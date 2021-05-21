@@ -9,8 +9,11 @@
           enter-active-class="animate__animated animate__fadeInDown"
           mode="out-in"
       >
-        <BookMarkItem v-if="showBookMarkList" :search-input-value="searchInputValue"
-                      ref="BookMarkItemChild"/>
+        <div v-if="showBookMarkList" class="BookMarkItemDiv">
+          <BookMarkItem :search-input-value="searchInputValue" ref="BookMarkItemChild"
+                        v-for="item in searchResult" :key="item.length" :searchResultObj='item'
+          />
+        </div>
       </transition>
       <transition-group
           name="others-transition"
@@ -27,6 +30,7 @@
 </template>
 
 <script>
+import {searchResult} from '../mock/popup/index';
 import SearchInput from "@/components/popup/SearchInput";
 import BookMarkItem from "@/components/popup/BookMarkItem";
 import StarButton from "@/components/popup/StarButton";
@@ -40,6 +44,8 @@ export default {
       showBookMarkList: false,
       showStarPage: false,
       searchInputValue: "",
+      searchResult: searchResult,
+      item: ""
     }
   },
   methods: {
@@ -67,6 +73,7 @@ export default {
 .animate__fadeIn {
   animation-duration: 1s;
 }
+
 .animate__fadeInDown,
 .animate__fadeOutDown {
   animation-duration: 0.6s;
@@ -92,5 +99,13 @@ export default {
   font-weight: lighter;
   margin: 15px auto;
   color: #191d22;
+}
+
+.BookMarkItemDiv {
+    width: 90%;
+    height: 210px;
+    overflow-y: scroll;
+    margin-top: 10px;
+    padding: 10px 10px 0 10px;
 }
 </style>

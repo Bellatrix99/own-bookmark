@@ -2,14 +2,14 @@
   <div class="search-page" ref="searchPage">
     <!-- 用于挂载搜索结果相关 DOM -->
     <h1>{{ searchInputValue }}</h1>
-    <div class="search-item" v-for="item in searchResult" :key="item.length">
+    <div class="search-item">
       <div class="search-item-icon-box">
-        <img :src="item.icon" alt="item-icon">
+        <img :src="searchResultObj.icon" alt="item-icon">
       </div>
       <div class="search-info">
-        <h2 :href="item.href" @click="openTab">{{ item.title }}</h2>
+        <h2 :href="searchResultObj.href" @click="openTab">{{ searchResultObj.title }}</h2>
         <div class="tag-box">
-          <div class="tag" v-for="tag in item.tags.slice(0,4)" :key="Math.random() * tag.length">
+          <div class="tag" v-for="tag in searchResultObj.tags.slice(0,4)" :key="Math.random() * tag.length">
             {{ tag }}
           </div>
         </div>
@@ -19,19 +19,18 @@
 </template>
 
 <script>
-import {searchResult} from '../../mock/popup/index';
-
 export default {
   name: "BookMarkItem",
   props: {
     searchInputValue: {
       type: String,
     },
+    searchResultObj: {
+      type: Object
+    }
   },
   data() {
-    return {
-      searchResult: searchResult
-    }
+    return {}
   },
   methods: {
     openTab(e) {
@@ -47,13 +46,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.search-page {
-  width: 90%;
-  height: 210px;
-  overflow-y: scroll;
-  margin-top: 10px;
-  padding: 10px 10px 0 10px;
-}
 .search-item {
   display: flex;
   align-items: center;
