@@ -1,16 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-
+import animate from 'animate.css'
 import '@/style/global.scss'
+import Globle from "./utils/Globle.js";
+
+Vue.use(animate)
 
 Vue.config.productionTip = false
-// import {elementMoveIn, elementMoveOut} from "./utils/animation.mjs";
-import Globle from "./utils/Globle.mjs";
 Vue.prototype.$Globle = Globle;
-
-import animationInOut from "./utils/animation.mjs";
-Vue.prototype.animationInOut = animationInOut;
 
 new Vue({
     router,

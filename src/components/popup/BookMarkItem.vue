@@ -19,11 +19,15 @@
 </template>
 
 <script>
-import {searchResult} from '../../mock/popup/index.mjs';
+import {searchResult} from '../../mock/popup/index';
 
 export default {
   name: "BookMarkItem",
-  props: ['searchInputValue'],
+  props: {
+    searchInputValue: {
+      type: String,
+    },
+  },
   data() {
     return {
       searchResult: searchResult
@@ -38,29 +42,24 @@ export default {
     },
     renderSearchItem() {
     },
-    handleClickSearch() {
-      if (this.$Globle.currentPage !== this.$Globle.SEARCH) {
-        this.animationInOut.elementMoveIn(this.$refs.searchPage, 'search-page-show', 500, () => {
-          this.$emit('topBoxMoveIn');
-          this.$emit('cancelButton');
-          this.$emit('appendSearchPage');
-          this.$Globle.currentPage = this.$Globle.SEARCH;// 这里有问题
-        });
-        console.log("这不是Search页面")
-      }
-    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-
+.search-page {
+  width: 90%;
+  height: 210px;
+  overflow-y: scroll;
+  margin-top: 10px;
+  padding: 10px 10px 0 10px;
+}
 .search-item {
   display: flex;
   align-items: center;
   height: var(--search-item-height);
   overflow: hidden;
-  padding: 5px 15px;
+  padding: 5px 20px;
   margin-bottom: 10px;
   border-radius: 8px;
   transition: all .5s;
@@ -80,6 +79,7 @@ export default {
   }
 
   .search-item-icon-box {
+    margin-left: calc(50% - 120px);
     height: 50%;
     overflow: hidden;
 

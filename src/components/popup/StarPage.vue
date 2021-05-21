@@ -88,4 +88,21 @@ form {
   float: left;
 }
 
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all .5s;
+}
+
+.button {
+  font-size: 13px;
+  padding: 5px 20px;
+  color: #2d3139;
+  border: 1px solid var(--light-border-color);
+  border-radius: 5px;
+  box-shadow: 0 0 3px #efefef;
+  transition: all .5s;
+}
+
 </style>

@@ -2,13 +2,26 @@
   <div class="container" ref="container">
     <div class="top-box" ref="topBox">
       <search-input @toggleExpand="handleSearchExpand" @renderBookmark="renderBookmark"
-                    @handleClickSearch="handleClickSearch" ref="searchInput"/>
-      <BookMarkItem v-if="showBookMarkList" :search-input-value="searchInputValue"
-                    ref="BookMarkItemChild" @topBoxMoveIn="topBoxMoveIn"
-                    @cancelButton="cancelButton" @appendSearchPage="appendSearchPage"/>
-      <p id="or">Or</p>
-      <StarButton @ToggleStarPage="handleStarPage"/>
-      <StarPage v-if="showStarPage"/>
+                    ref="searchInput"
+      />
+      <transition
+          name="bookmark-transition"
+          enter-active-class="animate__animated animate__fadeInDown"
+          mode="out-in"
+      >
+        <BookMarkItem v-if="showBookMarkList" :search-input-value="searchInputValue"
+                      ref="BookMarkItemChild"/>
+      </transition>
+      <transition-group
+          name="others-transition"
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOutDown"
+          mode="out-in"
+      >
+        <p id="or" v-show="!this.showBookMarkList" key="orP">Or</p>
+        <StarButton @ToggleStarPage="handleStarPage" v-show="!this.showBookMarkList" key="StarButton"/>
+        <StarPage v-if="showStarPage" key="StarPage"/>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -46,34 +59,30 @@ export default {
       this.$refs.BookMarkItemChild.renderSearchItem();
       console.log(this.$refs.BookMarkItemChild);
     },
-    topBoxMoveIn() {
-      console.log("topBoxMoveIn was calling!");
-      this.animationInOut.elementMoveIn(this.$refs.topBox, 'top-box-search');
-    },
-    cancelButton() {
-      console.log("cancelButton was calling!");
-      this.$refs.searchInput.cancelButtonMoveIn();
-    },
-    handleClickSearch() {
-      if (this.$Globle.currentPage !== this.$Globle.SEARCH) {
-        // console.log(this.animationInOut.elementMoveOut);
-        this.$refs.BookMarkItemChild.handleClickSearch();
-      }
-    },
-    appendSearchPage() {
-      console.log("抵达最后一步")
-      // this.$refs.container.style.backgroundColor = black;
-    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-* {
-  overflow-x: hidden;
+.animate__fadeIn {
+  animation-duration: 1s;
+}
+.animate__fadeInDown,
+.animate__fadeOutDown {
+  animation-duration: 0.6s;
 }
 
-.top-box {
+* {
+  overflow: hidden;
+}
+
+.container {
+  width: 80%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
 }
 
 #or {
