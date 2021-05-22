@@ -34,9 +34,6 @@ export default {
   },
   methods: {
     openTab(e) {
-      console.dir(e.target);
-      // console.log([...item.tags])
-      // console.log(e.attributes.href.nodeValue)
       window.open(e.target.attributes.href.value, '_blank');
     },
     renderSearchItem() {

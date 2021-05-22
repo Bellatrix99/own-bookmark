@@ -21,7 +21,7 @@
       </div>
     </form>
     <div class="operate-group">
-      <button id="deleteBtn" class="button">取消</button>
+      <button id="deleteBtn" class="button" @click="starPageBackToMain">取消</button>
       <button id="addBtn" class="button">添加</button>
     </div>
   </div>
@@ -29,7 +29,16 @@
 
 <script>
 export default {
-  name: "StarPage"
+  name: "StarPage",
+  data() {
+    return {
+    }
+  },
+  methods: {
+    starPageBackToMain() {
+      this.$emit("showStarPage", false)
+    }
+  }
 }
 </script>
 

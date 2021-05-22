@@ -1,6 +1,6 @@
 <template>
   <div class="search-box" @click="handleToggleExpand">
-    <label :class="{'search-input-up': showAnimate}">
+    <label>
       <input type="text" id="search" name="search" placeholder="搜索标签或书签" autocomplete="off"
              @input="renderBookmark" v-model="searchInputValue">
     </label>
@@ -24,7 +24,6 @@ export default {
       // 子组件可以使用 $emit 触发父组件的自定义事件
       // 第二参数是传给父组件的值
       // 父组件监听事件时，可以通过 $event 访问这个被抛出的值
-      // console.log(this.expanded);
       this.expanded = e.target.tagName === 'INPUT';
       this.$emit('toggleExpand', {
         expanded: this.expanded
@@ -40,41 +39,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.search-input-down {
-  animation: down .5s;
-}
-
-.search-input-up {
-  animation: up .5s;
-}
-
-@keyframes up {
-  0% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-50px);
-  }
-
-  100% {
-    transform: translateY(-100px);
-  }
-}
-
-@keyframes down {
-  0% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(100px);
-  }
-
-  100% {
-    transform: translateY(0px);
-  }
-}
 
 .search-box {
   display: flex;
