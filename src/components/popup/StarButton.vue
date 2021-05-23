@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <button id="star-btn" @click="handleToggleStarPage">
-      <img src="@/assets/star.svg" alt="star-icon">
-    </button>
-  </div>
+    <div class="star-btn-outer">
+      <button id="star-btn" @click="handleToggleStarPage">
+        <img src="@/assets/star.svg" alt="star-icon">
+      </button>
+    </div>
 </template>
 
 <script>
@@ -19,6 +19,7 @@ export default {
     handleToggleStarPage() {
       this.showStarPage = !this.showStarPage;
       this.$emit("ToggleStarPage", this.showStarPage);
+
     }
   }
 }
@@ -34,8 +35,8 @@ button {
 
 #star-btn {
   overflow: hidden;
-  display:block;
-  margin:0 auto;
+  display: block;
+  margin: 6px auto;
   height: 40px;
   width: 40px;
   padding: 10px;

@@ -15,8 +15,16 @@
       </div>
       <div class="form-item" id="form-item-tag">
         <label for="bookmark-tags">标签</label>
-        <div class="input tags-box" id="tag-input">
-          <input id="bookmark-tags" type="text"/>
+        <div class="input tags-box" id="tag-input" @click="addTagsFocus" @keydown="handleTagInputKeyDown">
+          <div class="tag" v-for="(tagName,index) in this.tags.tagNames" :key="index + '-only'">
+            <span>{{ tagName }}</span>
+            <a id="text-close">
+              <img src="@/components/img/close.svg" alt="close-btn"/>
+            </a>
+          </div>
+          <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
+                 ref="inputTags" @input="handleTagInputChange"
+          />
         </div>
       </div>
     </form>
@@ -32,14 +40,44 @@ export default {
   name: "StarPage",
   data() {
     return {
+      inputValueLength: "",
+      bookMarkTagsStyle: {
+        width: this.inputValueLength + 'em'
+      },
+      tags: {
+        tagNames: [],
+      },
     }
   },
   methods: {
     starPageBackToMain() {
       this.$emit("showStarPage", false)
+    },
+    addTagsFocus() {
+      this.$nextTick(function () {
+        //DOM 更新了
+        this.$refs.inputTags.focus();
+      })
+    },
+    handleTagInputKeyDown(event) {
+      if (event.key === 'Backspace' && event.target.value === '') {
+        if (this.$refs.inputTags.previousElementSibling) {
+          this.$refs.inputTags.previousElementSibling.querySelector('#text-close').click();
+        }
+      }
+    },
+    handleTagInputChange(event) {
+      const value = event.target.value;
+      const match = value.match(/(.+)[\s,，]/);
+      this.inputValueLength = event.target.value.length;
+      if (match !== null && match.length === 2) {
+        this.tags.tagNames.push(match[1]);
+        event.target.value = "";
+      }
     }
   }
 }
+
 </script>
 
 <style scoped lang="scss">
@@ -72,7 +110,7 @@ form {
     overflow: hidden;
 
     input {
-      width: calc(100% - 20px);
+      width: 100%;
       height: 100%;
       border: none;
       padding: 0 10px;
@@ -98,6 +136,7 @@ form {
 }
 
 button {
+  height: 30px;
   outline: none;
   border: none;
   cursor: pointer;
@@ -114,4 +153,81 @@ button {
   transition: all .5s;
 }
 
+#form-item-tag {
+  height: var(--star-tag-input-height);
+  margin-top: 8px;
+  align-items: start;
+
+  label {
+    line-height: inherit;
+  }
+}
+
+
+#tag-input {
+  display: block;
+  text-align: left;
+  height: calc(var(--star-tag-input-height) - 20px);
+  width: 228px;
+  align-items: baseline;
+  cursor: text;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+
+  input {
+    width: 2em;
+    height: 20px;
+    min-width: 1em;
+  }
+}
+
+.input {
+  flex-grow: 1;
+  height: 25px;
+  border: 1px solid var(--light-border-color);
+  border-radius: 3px;
+  overflow: hidden;
+
+  input {
+    width: calc(100% - 20px);
+    height: 100%;
+    border: none;
+    padding: 0 10px;
+  }
+}
+
+input, textarea {
+  outline: none;
+}
+
+.tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  font-size: 12px;
+  color: #485665;
+  background-color: rgba(217, 240, 255, 0.62);
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin: 3px 5px;
+
+  a {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+
+  img {
+    height: 12px;
+    opacity: .8;
+  }
+}
+
+a {
+  cursor: pointer;
+  transition: all .5s;
+  text-decoration: none;
+  color: gray;
+}
 </style>

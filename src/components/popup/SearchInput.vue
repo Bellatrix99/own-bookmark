@@ -1,10 +1,18 @@
 <template>
-  <div class="search-box" @click="handleToggleExpand">
-    <label>
-      <input type="text" id="search" name="search" placeholder="搜索标签或书签" autocomplete="off"
-             @input="renderBookmark" v-model="searchInputValue">
-    </label>
-    <a id="search-input-operate-btn" v-show="expanded" @click="handleToggleExpand">取消</a>
+  <div class="search-box-outer">
+    <div class="search-box" @click="handleToggleExpand">
+      <label>
+        <input type="text" id="search" name="search" placeholder="搜索标签或书签" autocomplete="off"
+               @input="renderBookmark" v-model="searchInputValue">
+      </label>
+      <transition
+          name="cancel-button"
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
+      >
+        <a id="search-input-operate-btn" v-show="expanded" @click="handleToggleExpand">取消</a>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -39,6 +47,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.animate__fadeIn,
+.animate__fadeOut {
+  animation-duration: 0.5s;
+}
+.search-box-outer {
+  position: relative;
+  z-index: 9999;
+}
 
 .search-box {
   display: flex;
@@ -70,11 +86,12 @@ export default {
   }
 
   #search-input-operate-btn {
-    height: 20px;
-    margin-left: 10px;
+    margin-left: -28px;
+    line-height: 40px;
+    font-size: 14px;
     color: #757575;
-    transition: all .5s;
     cursor: pointer;
   }
+
 }
 </style>

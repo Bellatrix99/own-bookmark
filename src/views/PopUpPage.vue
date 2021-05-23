@@ -1,16 +1,16 @@
 <template>
-  <div class="container" ref="container" :class="{}">
-    <div class="top-box" ref="topBox" :class="{'topBoxAnimate': this.showBookMarkList}">
-      <div class="top-box-top" :class="{'containerAnimate': this.showStarPage}">
+  <div class="container" ref="container">
+    <div class="top-box" ref="topBox"
+         :class="{'animate__searchUp': this.showBookMarkList, 'animate__topBoxToTop':this.showStarPage}">
+      <div class="main-page-center" :class="{'animate__starButtonUp': this.showStarPage}">
         <search-input @toggleExpand="handleSearchExpand" @renderBookmark="renderBookmark"
                       ref="searchInput"
         />
         <transition
             name="bookmark-transition"
             enter-active-class="animate__animated animate__fadeInDown"
-            mode="out-in"
         >
-          <div v-if="showBookMarkList" class="BookMarkItemDiv">
+          <div v-if="showBookMarkList" class="bookmark-outer-div">
             <BookMarkItem :search-input-value="searchInputValue" ref="BookMarkItemChild"
                           v-for="item in searchResult" :key="item.length" :searchResultObj='item'
             />
@@ -22,9 +22,11 @@
             leave-active-class="animate__animated animate__fadeOut"
             mode="out-in"
         >
-          <p id="or" v-show="!this.showBookMarkList" key="orP">Or</p>
-          <StarButton @ToggleStarPage="handleStarPage" v-show="!this.showBookMarkList"
-                      key="StarButton"/>
+          <p id="or" v-show="!this.showBookMarkList" key="orP">or</p>
+          <div class="star-btn-outer" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
+               key="starButtonOuter" v-show="!this.showBookMarkList">
+            <StarButton @ToggleStarPage="handleStarPage" key="starButton"/>
+          </div>
         </transition-group>
       </div>
       <transition
@@ -85,6 +87,26 @@ export default {
 <style scoped lang="scss">
 * {
   overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.star-btn-outer {
+  margin-left: calc(50% - 20px);
+  width: 40px;
+  transition: 1s;
+}
+
+.animate__starButtonOuterUp {
+  width: 100%;
+  border-radius: 20px;
+  margin-left: 0;
+  background-color: #f4b828;
+}
+
+.container {
+  width: 400px;
+  height: 500px;
 }
 
 .animate__fadeIn {
@@ -92,7 +114,7 @@ export default {
 }
 
 .animate__fadeInDown {
-  animation-duration: 0.6s;
+  animation-duration: .6s;
 }
 
 .animate__fadeOut {
@@ -100,19 +122,23 @@ export default {
 }
 
 .top-box {
-  margin-top: 20%;
+  padding-top: 25%;
   transition: 0.6s;
 }
 
-.topBoxAnimate {
-  margin-top: 10%;
+.animate__topBoxToTop {
+  padding-top: 0;
 }
 
-.top-box-top {
-  transition: 0.5s;
+.animate__searchUp {
+  padding-top: 10%;
 }
 
-.containerAnimate {
+.main-page-center {
+  transition: 0.4s;
+}
+
+.animate__starButtonUp {
   margin-top: -90px;
   background-color: #f4b828;
 }
@@ -126,7 +152,7 @@ export default {
   color: #191d22;
 }
 
-.BookMarkItemDiv {
+.bookmark-outer-div {
   width: 90%;
   height: 300px;
   overflow-y: scroll;
@@ -136,26 +162,27 @@ export default {
   &:hover {
     &::-webkit-scrollbar-thumb {
       width: 20px;
-      background-color: rgba(0,0,0,.2);
+      background-color: rgba(0, 0, 0, .2);
       border-radius: 10px;
-      -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1);
+      -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
     }
   }
 
-  &::-webkit-scrollbar {/*滚动条整体样式*/
-    width: 1vw;     /*高宽分别对应横竖滚动条的尺寸*/
+  &::-webkit-scrollbar { /*滚动条整体样式*/
+    width: 1vw; /*高宽分别对应横竖滚动条的尺寸*/
   }
-  &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+
+  &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
     border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    background-color: rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.15);
   }
 }
 
-.BookMarkItemDiv::-webkit-scrollbar-thumb:hover{
-  background-color: rgba(0,0,0,0.5);
+.bookmark-outer-div::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.35);
   border-radius: 5px;
-  -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.1);
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
 
 }
 

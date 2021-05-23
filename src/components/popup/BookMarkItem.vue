@@ -68,7 +68,7 @@ export default {
   }
 
   .search-item-icon-box {
-    margin-left: calc(50% - 120px);
+    margin-left: calc(50% - 110px);
     height: 50%;
     overflow: hidden;
 

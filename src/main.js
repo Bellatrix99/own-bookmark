@@ -4,6 +4,7 @@ import router from './router'
 import animate from 'animate.css'
 import '@/style/global.scss'
 import Globle from "./utils/Globle.js";
+import '../node_modules/modern-normalize/modern-normalize.css';
 
 Vue.use(animate)
 
