@@ -74,11 +74,10 @@ export default {
       }
     },
     handleToggleExpand() {
-      this.$children[0].handleToggleExpand()
+      this.$refs.searchInput.handleToggleExpand()
     },
     renderBookmark(searchInputValue) {
       this.searchInputValue = searchInputValue
-      this.$refs.BookMarkItemChild.renderSearchItem();
     },
   }
 }
@@ -114,7 +113,7 @@ export default {
 }
 
 .animate__fadeInDown {
-  animation-duration: .6s;
+  animation-duration: .4s;
 }
 
 .animate__fadeOut {
@@ -123,7 +122,7 @@ export default {
 
 .top-box {
   padding-top: 25%;
-  transition: 0.6s;
+  transition: 0.4s;
 }
 
 .animate__topBoxToTop {
@@ -154,7 +153,7 @@ export default {
 
 .bookmark-outer-div {
   width: 90%;
-  height: 300px;
+  height: 200px;
   overflow-y: scroll;
   margin-top: 10px;
   padding: 10px 10px 0 10px;

@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="form-item">
-        <label for="bookmark-folder">文件夹</label>
+        <label for="bookmark-folder">描述</label>
         <div class="input">
           <input type="text" name="title" id="bookmark-folder"/>
         </div>
@@ -18,7 +18,7 @@
         <div class="input tags-box" id="tag-input" @click="addTagsFocus" @keydown="handleTagInputKeyDown">
           <div class="tag" v-for="(tagName,index) in this.tags.tagNames" :key="index + '-only'">
             <span>{{ tagName }}</span>
-            <a id="text-close">
+            <a id="text-close" @click="deleteTagBtn(index)">
               <img src="@/components/img/close.svg" alt="close-btn"/>
             </a>
           </div>
@@ -62,7 +62,7 @@ export default {
     handleTagInputKeyDown(event) {
       if (event.key === 'Backspace' && event.target.value === '') {
         if (this.$refs.inputTags.previousElementSibling) {
-          this.$refs.inputTags.previousElementSibling.querySelector('#text-close').click();
+          this.tags.tagNames.pop();
         }
       }
     },
@@ -74,6 +74,11 @@ export default {
         this.tags.tagNames.push(match[1]);
         event.target.value = "";
       }
+    },
+    deleteTagBtn(index) {
+      this.$nextTick(function () {
+        this.tags.tagNames.splice(index,1);
+      })
     }
   }
 }
@@ -165,7 +170,8 @@ button {
 
 
 #tag-input {
-  display: block;
+  display: flex;
+  //justify-content:center;
   text-align: left;
   height: calc(var(--star-tag-input-height) - 20px);
   width: 228px;
@@ -175,7 +181,7 @@ button {
   overflow-y: scroll;
 
   input {
-    width: 2em;
+    width: 6em;
     height: 20px;
     min-width: 1em;
   }
@@ -203,6 +209,7 @@ input, textarea {
 .tag {
   display: inline-flex;
   justify-content: center;
+  text-align: center;
   align-items: center;
   height: 28px;
   font-size: 12px;
