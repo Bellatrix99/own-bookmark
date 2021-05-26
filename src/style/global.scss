@@ -12,3 +12,33 @@
   --form-item-height: 40px;
   --light-border-color: #dedede;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  outline: none;
+  color: #252629;
+}
+
+div {
+  display: block;
+}
+
+.tag {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 10px;
+  margin-right: 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  background-color: rgba(217, 240, 255, 0.62);
+  color: #485665;
+  transition: all .5s;
+
+  &:hover {
+    background-color: rgb(194, 227, 250);
+  }
+}

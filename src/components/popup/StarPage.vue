@@ -19,7 +19,7 @@
           <div class="tag" v-for="(tagName,index) in this.tags.tagNames" :key="index + '-only'">
             <span>{{ tagName }}</span>
             <a id="text-close" @click="deleteTagBtn(index)">
-              <img src="@/components/img/close.svg" alt="close-btn"/>
+              <img src="../../assets/close.svg" alt="close-btn"/>
             </a>
           </div>
           <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
@@ -30,7 +30,7 @@
     </form>
     <div class="operate-group">
       <button id="deleteBtn" class="button" @click="starPageBackToMain">取消</button>
-      <button id="addBtn" class="button">添加</button>
+      <button id="addBtn" class="button" @click="handleAddMark">添加</button>
     </div>
   </div>
 </template>
@@ -67,18 +67,24 @@ export default {
       }
     },
     handleTagInputChange(event) {
-      const value = event.target.value;
+      let value = event.target.value;
       const match = value.match(/(.+)[\s,，]/);
-      this.inputValueLength = event.target.value.length;
-      if (match !== null && match.length === 2) {
+      this.inputValueLength = value.length;
+      while (value.lastIndexOf(" ") !== -1) {
+        value = value.replace(" ", "");
+      }
+      if (match !== null && match.length === 2 && match[1].lastIndexOf(" ") !== match[1].length - 1) {
         this.tags.tagNames.push(match[1]);
         event.target.value = "";
       }
     },
     deleteTagBtn(index) {
       this.$nextTick(function () {
-        this.tags.tagNames.splice(index,1);
+        this.tags.tagNames.splice(index, 1);
       })
+    },
+    handleAddMark() {
+
     }
   }
 }

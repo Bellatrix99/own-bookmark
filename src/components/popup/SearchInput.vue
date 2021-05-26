@@ -27,6 +27,7 @@ export default {
       showAnimate: false
     }
   },
+
   methods: {
     handleToggleExpand(e) {
       // 子组件可以使用 $emit 触发父组件的自定义事件
@@ -42,6 +43,7 @@ export default {
       this.showAnimate = true;
       this.$emit('renderBookmark', this.searchInputValue);
     },
+
     clearSearchInput() {
       this.$nextTick(function () {
             this.$refs.searchTextInput.value = "";
