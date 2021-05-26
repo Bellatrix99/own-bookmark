@@ -1,7 +1,6 @@
 <template>
   <div class="search-page" ref="searchPage">
     <!-- 用于挂载搜索结果相关 DOM -->
-    <h1>{{ searchInputValue }}</h1>
     <div class="search-item">
       <div class="search-item-icon-box">
         <img :src="searchResultObj.icon" alt="item-icon">
@@ -22,9 +21,6 @@
 export default {
   name: "BookMarkItem",
   props: {
-    searchInputValue: {
-      type: String,
-    },
     searchResultObj: {
       type: Object
     }
@@ -35,8 +31,6 @@ export default {
   methods: {
     openTab(e) {
       window.open(e.target.attributes.href.value, '_blank');
-    },
-    renderSearchItem() {
     },
   }
 }

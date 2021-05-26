@@ -1,6 +1,6 @@
 export let searchResult = [
     {
-        title: '储存 API',
+        title: '百度一下，你就知道',
         href: 'https://www.baidu.com',
         icon: 'https://www.baidu.com/favicon.ico',
         tags: [
@@ -8,7 +8,7 @@ export let searchResult = [
         ]
     },
     {
-        title: '储存 API',
+        title: 'Google',
         href: 'https://www.google.com',
         icon: 'https://www.google.com/favicon.ico',
         tags: [
@@ -16,7 +16,7 @@ export let searchResult = [
         ]
     },
     {
-        title: '储存 API',
+        title: 'Github',
         href: 'https://github.com',
         icon: 'https://github.com/favicon.ico',
         tags: [
@@ -24,7 +24,7 @@ export let searchResult = [
         ]
     },
     {
-        title: '储存 API',
+        title: '存储 API - Google Chrome 应用开发文档',
         href: 'https://crxdoc-zh.appspot.com/apps/app_storage',
         icon: 'https://crxdoc-zh.appspot.com/favicon.ico',
         tags: [
