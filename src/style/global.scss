@@ -22,6 +22,20 @@
   color: #252629;
 }
 
+html {
+  overflow-y: scroll;     //兼容ie8，不支持:root, vw
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}
+
+:root {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 div {
   display: block;
 }

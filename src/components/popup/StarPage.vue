@@ -70,9 +70,6 @@ export default {
       let value = event.target.value;
       const match = value.match(/(.+)[\s,，]/);
       this.inputValueLength = value.length;
-      while (value.lastIndexOf(" ") !== -1) {
-        value = value.replace(" ", "");
-      }
       if (match !== null && match.length === 2 && match[1].lastIndexOf(" ") !== match[1].length - 1) {
         this.tags.tagNames.push(match[1]);
         event.target.value = "";

@@ -1,7 +1,7 @@
 <template>
   <div class="search-page" ref="searchPage">
     <!-- 用于挂载搜索结果相关 DOM -->
-    <div class="search-item">
+    <div class="search-item" :title="searchResultOrigin.title">
       <div class="search-item-icon-box">
         <img :src="searchResultObj.icon" alt="item-icon">
       </div>
@@ -14,6 +14,9 @@
         </div>
       </div>
     </div>
+    <!--      <iframe class="iframe-web" frameborder='0' src="http://www.baidu.com"-->
+    <!--              marginwidth="0" marginheight="0" scrolling="no" align="center"-->
+    <!--      ></iframe>-->
   </div>
 </template>
 
@@ -26,12 +29,20 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      searchResultOrigin: ""
+    }
   },
   methods: {
     openTab(e) {
       window.open(e.target.attributes.href.value, '_blank');
     },
+  },
+  mounted() {
+    if (this.searchResultObj.title.length >= 20) {
+      this.searchResultOrigin = JSON.parse(JSON.stringify(this.searchResultObj));
+      this.searchResultObj.title = this.searchResultObj.title.slice(0, 20) + "...";
+    }
   }
 }
 </script>
@@ -64,7 +75,6 @@ export default {
   .search-item-icon-box {
     margin-left: calc(50% - 110px);
     height: 50%;
-    overflow: hidden;
 
     img {
       height: 100%;
@@ -108,5 +118,10 @@ export default {
     opacity: .8;
   }
 }
+
+//.iframe-web {
+//  height: 100vh; /* Viewport-relative units */
+//  width: 100vw;
+//}
 
 </style>
