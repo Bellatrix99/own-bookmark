@@ -4,7 +4,7 @@ export let searchResult = [
         href: 'https://www.baidu.com',
         icon: 'https://www.baidu.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'js'
+            'chrome', 'dev', 'html', 'css', 'js', 'baidu'
         ]
     },
     {

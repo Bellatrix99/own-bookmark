@@ -1,14 +1,17 @@
 <template>
   <div class="search-page" ref="searchPage">
     <!-- 用于挂载搜索结果相关 DOM -->
-    <div class="search-item" :title="searchResultOrigin.title">
-      <div class="search-item-icon-box">
-        <img :src="searchResultObj.icon" alt="item-icon">
+    <div class="search-item">
+      <div class="search-item-icon-box" :title="this.searchResultNew.title">
+        <img :src="searchResultObj.icon" alt="item-icon" :href="searchResultObj.href" @click="openTab">
       </div>
       <div class="search-info">
-        <h2 :href="searchResultObj.href" @click="openTab">{{ searchResultObj.title }}</h2>
+        <h2 :href="searchResultObj.href" @click="openTab" :title="this.searchResultNew.title">{{
+            searchResultObj.title
+          }}</h2>
         <div class="tag-box">
-          <div class="tag" v-for="tag in searchResultObj.tags.slice(0,4)" :key="Math.random() * tag.length">
+          <div class="tag" v-for="(tag,index) in searchResultNew.tags"
+               :key="index + '-only'">
             {{ tag }}
           </div>
         </div>
@@ -30,7 +33,10 @@ export default {
   },
   data() {
     return {
-      searchResultOrigin: ""
+      searchResultNew: "",
+      allTagLength: 0,
+      tagNumbers: 0,
+      maxShowTagNumbers: 7
     }
   },
   methods: {
@@ -39,8 +45,18 @@ export default {
     },
   },
   mounted() {
+    let allTags = this.searchResultObj.tags;
+    this.searchResultNew = JSON.parse(JSON.stringify(this.searchResultObj));
+    for (let tagIndex in allTags) {
+      if (Object.prototype.hasOwnProperty.call(allTags, tagIndex)) {
+        this.allTagLength += allTags[tagIndex].length;
+        if (this.allTagLength >= 20 || tagIndex > this.maxShowTagNumbers) {
+          this.tagNumbers = tagIndex < this.maxShowTagNumbers ? tagIndex : this.maxShowTagNumbers;
+          this.searchResultNew.tags.splice(this.tagNumbers - 1, 99, "...");
+        }
+      }
+    }
     if (this.searchResultObj.title.length >= 20) {
-      this.searchResultOrigin = JSON.parse(JSON.stringify(this.searchResultObj));
       this.searchResultObj.title = this.searchResultObj.title.slice(0, 20) + "...";
     }
   }
@@ -53,8 +69,7 @@ export default {
   align-items: center;
   height: var(--search-item-height);
   overflow: hidden;
-  padding: 5px 20px;
-  margin-bottom: 10px;
+  margin: 0 0 10px 10px;
   border-radius: 8px;
   transition: all .5s;
 
@@ -73,8 +88,9 @@ export default {
   }
 
   .search-item-icon-box {
-    margin-left: calc(50% - 110px);
+    margin-left: calc(50% - 144px);
     height: 50%;
+    cursor: pointer;
 
     img {
       height: 100%;
