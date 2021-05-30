@@ -12,7 +12,7 @@ export let searchResult = [
         href: 'https://www.google.com',
         icon: 'https://www.google.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'js'
+            'chrome', 'dev', 'html', 'css', 'google', 'js'
         ]
     },
     {
@@ -20,7 +20,7 @@ export let searchResult = [
         href: 'https://github.com',
         icon: 'https://github.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'js'
+            'chrome', 'dev', 'html', 'css', 'github', 'js'
         ]
     },
     {
@@ -28,7 +28,7 @@ export let searchResult = [
         href: 'https://crxdoc-zh.appspot.com/apps/app_storage',
         icon: 'https://crxdoc-zh.appspot.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'js'
+            'chrome', 'dev', 'html', 'css', 'api', 'js'
         ]
     },
 ];

@@ -2,12 +2,12 @@
   <div class="search-page" ref="searchPage">
     <!-- 用于挂载搜索结果相关 DOM -->
     <div class="search-item">
-      <div class="search-item-icon-box" :title="this.searchResultNew.title">
+      <div class="search-item-icon-box" :title="this.searchResultObj.title">
         <img :src="searchResultObj.icon" alt="item-icon" :href="searchResultObj.href" @click="openTab">
       </div>
       <div class="search-info">
-        <h2 :href="searchResultObj.href" @click="openTab" :title="this.searchResultNew.title">{{
-            searchResultObj.title
+        <h2 :href="searchResultObj.href" @click="openTab" :title="this.searchResultObj.title">{{
+            searchResultNew.title
           }}</h2>
         <div class="tag-box">
           <div class="tag" v-for="(tag,index) in searchResultNew.tags"
@@ -17,9 +17,7 @@
         </div>
       </div>
     </div>
-    <!--      <iframe class="iframe-web" frameborder='0' src="http://www.baidu.com"-->
-    <!--              marginwidth="0" marginheight="0" scrolling="no" align="center"-->
-    <!--      ></iframe>-->
+
   </div>
 </template>
 
@@ -36,7 +34,7 @@ export default {
       searchResultNew: "",
       allTagLength: 0,
       tagNumbers: 0,
-      maxShowTagNumbers: 7
+      maxShowTagNumbers: 6
     }
   },
   methods: {
@@ -50,14 +48,15 @@ export default {
     for (let tagIndex in allTags) {
       if (Object.prototype.hasOwnProperty.call(allTags, tagIndex)) {
         this.allTagLength += allTags[tagIndex].length;
-        if (this.allTagLength >= 20 || tagIndex > this.maxShowTagNumbers) {
+        if (this.allTagLength > 16 || tagIndex > this.maxShowTagNumbers) {
           this.tagNumbers = tagIndex < this.maxShowTagNumbers ? tagIndex : this.maxShowTagNumbers;
-          this.searchResultNew.tags.splice(this.tagNumbers - 1, 99, "...");
+          this.searchResultNew.tags.splice(this.tagNumbers , 99, "...");
+          this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers );
         }
       }
     }
     if (this.searchResultObj.title.length >= 20) {
-      this.searchResultObj.title = this.searchResultObj.title.slice(0, 20) + "...";
+      this.searchResultNew.title = this.searchResultObj.title.slice(0, 20) + "...";
     }
   }
 }
@@ -135,9 +134,5 @@ export default {
   }
 }
 
-//.iframe-web {
-//  height: 100vh; /* Viewport-relative units */
-//  width: 100vw;
-//}
 
 </style>
