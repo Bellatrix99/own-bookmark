@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import {calculateStringLength} from "@/utils/Globle";
+
 export default {
   name: "BookMarkItem",
   props: {
@@ -66,8 +68,14 @@ export default {
         }
       }
     }
-    if (this.searchResultObj.title.length >= 20) {
-      this.searchResultNew.title = this.searchResultObj.title.slice(0, 20) + "...";
+    if (calculateStringLength(this.searchResultObj.title).len > 26) {
+      if (calculateStringLength(this.searchResultObj.title).hans
+          >= calculateStringLength(this.searchResultObj.title).chars
+      ) {
+        this.searchResultNew.title = this.searchResultObj.title.slice(0, 16) + "...";
+      } else {
+        this.searchResultNew.title = this.searchResultObj.title.slice(0, 22) + "...";
+      }
     }
   }
 }

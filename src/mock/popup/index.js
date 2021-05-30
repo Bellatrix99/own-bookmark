@@ -1,6 +1,6 @@
 export let searchResult = [
     {
-        title: '百度一下，你就知道',
+        title: '百度一下,你就知道',
         href: 'https://www.baidu.com',
         icon: 'https://www.baidu.com/favicon.ico',
         tags: [
@@ -16,7 +16,7 @@ export let searchResult = [
         ]
     },
     {
-        title: 'Github',
+        title: 'GithubGithubGithubGithubGithub',
         href: 'https://github.com',
         icon: 'https://github.com/favicon.ico',
         tags: [
@@ -29,6 +29,22 @@ export let searchResult = [
         icon: 'https://crxdoc-zh.appspot.com/favicon.ico',
         tags: [
             'chrome', 'dev', 'html', 'css', 'api', 'js'
+        ]
+    },
+    {
+        title: '掘金 - 代码不止，掘金不停',
+        href: 'https://juejin.cn/',
+        icon: 'https://juejin.cn/favicon.ico',
+        tags: [
+            'chrome', 'dev', 'html', 'css', 'juejin', 'js'
+        ]
+    },
+    {
+        title: 'OSCHINA - 中文开源技术交流社区',
+        href: 'https://www.oschina.net/',
+        icon: 'https://www.oschina.net/favicon.ico',
+        tags: [
+            'chrome', 'dev', 'html', 'css', 'oschina', 'js'
         ]
     },
 ];

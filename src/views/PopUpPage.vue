@@ -153,7 +153,7 @@ export default {
 
 .bookmark-outer-div {
   width: 90%;
-  height: 200px;
+  height: 300px;
   overflow-y: scroll;
   margin-top: 10px;
   padding: 10px 10px 0 10px;
