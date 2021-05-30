@@ -11,7 +11,9 @@
           }}</h2>
         <div class="tag-box">
           <div class="tag" v-for="(tag,index) in searchResultNew.tags"
-               :key="index + '-only'">
+               :key="index + '-only'" @mouseenter="showMoreTags(index)"
+               ref="eachTag" :title="moreTags"
+          >
             {{ tag }}
           </div>
         </div>
@@ -34,13 +36,22 @@ export default {
       searchResultNew: "",
       allTagLength: 0,
       tagNumbers: 0,
-      maxShowTagNumbers: 6
+      maxShowTagNumbers: 6,
+      moreTags: "",
+      isactive: false
     }
   },
   methods: {
     openTab(e) {
       window.open(e.target.attributes.href.value, '_blank');
     },
+    showMoreTags(index) {
+      this.moreTags = '';
+      if (index === this.tagNumbers - 1) {
+        this.moreTags = this.searchResultObj.tags.slice(this.tagNumbers - 1);
+        this.$refs.eachTag[index].style.cursor = 'pointer';
+      }
+    }
   },
   mounted() {
     let allTags = this.searchResultObj.tags;
@@ -50,8 +61,8 @@ export default {
         this.allTagLength += allTags[tagIndex].length;
         if (this.allTagLength > 16 || tagIndex > this.maxShowTagNumbers) {
           this.tagNumbers = tagIndex < this.maxShowTagNumbers ? tagIndex : this.maxShowTagNumbers;
-          this.searchResultNew.tags.splice(this.tagNumbers , 99, "...");
-          this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers );
+          this.searchResultNew.tags.splice(this.tagNumbers, 99, "...");
+          this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers);
         }
       }
     }
