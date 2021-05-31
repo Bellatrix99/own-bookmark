@@ -10,32 +10,35 @@
       <div class="content">
         <div class="bookmark-list-item">
           <div class="favicon">
-            <img :src="searchResult[this.bookMarkClickIndex].icon" alt="item-icon">
+            <img :src="searchResult[this.BookMarkInfoIndex].icon" alt="item-icon">
           </div>
           <div class="form-item">
             <div class="form-content">
               <div class="form-item">
                 <label>标题</label>
                 <div class="input-item">
-                  <input type="text" value="测试标题测试标题">
+                  <input type="text" :value="searchResult[this.BookMarkInfoIndex].title">
                 </div>
               </div>
               <div class="form-item">
                 <label>URL</label>
                 <div class="input-item">
-                  <input type="text" value="测试URL测试URL">
+                  <input type="text" :value="searchResult[this.BookMarkInfoIndex].href">
                 </div>
               </div>
               <div class="form-item">
                 <label>标签</label>
-                <div class="tag-input-box">
-                  <div class="tag-input-fragment">
-                    <span>测试Tag</span>
-                    <a id="text-close">
+                <div class="tag-input-box" @click="addTagsFocus" @keydown="handleTagInputKeyDown">
+                  <div class="tag" v-for="(tagName,index) in searchResult[this.BookMarkInfoIndex].tags"
+                       :key="index + '-only'">
+                    <span>{{ tagName }}</span>
+                    <a id="text-close" @click="deleteTagBtn(index)">
                       <img src="../../assets/close.svg" alt="close-btn"/>
                     </a>
-                    <input id="bookmark-tags" type="text" ref="inputTags"/>
                   </div>
+                  <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
+                         ref="inputTags" @input="handleTagInputChange"
+                  />
                 </div>
               </div>
             </div>
@@ -54,7 +57,6 @@
 
 <script>
 import {searchResult} from "@/mock/popup";
-import Bus from "@/assets/Bus";
 
 export default {
   name: "EditBookMarkInfo",
@@ -62,24 +64,56 @@ export default {
     searchResultObj: {
       type: Object
     },
+    BookMarkInfoIndex: {
+      type: Number
+    }
   },
   data() {
     return {
       showEditBookMarkInfo: "",
       searchResult: searchResult,
-      bookMarkClickIndex: null
+      bookMarkClickIndex: null,
+      bookMarkTagsStyle: {
+        width: this.inputValueLength + 'em'
+      },
+      tags: {
+        tagNames: searchResult[this.BookMarkInfoIndex].tags,
+      },
     }
   },
   methods: {
     closeEditBookMarkInfo() {
       this.showEditBookMarkInfo = false;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
-    }
-  },
-  created() {
-    Bus.$on('getClickBookMark', data => {
-      this.bookMarkClickIndex = data;
-    })
+    },
+    handleTagInputChange(event) {
+      let value = event.target.value;
+      const match = value.match(/(.+)[\s,，]/);
+      this.inputValueLength = value.length;
+      if (match !== null && match.length === 2 && match[1].lastIndexOf(" ") !== match[1].length - 1) {
+        this.tags.tagNames.push(match[1]);
+        event.target.value = "";
+      }
+    },
+    deleteTagBtn(index) {
+      console.log(index)
+      this.$nextTick(function () {
+        this.tags.tagNames.splice(index, 1);
+      })
+    },
+    addTagsFocus() {
+      this.$nextTick(function () {
+        //DOM 更新了
+        this.$refs.inputTags.focus();
+      })
+    },
+    handleTagInputKeyDown(event) {
+      if (event.key === 'Backspace' && event.target.value === '') {
+        if (this.$refs.inputTags.previousElementSibling) {
+          this.tags.tagNames.pop();
+        }
+      }
+    },
   },
 }
 </script>
@@ -200,6 +234,12 @@ export default {
             overflow-y: scroll;
             overflow-x: hidden;
 
+            input {
+              width: 6em;
+              height: 20px;
+              min-width: 1em;
+            }
+
             #text-close {
               display: flex;
               align-items: center;
@@ -219,7 +259,6 @@ export default {
           }
 
           #bookmark-tags {
-            width: .5em;
             border: none;
             background-color: transparent;
           }

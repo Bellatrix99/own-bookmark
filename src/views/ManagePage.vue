@@ -8,6 +8,7 @@
         <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
                       :searchResultObj="item" :searchResultIndex="index"
                       :hiddenBookMarkIndex="hiddenBookMarkIndex"
+                      @getClickBookMark="getClickBookMark"
                       @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
         />
         <div v-if="this.isEmptySearchResult">
@@ -19,6 +20,7 @@
       </a-col>
     </a-row>
     <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"
+                      :BookMarkInfoIndex="this.BookMarkInfoIndex"
     />
   </div>
 </template>
@@ -41,7 +43,8 @@ export default {
       isEmptySearchResult: false,
       visibleBookMarkIndex: [],
       hiddenBookMarkIndex: [],
-      originBookMarkIndex: []
+      originBookMarkIndex: [],
+      BookMarkInfoIndex: 0
     }
   },
   methods: {
@@ -64,6 +67,9 @@ export default {
             }
           }
       );
+    },
+    getClickBookMark(searchResultIndex) {
+      this.BookMarkInfoIndex = searchResultIndex;
     }
   },
   mounted() {

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Bus from "@/assets/Bus";
+// import Bus from "@/assets/Bus";
 
 export default {
   name: "BookMarkInfo",
@@ -47,7 +47,8 @@ export default {
   methods: {
     handleToggleEdit() {
       this.editable = true;
-      Bus.$emit('getClickBookMark', this.searchResultIndex);
+      // Bus.$emit('getClickBookMark', this.searchResultIndex);
+      this.$emit('getClickBookMark', this.searchResultIndex);
       this.$emit('handleEditBookMark', this.editable);
     },
     deleteBookMarkItem() {
