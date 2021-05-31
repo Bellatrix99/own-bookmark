@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmark-info">
+  <div class="bookmark-info" v-if="showBookMarkSearch()">
     <div class="favicon">
       <img :src="searchResultObj.icon" alt="item-icon">
     </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+
 export default {
   name: "BookMarkInfo",
   props: {
@@ -32,22 +33,34 @@ export default {
     },
     searchResultIndex: {
       type: Number
+    },
+    hiddenBookMarkIndex: {
+      type: Array
     }
   },
   data() {
     return {
-      editable: false
+      editable: false,
+      arr: [1, 2, 3]
     }
   },
   methods: {
     handleToggleEdit() {
       this.editable = true;
-      this.$emit('handleEditBookMark',this.editable)
+      this.$emit('handleEditBookMark', this.editable)
     },
     deleteBookMarkItem() {
       this.$emit("deleteBKIndex", this.searchResultIndex);
+    },
+    showBookMarkSearch() {
+      for (let oneArr of this.hiddenBookMarkIndex) {
+        if (this.searchResultIndex === oneArr) {
+          return false;
+        }
+      }
+      return true;
     }
-  }
+  },
 }
 </script>
 
@@ -65,12 +78,16 @@ export default {
   }
 
   .content {
-    width: 100%;
-    margin-left: 20px;
+    width: 80%;
+    margin: 0 70px 0 20px;
 
     h1 {
       font-size: 25px;
       transition: all .5s;
+
+      a {
+        word-wrap: anywhere;
+      }
     }
 
     .tag-box-inner {

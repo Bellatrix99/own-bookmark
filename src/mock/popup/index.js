@@ -16,7 +16,7 @@ export let searchResult = [
         ]
     },
     {
-        title: 'GithubGithubGithubGithubGithub',
+        title: 'Github,Github,Github,Github,Github',
         href: 'https://github.com',
         icon: 'https://github.com/favicon.ico',
         tags: [

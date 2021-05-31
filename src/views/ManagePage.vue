@@ -1,12 +1,13 @@
 <template>
   <div class="container">
     <div class="bookmark-filter">
-      <BookMarkFilter/>
+      <BookMarkFilter @getVisibleBookMarkIndex="getVisibleBookMarkIndex"/>
     </div>
     <a-row class="default-container">
       <a-col :span="18" class="bookmark-info-outer">
         <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
                       :searchResultObj="item" :searchResultIndex="index"
+                      :hiddenBookMarkIndex="hiddenBookMarkIndex"
                       @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
         />
         <div v-if="this.isEmptySearchResult">
@@ -34,8 +35,12 @@ export default {
   data() {
     return {
       searchResult: searchResult,
+      visibleSearchResult: "",
       showEditBookMarkInfo: "",
-      isEmptySearchResult: false
+      isEmptySearchResult: false,
+      visibleBookMarkIndex: [],
+      hiddenBookMarkIndex: [],
+      originBookMarkIndex: []
     }
   },
   methods: {
@@ -47,7 +52,21 @@ export default {
       if (searchResult.length === 0) {
         this.isEmptySearchResult = true;
       }
+    },
+    getVisibleBookMarkIndex(visibleBookMarkIndex) {
+      this.visibleBookMarkIndex = visibleBookMarkIndex;
+      // this.visibleSearchResult = JSON.parse(JSON.stringify(this.searchResult));
+      this.hiddenBookMarkIndex = this.originBookMarkIndex.filter(
+          (val) => {
+            if (Object.prototype.hasOwnProperty.call(this.originBookMarkIndex, val)) {
+              return this.visibleBookMarkIndex.indexOf(val) === -1
+            }
+          }
+      );
     }
+  },
+  mounted() {
+    this.originBookMarkIndex = [...new Array(this.searchResult.length).keys()];
   }
 }
 </script>

@@ -5,16 +5,37 @@
       <div class="icon">
         <img src="../../assets/icon.png" alt="input-icon">
       </div>
-      <input type="text" placeholder="搜索书签或标签">
+      <input type="text" placeholder="搜索书签或标签" @input="darkSearchBookMark">
     </div>
   </div>
 </template>
 
 <script>
+import {searchResult} from "@/mock/popup";
+
 export default {
   name: "BookMarkFilter",
+  data() {
+    return {
+      searchResult: searchResult,
+      darkSearchSymbol: "",
+      arrIndex: 0,
+      visibleBookMarkIndex: []
+    }
+  },
   methods: {
-
+    darkSearchBookMark(e) {
+      this.visibleBookMarkIndex = [];
+      this.arrIndex = 0;
+      this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
+      for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
+        this.arrIndex++;
+        if (e.target.value !== "" && eachDarkSearchSymbol.toString().split(",").join("").indexOf(e.target.value) !== -1) {
+          this.visibleBookMarkIndex.push(this.arrIndex - 1);
+        }
+      }
+      this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
+    }
   }
 }
 </script>
