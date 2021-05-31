@@ -3,15 +3,20 @@
     <div class="bookmark-filter">
       <BookMarkFilter/>
     </div>
-    <div class="default-container">
-      <tagBox/>
-      <div class="bookmark-info-outer">
-        <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'" :searchResultObj="item"
-                      :searchResultIndex="index" @handleEditBookMark="handleEditBookMark"
-                      @deleteBKIndex="deleteBKIndex"
+    <a-row class="default-container">
+      <a-col :span="18" class="bookmark-info-outer">
+        <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
+                      :searchResultObj="item" :searchResultIndex="index"
+                      @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
         />
-      </div>
-    </div>
+        <div v-if="this.isEmptySearchResult">
+          没有数据
+        </div>
+      </a-col>
+      <a-col :span="6" class="tag-box-outer">
+        <tagBox/>
+      </a-col>
+    </a-row>
     <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"/>
   </div>
 </template>
@@ -29,7 +34,8 @@ export default {
   data() {
     return {
       searchResult: searchResult,
-      showEditBookMarkInfo: ""
+      showEditBookMarkInfo: "",
+      isEmptySearchResult: false
     }
   },
   methods: {
@@ -38,6 +44,9 @@ export default {
     },
     deleteBKIndex(searchResultIndex) {
       searchResult.splice(searchResultIndex, 1);
+      if (searchResult.length === 0) {
+        this.isEmptySearchResult = true;
+      }
     }
   }
 }
@@ -57,6 +66,11 @@ export default {
   border-radius: 3px;
   width: 80%;
   margin: -100px auto 30px;
+}
+
+.tag-box-outer {
+  position: sticky;
+  top: 5%;
 }
 
 .bookmark-info-outer {

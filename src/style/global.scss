@@ -28,7 +28,6 @@ html {
 
 body {
   width: 100vw;
-  overflow: hidden;
 }
 
 :root {
@@ -45,7 +44,7 @@ div {
   justify-content: center;
   align-items: center;
   padding: 6px 10px;
-  margin-right: 10px;
+  margin: 5px 6px;
   border-radius: 3px;
   font-size: 12px;
   background-color: rgba(217, 240, 255, 0.62);

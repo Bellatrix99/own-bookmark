@@ -1,6 +1,6 @@
 export let searchResult = [
     {
-        title: '百度一下,你就知道',
+        title: '百度一下，你就知道',
         href: 'https://www.baidu.com',
         icon: 'https://www.baidu.com/favicon.ico',
         tags: [
@@ -33,7 +33,7 @@ export let searchResult = [
     },
     {
         title: '掘金 - 代码不止，掘金不停',
-        href: 'https://juejin.cn/',
+        href: 'https://juejin.cn',
         icon: 'https://juejin.cn/favicon.ico',
         tags: [
             'chrome', 'dev', 'html', 'css', 'juejin', 'js'
@@ -41,7 +41,7 @@ export let searchResult = [
     },
     {
         title: 'OSCHINA - 中文开源技术交流社区',
-        href: 'https://www.oschina.net/',
+        href: 'https://www.oschina.net',
         icon: 'https://www.oschina.net/favicon.ico',
         tags: [
             'chrome', 'dev', 'html', 'css', 'oschina', 'js'
@@ -49,3 +49,9 @@ export let searchResult = [
     },
 ];
 
+export let tagsArr = [
+    'Docker', 'C++', 'Java', 'JavaScript',
+    '数据结构', '算法', 'Shell', '教程', '仓库',
+    'TypeScript', 'Webpack', 'React', 'Vue', 'jest',
+    '测试', '知乎', '掘金'
+]
