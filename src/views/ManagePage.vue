@@ -18,7 +18,8 @@
         <tagBox/>
       </a-col>
     </a-row>
-    <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"/>
+    <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"
+    />
   </div>
 </template>
 

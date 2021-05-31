@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Bus from "@/assets/Bus";
 
 export default {
   name: "BookMarkInfo",
@@ -41,13 +42,13 @@ export default {
   data() {
     return {
       editable: false,
-      arr: [1, 2, 3]
     }
   },
   methods: {
     handleToggleEdit() {
       this.editable = true;
-      this.$emit('handleEditBookMark', this.editable)
+      Bus.$emit('getClickBookMark', this.searchResultIndex);
+      this.$emit('handleEditBookMark', this.editable);
     },
     deleteBookMarkItem() {
       this.$emit("deleteBKIndex", this.searchResultIndex);

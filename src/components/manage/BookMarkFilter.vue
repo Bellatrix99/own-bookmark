@@ -30,7 +30,7 @@ export default {
       this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
       for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
         this.arrIndex++;
-        if (e.target.value !== "" && eachDarkSearchSymbol.toString().split(",").join("").indexOf(e.target.value) !== -1) {
+        if (eachDarkSearchSymbol.toString().split(",").join("").indexOf(e.target.value) !== -1) {
           this.visibleBookMarkIndex.push(this.arrIndex - 1);
         }
       }

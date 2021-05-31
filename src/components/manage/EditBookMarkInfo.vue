@@ -10,7 +10,7 @@
       <div class="content">
         <div class="bookmark-list-item">
           <div class="favicon">
-            <img src="../../assets/icon.png" alt="item-icon">
+            <img :src="searchResult[this.bookMarkClickIndex].icon" alt="item-icon">
           </div>
           <div class="form-item">
             <div class="form-content">
@@ -53,11 +53,21 @@
 </template>
 
 <script>
+import {searchResult} from "@/mock/popup";
+import Bus from "@/assets/Bus";
+
 export default {
   name: "EditBookMarkInfo",
+  props: {
+    searchResultObj: {
+      type: Object
+    },
+  },
   data() {
     return {
-      showEditBookMarkInfo: ""
+      showEditBookMarkInfo: "",
+      searchResult: searchResult,
+      bookMarkClickIndex: null
     }
   },
   methods: {
@@ -65,7 +75,12 @@ export default {
       this.showEditBookMarkInfo = false;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
     }
-  }
+  },
+  created() {
+    Bus.$on('getClickBookMark', data => {
+      this.bookMarkClickIndex = data;
+    })
+  },
 }
 </script>
 
