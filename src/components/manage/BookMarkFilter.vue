@@ -20,21 +20,37 @@ export default {
       searchResult: searchResult,
       darkSearchSymbol: "",
       arrIndex: 0,
-      visibleBookMarkIndex: []
+      visibleBookMarkIndex: [],
+      searchInputVal: ""
     }
   },
   methods: {
     darkSearchBookMark(e) {
       this.visibleBookMarkIndex = [];
       this.arrIndex = 0;
+      this.searchInputVal = e.target.value;
       this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
       for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
         this.arrIndex++;
-        if (eachDarkSearchSymbol.toString().split(",").join("").indexOf(e.target.value) !== -1) {
+        if (eachDarkSearchSymbol.toString().split(",").join("").indexOf(this.searchInputVal) !== -1) {
           this.visibleBookMarkIndex.push(this.arrIndex - 1);
         }
       }
       this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
+      this.$emit('getSearchInputVal', this.searchInputVal);
+    },
+    darkSearchBookMarkVal(searchInputVal) {
+      this.visibleBookMarkIndex = [];
+      this.arrIndex = 0;
+      this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
+      for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
+        this.arrIndex++;
+        if (eachDarkSearchSymbol.toString().split(",").join("").indexOf(searchInputVal) !== -1) {
+          this.visibleBookMarkIndex.push(this.arrIndex - 1);
+        }
+      }
+      this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
+      this.$emit('getSearchInputVal', this.searchInputVal);
     }
   }
 }

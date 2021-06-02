@@ -16,7 +16,7 @@
             />
           </div>
         </transition>
-        <transition-group
+        <transition
             name="others-transition"
             enter-active-class="animate__animated animate__fadeIn"
             leave-active-class="animate__animated animate__fadeOut"
@@ -27,7 +27,7 @@
                key="starButtonOuter" v-show="!this.showBookMarkList">
             <StarButton @ToggleStarPage="handleStarPage" key="starButton"/>
           </div>
-        </transition-group>
+        </transition>
       </div>
       <transition
           name="star-page-transition"

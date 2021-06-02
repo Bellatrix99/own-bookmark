@@ -37,6 +37,9 @@ export default {
     },
     hiddenBookMarkIndex: {
       type: Array
+    },
+    searchInputVal: {
+      type: String
     }
   },
   data() {
@@ -52,6 +55,9 @@ export default {
       this.$emit('handleEditBookMark', this.editable);
     },
     deleteBookMarkItem() {
+      if (this.searchInputVal !== "") {
+        this.$emit('darkSearchBookMark', this.searchInputVal);
+      }
       this.$emit("deleteBKIndex", this.searchResultIndex);
     },
     showBookMarkSearch() {
@@ -61,7 +67,7 @@ export default {
         }
       }
       return true;
-    }
+    },
   },
 }
 </script>

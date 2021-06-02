@@ -1,15 +1,20 @@
 <template>
   <div class="container">
     <div class="bookmark-filter">
-      <BookMarkFilter @getVisibleBookMarkIndex="getVisibleBookMarkIndex"/>
+      <BookMarkFilter @getVisibleBookMarkIndex="getVisibleBookMarkIndex"
+                      @getSearchInputVal="getSearchInputVal"
+                      ref="BookMarkFilter"
+      />
     </div>
     <a-row class="default-container">
       <a-col :span="18" class="bookmark-info-outer">
         <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
                       :searchResultObj="item" :searchResultIndex="index"
                       :hiddenBookMarkIndex="hiddenBookMarkIndex"
+                      :searchInputVal="searchInputVal"
                       @getClickBookMark="getClickBookMark"
                       @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
+                      @darkSearchBookMark="darkSearchBookMark"
         />
         <div v-if="this.isEmptySearchResult">
           没有数据
@@ -44,7 +49,8 @@ export default {
       visibleBookMarkIndex: [],
       hiddenBookMarkIndex: [],
       originBookMarkIndex: [],
-      BookMarkInfoIndex: 0
+      BookMarkInfoIndex: 0,
+      searchInputVal: ""
     }
   },
   methods: {
@@ -70,6 +76,12 @@ export default {
     },
     getClickBookMark(searchResultIndex) {
       this.BookMarkInfoIndex = searchResultIndex;
+    },
+    darkSearchBookMark() {
+      this.$refs.BookMarkFilter.darkSearchBookMarkVal();
+    },
+    getSearchInputVal(searchInputVal) {
+      this.searchInputVal = searchInputVal;
     }
   },
   mounted() {
