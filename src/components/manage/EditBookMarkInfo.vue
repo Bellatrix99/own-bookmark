@@ -29,7 +29,7 @@
               <div class="form-item">
                 <label>标签</label>
                 <div class="tag-input-box" @click="addTagsFocus" @keydown="handleTagInputKeyDown">
-                  <div class="tag" v-for="(tagName,index) in searchResult[this.BookMarkInfoIndex].tags"
+                  <div class="tag" v-for="(tagName,index) in this.editTags.tagNames"
                        :key="index + '-only'">
                     <span>{{ tagName }}</span>
                     <a id="text-close" @click="deleteTagBtn(index)">
@@ -37,7 +37,7 @@
                     </a>
                   </div>
                   <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
-                         ref="inputTags" @input="handleTagInputChange"
+                         ref="inputTags" @input="tagInputChange"
                   />
                 </div>
               </div>
@@ -47,7 +47,7 @@
       </div>
       <div class="operate-bottom">
         <div class="operate-btn">
-          <button class="finish-btn">完成</button>
+          <button class="finish-btn" @click="finishEditBookMarkInfo">完成</button>
           <button class="cancel-btn" @click="closeEditBookMarkInfo">取消</button>
         </div>
       </div>
@@ -68,6 +68,9 @@ export default {
       type: Number
     }
   },
+  mounted() {
+    this.editTags.tagNames = this.tags.tagNames.slice(0);
+  },
   data() {
     return {
       showEditBookMarkInfo: "",
@@ -79,24 +82,32 @@ export default {
       tags: {
         tagNames: searchResult[this.BookMarkInfoIndex].tags,
       },
+      editTags: {
+        tagNames: ""
+      }
     }
   },
   methods: {
+    finishEditBookMarkInfo() {
+      console.log(this.editTags)
+      this.showEditBookMarkInfo = false;
+      searchResult[this.BookMarkInfoIndex].tags = this.editTags.tagNames;
+      this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
+    },
     closeEditBookMarkInfo() {
       this.showEditBookMarkInfo = false;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
     },
-    handleTagInputChange(event) {
+    tagInputChange(event) {
       let value = event.target.value;
       const match = value.match(/(.+)[\s,，]/);
       this.inputValueLength = value.length;
       if (match !== null && match.length === 2 && match[1].lastIndexOf(" ") !== match[1].length - 1) {
-        this.tags.tagNames.push(match[1]);
+        this.editTags.tagNames.push(match[1]);
         event.target.value = "";
       }
     },
     deleteTagBtn(index) {
-      console.log(index)
       this.$nextTick(function () {
         this.tags.tagNames.splice(index, 1);
       })
