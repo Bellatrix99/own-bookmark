@@ -3,7 +3,8 @@
     <div class="top-box" ref="topBox"
          :class="{'animate__searchUp': this.showBookMarkList, 'animate__topBoxToTop':this.showStarPage}">
       <div class="main-page-center" :class="{'animate__starButtonUp': this.showStarPage}">
-        <search-input @toggleExpand="handleSearchExpand" @renderBookmark="renderBookmark"
+        <!-- 输入框组件 -->
+        <search-input @toggleExpand="handleSearchExpand"
                       ref="searchInput"
         />
         <transition
@@ -11,6 +12,7 @@
             enter-active-class="animate__animated animate__fadeInDown"
         >
           <div v-if="showBookMarkList" class="bookmark-outer-div">
+            <!-- 书签目录组件 -->
             <BookMarkItem :search-input-value="searchInputValue" ref="BookMarkItemChild"
                           v-for="item in searchResult" :key="item.length" :searchResultObj='item'
             />
@@ -25,6 +27,7 @@
           <p id="or" v-show="!this.showBookMarkList" key="orP">or</p>
           <div class="star-btn-outer" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
                key="starButtonOuter" v-show="!this.showBookMarkList">
+            <!-- 点击收藏按钮组件 -->
             <StarButton @ToggleStarPage="handleStarPage" key="starButton"/>
           </div>
         </transition-group>
@@ -35,6 +38,7 @@
           leave-active-class="animate__animated animate__fadeOutDown"
           mode="out-in"
       >
+        <!-- 新增收藏组件 -->
         <StarPage v-if="showStarPage" key="StarPage" @showStarPage="handleStarPage"/>
       </transition>
     </div>
@@ -53,19 +57,29 @@ export default {
   components: {StarButton, BookMarkItem, SearchInput, StarPage},
   data() {
     return {
-      showBookMarkList: false,
-      showStarPage: false,
-      searchInputUp: false,
-      searchInputValue: "",
-      searchResult: searchResult,
-      item: ""
+      showBookMarkList: false,      // 是否显示书签目录状态布尔值
+      showStarPage: false,          // 是否显示收藏页状态布尔值
+      searchInputUp: false,         // 搜索输入框是否上升(动画)状态布尔值
+      searchInputValue: "",         // 搜索输入框中输入的值
+      searchResult: searchResult,   // 全局的已收藏书签数组
+      item: {},                     // 某个已收藏的书签
     }
   },
   methods: {
+    /**
+     * @description 用于展开输入框
+     * @param {Boolean} expanded
+     * @return void
+     */
     handleSearchExpand({expanded}) {
       this.showBookMarkList = expanded;
       this.searchInputUp = true;
     },
+    /**
+     * @description 用于切换收藏页是否显示
+     * @param {Boolean} showStarPage
+     * @return void
+     */
     handleStarPage(showStarPage) {
       if (this.showStarPage === showStarPage) {
         this.showStarPage = !showStarPage;
@@ -73,11 +87,12 @@ export default {
         this.showStarPage = showStarPage;
       }
     },
+    /**
+     * @description 用于切换收藏页是否显示
+     * @return void
+     */
     handleToggleExpand() {
       this.$refs.searchInput.handleToggleExpand()
-    },
-    renderBookmark(searchInputValue) {
-      this.searchInputValue = searchInputValue
     },
   }
 }
@@ -169,6 +184,7 @@ export default {
 
   &::-webkit-scrollbar { /*滚动条整体样式*/
     width: 1vw; /*高宽分别对应横竖滚动条的尺寸*/
+    max-width: 10px;
   }
 
   &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/

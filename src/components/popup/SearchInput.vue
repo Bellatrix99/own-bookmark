@@ -3,7 +3,7 @@
     <div class="search-box" @click="handleToggleExpand">
       <label>
         <input type="text" id="search" name="search" placeholder="搜索标签或书签" autocomplete="off"
-               @input="renderBookmark" v-model="searchTextInput" @blur="clearSearchInput">
+               v-model="searchTextInput" @blur="clearSearchInput">
       </label>
       <transition
           name="cancel-button"
@@ -24,7 +24,6 @@ export default {
     return {
       expanded: false,
       searchInputValue: "",
-      showAnimate: false,
       searchTextInput: ""
     }
   },
@@ -40,10 +39,7 @@ export default {
       });
     },
 
-    renderBookmark() {
-      this.showAnimate = true;
-      this.$emit('renderBookmark', this.searchInputValue);
-    },
+
 
     clearSearchInput() {
       this.searchTextInput = "";

@@ -17,38 +17,58 @@ export default {
   name: "BookMarkFilter",
   data() {
     return {
-      searchResult: searchResult,
-      darkSearchSymbol: "",
-      arrIndex: 0,
-      visibleBookMarkIndex: [],
-      searchInputVal: ""
+      searchResult: searchResult,     // 全局的已收藏书签数组
+      darkSearchSymbol: [],           // 用于模糊搜索的"标志"(书签的标题和标签合并的一维数组)
+      arrIndex: 0,                    // 用于循环语句,从而得到当前数组循环的次数和数组下标
+      visibleBookMarkIndex: [],       // 可见的书签下标数组
+      searchInputVal: ""              // 搜索框输入框的值
     }
   },
   methods: {
-    darkSearchBookMark(e) {
+    /**
+     * @description 用于实现模糊搜索(参数是当前元素版本)
+     * @param {Object} event
+     * @return void
+     */
+    darkSearchBookMark(event) {
+      // 初始化可见的下标数组和当前下标
       this.visibleBookMarkIndex = [];
       this.arrIndex = 0;
-      this.searchInputVal = e.target.value;
+      this.searchInputVal = event.target.value;
+      // 书签的标题和标签拍平并合并成一维数组作为模糊搜索的"标志"
       this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
+      // 循环判断,如果包含则为可见下标数组push该下标
       for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
         this.arrIndex++;
-        if (eachDarkSearchSymbol.toString().split(",").join("").indexOf(this.searchInputVal) !== -1) {
+        if (eachDarkSearchSymbol.toString().split(",").join("")
+            .indexOf(this.searchInputVal) !== -1) {
           this.visibleBookMarkIndex.push(this.arrIndex - 1);
         }
       }
+      // 调用父组件的方法, 并传值
       this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
       this.$emit('getSearchInputVal', this.searchInputVal);
     },
+    /**
+     * @description 用于实现模糊搜索(参数是搜索框输入的值版本)
+     * @param {String} searchInputVal
+     * @return void
+     */
     darkSearchBookMarkVal(searchInputVal) {
+      // 初始化可见的下标数组和当前下标
       this.visibleBookMarkIndex = [];
       this.arrIndex = 0;
+      // 书签的标题和标签拍平并合并成一维数组作为模糊搜索的"标志"
       this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
+      // 循环判断,如果包含则为可见下标数组push该下标
       for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
         this.arrIndex++;
-        if (eachDarkSearchSymbol.toString().split(",").join("").indexOf(searchInputVal) !== -1) {
+        if (eachDarkSearchSymbol.toString().split(",").join("")
+            .indexOf(searchInputVal) !== -1) {
           this.visibleBookMarkIndex.push(this.arrIndex - 1);
         }
       }
+      // 调用父组件的方法, 并传值
       this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
       this.$emit('getSearchInputVal', this.searchInputVal);
     }
