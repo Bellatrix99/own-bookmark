@@ -16,7 +16,7 @@
             />
           </div>
         </transition>
-        <transition
+        <transition-group
             name="others-transition"
             enter-active-class="animate__animated animate__fadeIn"
             leave-active-class="animate__animated animate__fadeOut"
@@ -27,7 +27,7 @@
                key="starButtonOuter" v-show="!this.showBookMarkList">
             <StarButton @ToggleStarPage="handleStarPage" key="starButton"/>
           </div>
-        </transition>
+        </transition-group>
       </div>
       <transition
           name="star-page-transition"
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {searchResult} from '../mock/popup/index';
+import {searchResult} from '@/mock/popup';
 import SearchInput from "@/components/popup/SearchInput";
 import BookMarkItem from "@/components/popup/BookMarkItem";
 import StarButton from "@/components/popup/StarButton";

@@ -6,24 +6,26 @@
                       ref="BookMarkFilter"
       />
     </div>
-    <a-row class="default-container">
-      <a-col :span="18" class="bookmark-info-outer">
-        <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
-                      :searchResultObj="item" :searchResultIndex="index"
-                      :hiddenBookMarkIndex="hiddenBookMarkIndex"
-                      :searchInputVal="searchInputVal"
-                      @getClickBookMark="getClickBookMark"
-                      @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
-                      @darkSearchBookMark="darkSearchBookMark"
-        />
-        <div v-if="this.isEmptySearchResult">
-          没有数据
-        </div>
-      </a-col>
-      <a-col :span="6" class="tag-box-outer">
-        <tagBox/>
-      </a-col>
-    </a-row>
+    <div class="default-container">
+      <a-row :gutter="24">
+        <a-col :span="18" class="bookmark-info-outer">
+          <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
+                        :searchResultObj="item" :searchResultIndex="index"
+                        :hiddenBookMarkIndex="hiddenBookMarkIndex"
+                        :searchInputVal="searchInputVal"
+                        @getClickBookMark="getClickBookMark"
+                        @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
+                        @darkSearchBookMark="darkSearchBookMark"
+          />
+          <div v-if="this.isEmptySearchResult">
+            没有数据
+          </div>
+        </a-col>
+        <a-col :span="6" class="tag-box-outer">
+          <tagBox/>
+        </a-col>
+      </a-row>
+    </div>
     <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"
                       :BookMarkInfoIndex="this.BookMarkInfoIndex"
     />
@@ -31,7 +33,7 @@
 </template>
 
 <script>
-import {searchResult} from '../mock/popup/index';
+import {searchResult} from '@/mock/popup';
 import BookMarkFilter from "@/components/manage/BookMarkFilter";
 import TagBox from "@/components/manage/TagBox";
 import BookMarkInfo from "@/components/manage/BookMarkInfo";
@@ -99,8 +101,6 @@ export default {
 }
 
 .default-container {
-  box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
-  background-color: white;
   border-radius: 3px;
   width: 80%;
   margin: -100px auto 30px;
@@ -112,7 +112,10 @@ export default {
 }
 
 .bookmark-info-outer {
-  padding: 20px;
+  box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
+  background-color: white;
+  padding: 12px;
+  border-radius: 14px;
 }
 
 </style>

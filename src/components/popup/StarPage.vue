@@ -19,7 +19,7 @@
           <div class="tag" v-for="(tagName,index) in this.tags.tagNames" :key="index + '-only'">
             <span>{{ tagName }}</span>
             <a id="text-close" @click="deleteTagBtn(index)">
-              <img src="../../assets/close.svg" alt="close-btn"/>
+              <img src="@/assets/close.svg" alt="close-btn"/>
             </a>
           </div>
           <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"

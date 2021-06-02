@@ -3,7 +3,7 @@
     <h1>书签管理器</h1>
     <div class="bookmark-filter-input">
       <div class="icon">
-        <img src="../../assets/icon.png" alt="input-icon">
+        <img src="@/assets/icon.png" alt="input-icon">
       </div>
       <input type="text" placeholder="搜索书签或标签" @input="darkSearchBookMark">
     </div>

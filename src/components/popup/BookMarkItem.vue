@@ -10,12 +10,9 @@
             searchResultNew.title
           }}</h2>
         <div class="tag-box">
-          <div class="tag" v-for="(tag,index) in searchResultNew.tags"
-               :key="index + '-only'" @mouseenter="showMoreTags(index)"
-               ref="eachTag" :title="moreTags"
-          >
-            {{ tag }}
-          </div>
+          <TagBoxPopup :searchResultNew="searchResultNew" :tagNumbers="tagNumbers"
+                       :searchResultObj="searchResultObj"
+          />
         </div>
       </div>
     </div>
@@ -25,9 +22,11 @@
 
 <script>
 import {calculateStringLength} from "@/utils/Globle";
+import TagBoxPopup from "@/components/popup/TagBoxPopup";
 
 export default {
   name: "BookMarkItem",
+  components: {TagBoxPopup},
   props: {
     searchResultObj: {
       type: Object
@@ -35,25 +34,16 @@ export default {
   },
   data() {
     return {
-      searchResultNew: "",
+      searchResultNew: {},
       allTagLength: 0,
-      tagNumbers: 0,
+      tagNumbers: "",
       maxShowTagNumbers: 6,
-      moreTags: "",
-      isactive: false
     }
   },
   methods: {
     openTab(e) {
       window.open(e.target.attributes.href.value, '_blank');
     },
-    showMoreTags(index) {
-      this.moreTags = '';
-      if (index === this.tagNumbers - 1) {
-        this.moreTags = this.searchResultObj.tags.slice(this.tagNumbers - 1);
-        this.$refs.eachTag[index].style.cursor = 'pointer';
-      }
-    }
   },
   mounted() {
     let allTags = this.searchResultObj.tags;
@@ -124,34 +114,5 @@ export default {
 .tag-box {
   display: flex;
 }
-
-.tag {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 20px;
-  font-size: 12px;
-  color: #485665;
-  background-color: rgba(217, 240, 255, 0.62);
-  border-radius: 2px;
-  padding: 3px 8px;
-  margin: 3px 5px;
-
-  &:first-child {
-    margin-left: 0;
-  }
-
-  a {
-    display: flex;
-    align-items: center;
-    margin-left: 5px;
-  }
-
-  img {
-    height: 12px;
-    opacity: .8;
-  }
-}
-
 
 </style>

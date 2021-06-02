@@ -14,10 +14,10 @@
     </div>
     <div class="operation-btn">
       <button @click="handleToggleEdit">
-        <img src="../../assets/edit.svg" alt="edit-btn" id="edit-btn">
+        <img src="@/assets/edit.svg" alt="edit-btn" id="edit-btn">
       </button>
       <button @click="deleteBookMarkItem">
-        <img src="../../assets/remove.svg" alt="remove-btn" id="remove-btn">
+        <img src="@/assets/remove.svg" alt="remove-btn" id="remove-btn">
       </button>
     </div>
   </div>
@@ -78,7 +78,7 @@ export default {
   position: relative;
   margin-bottom: 20px;
   padding: 15px 25px;
-  border-radius: 5px;
+  border-radius: 10px;
   transition: all .3s;
 
   &:hover {

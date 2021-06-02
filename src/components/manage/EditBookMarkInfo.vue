@@ -4,7 +4,7 @@
       <div class="operate-header">
         <h2>修改书签</h2>
         <button class="close-btn" @click="closeEditBookMarkInfo">
-          <img src="../../assets/close.svg" alt="close-btn">
+          <img src="@/assets/close.svg" alt="close-btn">
         </button>
       </div>
       <div class="content">
@@ -33,7 +33,7 @@
                        :key="index + '-only'">
                     <span>{{ tagName }}</span>
                     <a id="text-close" @click="deleteTagBtn(index)">
-                      <img src="../../assets/close.svg" alt="close-btn"/>
+                      <img src="@/assets/close.svg" alt="close-btn"/>
                     </a>
                   </div>
                   <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
@@ -151,7 +151,7 @@ export default {
     min-width: 300px;
     min-height: 200px;
     background-color: white;
-    border-radius: 5px;
+    border-radius: 6px;
     box-shadow: 3px 3px 15px rgba(69, 69, 69, 72%);
 
     .operate-header {
