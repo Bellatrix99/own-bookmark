@@ -29,7 +29,9 @@ export default {
   components: {TagBoxPopup},
   props: {
     searchResultObj: {
-      type: Object
+      type: Object,
+      default: () => {
+      }
     }
   },
   data() {
@@ -44,29 +46,32 @@ export default {
     openTab(e) {
       window.open(e.target.attributes.href.value, '_blank');
     },
-  },
-  mounted() {
-    let allTags = this.searchResultObj.tags;
-    this.searchResultNew = JSON.parse(JSON.stringify(this.searchResultObj));
-    for (let tagIndex in allTags) {
-      if (Object.prototype.hasOwnProperty.call(allTags, tagIndex)) {
-        this.allTagLength += allTags[tagIndex].length;
-        if (this.allTagLength > 16 || tagIndex > this.maxShowTagNumbers) {
-          this.tagNumbers = tagIndex < this.maxShowTagNumbers ? tagIndex : this.maxShowTagNumbers;
-          this.searchResultNew.tags.splice(this.tagNumbers, 99, "...");
-          this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers);
+    omitLongText() {
+      let allTags = this.searchResultObj.tags;
+      this.searchResultNew = JSON.parse(JSON.stringify(this.searchResultObj));
+      for (let tagIndex in allTags) {
+        if (Object.prototype.hasOwnProperty.call(allTags, tagIndex)) {
+          this.allTagLength += allTags[tagIndex].length;
+          if (this.allTagLength > 16 || tagIndex > this.maxShowTagNumbers) {
+            this.tagNumbers = tagIndex < this.maxShowTagNumbers ? tagIndex : this.maxShowTagNumbers;
+            this.searchResultNew.tags.splice(this.tagNumbers, 99, "...");
+            this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers);
+          }
+        }
+      }
+      if (calculateStringLength(this.searchResultObj.title).len > 26) {
+        if (calculateStringLength(this.searchResultObj.title).hans
+            >= calculateStringLength(this.searchResultObj.title).chars
+        ) {
+          this.searchResultNew.title = this.searchResultObj.title.slice(0, 16) + "...";
+        } else {
+          this.searchResultNew.title = this.searchResultObj.title.slice(0, 22) + "...";
         }
       }
     }
-    if (calculateStringLength(this.searchResultObj.title).len > 26) {
-      if (calculateStringLength(this.searchResultObj.title).hans
-          >= calculateStringLength(this.searchResultObj.title).chars
-      ) {
-        this.searchResultNew.title = this.searchResultObj.title.slice(0, 16) + "...";
-      } else {
-        this.searchResultNew.title = this.searchResultObj.title.slice(0, 22) + "...";
-      }
-    }
+  },
+  mounted() {
+    this.omitLongText();
   }
 }
 </script>

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import PopUpPage from "@/views/PopUpPage";
-import ManagePage from "@/views/ManagePage";
+
+const PopUpPage = () => import('@/views/PopUpPage')
+const ManagePage = () => import('@/views/ManagePage')
 
 Vue.use(VueRouter)
 

@@ -62,10 +62,11 @@ export default {
   name: "EditBookMarkInfo",
   props: {
     searchResultObj: {
-      type: Object
+      type: Object,
     },
     BookMarkInfoIndex: {
-      type: Number
+      type: Number,
+      default: () => 0
     }
   },
   mounted() {
@@ -89,7 +90,6 @@ export default {
   },
   methods: {
     finishEditBookMarkInfo() {
-      console.log(this.editTags)
       this.showEditBookMarkInfo = false;
       searchResult[this.BookMarkInfoIndex].tags = this.editTags.tagNames;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
@@ -108,9 +108,8 @@ export default {
       }
     },
     deleteTagBtn(index) {
-      this.$nextTick(function () {
-        this.tags.tagNames.splice(index, 1);
-      })
+      this.tags.tagNames.splice(index, 1);
+      this.editTags.tagNames = this.tags.tagNames
     },
     addTagsFocus() {
       this.$nextTick(function () {
@@ -121,7 +120,7 @@ export default {
     handleTagInputKeyDown(event) {
       if (event.key === 'Backspace' && event.target.value === '') {
         if (this.$refs.inputTags.previousElementSibling) {
-          this.tags.tagNames.pop();
+          this.editTags.tagNames.pop();
         }
       }
     },

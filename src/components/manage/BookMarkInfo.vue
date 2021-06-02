@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmark-info" v-if="showBookMarkSearch()">
+  <div class="bookmark-info" v-if="showBookMarkSearch">
     <div class="favicon">
       <img :src="searchResultObj.icon" alt="item-icon">
     </div>
@@ -30,16 +30,20 @@ export default {
   name: "BookMarkInfo",
   props: {
     searchResultObj: {
-      type: Object
+      type: Object,
+      default: () => {}
     },
     searchResultIndex: {
-      type: Number
+      type: Number,
+      default: () => 0
     },
     hiddenBookMarkIndex: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     searchInputVal: {
-      type: String
+      type: String,
+      default: () => ""
     }
   },
   data() {
@@ -60,6 +64,9 @@ export default {
       }
       this.$emit("deleteBKIndex", this.searchResultIndex);
     },
+
+  },
+  computed: {
     showBookMarkSearch() {
       for (let oneArr of this.hiddenBookMarkIndex) {
         if (this.searchResultIndex === oneArr) {
@@ -68,7 +75,7 @@ export default {
       }
       return true;
     },
-  },
+  }
 }
 </script>
 
