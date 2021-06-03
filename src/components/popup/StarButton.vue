@@ -12,10 +12,15 @@ export default {
   name: "StarButton",
   data() {
     return {
+      // 是否显示收藏页的状态布尔值
       showStarPage: false
     }
   },
   methods: {
+    /**
+     * @description 用于切换收藏页是否显示并传递显示状态布尔值
+     * @return void
+     */
     handleToggleStarPage() {
       this.showStarPage = !this.showStarPage;
       this.$emit("ToggleStarPage", this.showStarPage);

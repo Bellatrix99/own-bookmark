@@ -16,7 +16,8 @@
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
                         :searchInputVal="searchInputVal"
                         @getClickBookMark="getClickBookMark"
-                        @handleEditBookMark="handleEditBookMark" @deleteBKIndex="deleteBKIndex"
+                        @handleEditBookMark="handleEditBookMark"
+                        @deleteBKIndex="deleteBKIndex"
                         @darkSearchBookMark="darkSearchBookMark"
           />
           <div v-if="this.isEmptySearchResult">
@@ -48,15 +49,23 @@ export default {
   components: {EditBookMarkInfo, BookMarkInfo, TagBox, BookMarkFilter},
   data() {
     return {
-      searchResult: searchResult,       // 全局的已收藏书签数组
-      showEditBookMarkInfo: false,      // 是否显示书签信息编辑模态框的状态布尔值
-      isEmptySearchResult: false,       // 搜索结果是否为空的状态布尔值
-      visibleBookMarkIndex: [],         // (模糊搜索之后)可见的书签下标数组
-      hiddenBookMarkIndex: [],          // (模糊搜索之后)不可见的书签下标数组
-      originBookMarkIndex: [],          // (模糊搜索之前)原来的数组下标数组
-      BookMarkInfoIndex: 0,             // 当前书签信息的下标
-      searchInputVal: ""                // manage 页顶部搜索框输入的值
-    }
+      // 全局的已收藏书签数组
+      searchResult: searchResult,
+      // 是否显示书签信息编辑模态框的状态布尔值
+      showEditBookMarkInfo: false,
+      // 搜索结果是否为空的状态布尔值
+      isEmptySearchResult: false,
+      // (模糊搜索之后)可见的书签下标数组
+      visibleBookMarkIndex: [],
+      // (模糊搜索之后)不可见的书签下标数组
+      hiddenBookMarkIndex: [],
+      // (模糊搜索之前)原来的数组下标数组
+      originBookMarkIndex: [],
+      // 当前书签信息的下标
+      BookMarkInfoIndex: 0,
+      // manage 页顶部搜索框输入的值
+      searchInputVal: ""
+    };
   },
   methods: {
     /**

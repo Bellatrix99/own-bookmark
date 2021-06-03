@@ -40,25 +40,37 @@ export default {
   name: "StarPage",
   data() {
     return {
+      // 输入内容的长度
       inputValueLength: "",
+      // 书签 tags 的样式
       bookMarkTagsStyle: {
         width: this.inputValueLength + 'em'
       },
+      // 单个书签,包括所有 tags 的数组
       tags: {
         tagNames: [],
       },
     }
   },
   methods: {
+    /**
+     * @description 用于返回到主页 (显示收藏页状态布尔值设为 false)
+     */
     starPageBackToMain() {
       this.$emit("showStarPage", false)
     },
+    /**
+     * @description 用于给新增 tags 输入框聚焦
+     * @return void
+     */
     addTagsFocus() {
-      this.$nextTick(function () {
-        //DOM 更新了
         this.$refs.inputTags.focus();
-      })
     },
+    /**
+     * @description 用于监听当前键盘按键, 用于删除标签
+     * @param {Object} event
+     * @return void
+     */
     handleTagInputKeyDown(event) {
       if (event.key === 'Backspace' && event.target.value === '') {
         if (this.$refs.inputTags.previousElementSibling) {
@@ -66,20 +78,35 @@ export default {
         }
       }
     },
+    /**
+     * @description 用于监听tag输入,
+     * 输入好标签名称之后按下空格或是逗号即可将输入的值变成一个具有样式的 tag 标签
+     * @param {Object} event
+     * @return void
+     */
     handleTagInputChange(event) {
       let value = event.target.value;
-      const match = value.match(/(.+)[\s,，]/);
+      const match = value.match(/(.+)[,，]/);
       this.inputValueLength = value.length;
       if (match !== null && match.length === 2 && match[1].lastIndexOf(" ") !== match[1].length - 1) {
         this.tags.tagNames.push(match[1]);
         event.target.value = "";
       }
     },
+    /**
+     * @description 用于监听点击删除时间, 用于删除书签
+     * @param {Number} index
+     * @return void
+     */
     deleteTagBtn(index) {
       this.$nextTick(function () {
         this.tags.tagNames.splice(index, 1);
       })
     },
+    /**
+     * @description 用于确定新增书签
+     * @return void
+     */
     handleAddMark() {
 
     }

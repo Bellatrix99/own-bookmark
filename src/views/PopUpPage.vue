@@ -57,12 +57,18 @@ export default {
   components: {StarButton, BookMarkItem, SearchInput, StarPage},
   data() {
     return {
-      showBookMarkList: false,      // 是否显示书签目录状态布尔值
-      showStarPage: false,          // 是否显示收藏页状态布尔值
-      searchInputUp: false,         // 搜索输入框是否上升(动画)状态布尔值
-      searchInputValue: "",         // 搜索输入框中输入的值
-      searchResult: searchResult,   // 全局的已收藏书签数组
-      item: {},                     // 某个已收藏的书签
+      // 是否显示书签目录状态布尔值
+      showBookMarkList: false,
+      // 是否显示收藏页状态布尔值
+      showStarPage: false,
+      // 搜索输入框是否上升(动画)状态布尔值
+      searchInputUp: false,
+      // 搜索输入框中输入的值
+      searchInputValue: "",
+      // 全局的已收藏书签数组
+      searchResult: searchResult,
+      // 某个已收藏的书签
+      item: {},
     }
   },
   methods: {

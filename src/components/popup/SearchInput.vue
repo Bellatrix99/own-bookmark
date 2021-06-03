@@ -22,25 +22,34 @@ export default {
   name: "SearchInput",
   data() {
     return {
+      // 搜索框是否展开的状态布尔值
       expanded: false,
-      searchInputValue: "",
+      // 输入框输入的值
       searchTextInput: ""
     }
   },
 
   methods: {
-    handleToggleExpand(e) {
+    /**
+     * @description 用于监听当前元素的点击事件,
+     * 并且传递搜索框是否展开的状态布尔值
+     * @param {Object} event
+     * @return void
+     */
+    handleToggleExpand(event) {
+      // 如果点击的元素是 Input 标签,则展开状态布尔值为"真"
+      this.expanded = event.target.tagName === 'INPUT';
       // 子组件可以使用 $emit 触发父组件的自定义事件
       // 第二参数是传给父组件的值
       // 父组件监听事件时，可以通过 $event 访问这个被抛出的值
-      this.expanded = e.target.tagName === 'INPUT';
       this.$emit('toggleExpand', {
         expanded: this.expanded
       });
     },
-
-
-
+    /**
+     * @description input 输入框失去焦点时清除输入框内容
+     * @return void
+     */
     clearSearchInput() {
       this.searchTextInput = "";
     }

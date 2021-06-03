@@ -15,19 +15,29 @@ import {tagsArr} from '@/mock/popup';
 export default {
   name: "TagBox",
   mounted() {
+    // 默认搜索结果为全局的的已定义标签数组 tagsArr
     this.searchTagArr = tagsArr;
   },
   data() {
     return {
+      // 全局的已定义标签数组 tagsArr
       tagsArr: tagsArr,
+      // 搜索标签结果数组
       searchTagArr: []
     }
   },
   methods: {
-    searchTag(e) {
+    /**
+     * @description 用于监听搜索框输入, 返回模糊搜索结果(忽略大小写)
+     * @param {Object} event
+     * @return void
+     */
+    searchTag(event) {
+      // 初始化搜索结果为空
       this.searchTagArr = [];
       for (const tag of this.tagsArr) {
-        if (tag.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1) {
+        // 如果已定义的标签数组中某一项包含当前输入的值,则将该项推到模糊搜索结果数组中(忽略大小写)
+        if (tag.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1) {
           this.searchTagArr.push(tag);
         }
       }

@@ -29,18 +29,22 @@
 export default {
   name: "BookMarkInfo",
   props: {
+    // 已收藏列表的单个项
     searchResultObj: {
       type: Object,
       default: () => {}
     },
+    // 已收藏列表单个项对应的下标
     searchResultIndex: {
       type: Number,
       default: () => 0
     },
+    // 隐藏的书签下标数组
     hiddenBookMarkIndex: {
       type: Array,
       default: () => []
     },
+    // 搜索框输入内容
     searchInputVal: {
       type: String,
       default: () => ""
@@ -48,16 +52,27 @@ export default {
   },
   data() {
     return {
+      // 编辑模态框是否弹出
       editable: false,
     }
   },
   methods: {
+    /**
+     * @description 用于切换模态框的显示并传递状态量
+     * @return void
+     */
     handleToggleEdit() {
       this.editable = true;
       // Bus.$emit('getClickBookMark', this.searchResultIndex);
       this.$emit('getClickBookMark', this.searchResultIndex);
       this.$emit('handleEditBookMark', this.editable);
     },
+    /**
+     * @description 用于删除书签项目;
+     * 如果当前输入内容不为空则继续保持模糊搜索结果,然后在模糊搜索结果上进行删除;
+     * 如果当前输入内容为空则在所有书签列表上进行删除
+     * @return void
+     */
     deleteBookMarkItem() {
       if (this.searchInputVal !== "") {
         this.$emit('darkSearchBookMark', this.searchInputVal);
@@ -67,6 +82,11 @@ export default {
 
   },
   computed: {
+    /**
+     * @description 用于处理需要显示的搜索结果
+     * (如果在隐藏书签列表中,则不显示; 反之显示)
+     * @return Boolean
+     */
     showBookMarkSearch() {
       for (let oneArr of this.hiddenBookMarkIndex) {
         if (this.searchResultIndex === oneArr) {

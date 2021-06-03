@@ -13,14 +13,17 @@
 export default {
   name: "TagBox-popup",
   props: {
+    // 深拷贝之后的"已收藏列表的单个项"
     searchResultNew: {
       type: Object,
       default: () => {}
     },
+    // 已收藏列表的单个项
     searchResultObj: {
       type: Object,
       default: () => {}
     },
+    // 当前 tag 显示数量
     tagNumbers: {
       type: String,
       default: () => ""
@@ -28,13 +31,20 @@ export default {
   },
   data() {
     return {
+      // 因为过长而未能直接显示的 tags 数组
       moreTags: [],
     }
   },
   methods: {
+    /**
+     * @description 用于显示省略的 tags 数组
+     * @param {Number} index
+     * @return void
+     */
     showMoreTags(index) {
       this.moreTags = [];
       if (index === this.tagNumbers - 1) {
+        // 省略的数组就是完整 tags 数组截去前面可显的数组
         this.moreTags = this.searchResultObj.tags.slice(this.tagNumbers - 1);
         this.$refs.eachTag[index].style.cursor = 'pointer';
       }

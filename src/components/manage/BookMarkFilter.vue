@@ -17,11 +17,16 @@ export default {
   name: "BookMarkFilter",
   data() {
     return {
-      searchResult: searchResult,     // 全局的已收藏书签数组
-      darkSearchSymbol: [],           // 用于模糊搜索的"标志"(书签的标题和标签合并的一维数组)
-      arrIndex: 0,                    // 用于循环语句,从而得到当前数组循环的次数和数组下标
-      visibleBookMarkIndex: [],       // 可见的书签下标数组
-      searchInputVal: ""              // 搜索框输入框的值
+      // 全局的已收藏书签数组
+      searchResult: searchResult,
+      // 用于模糊搜索的"标志"(书签的标题和标签合并的一维数组)
+      darkSearchSymbol: [],
+      // 用于循环语句,从而得到当前数组循环的次数和数组下标
+      arrIndex: 0,
+      // 可见的书签下标数组
+      visibleBookMarkIndex: [],
+      // 搜索框输入框的值
+      searchInputVal: ""
     }
   },
   methods: {
