@@ -26,21 +26,22 @@
                   <input type="text" :value="searchResult[this.BookMarkInfoIndex].href">
                 </div>
               </div>
-              <div class="form-item">
-                <label>标签</label>
-                <div class="tag-input-box" @click="addTagsFocus" @keydown="handleTagInputKeyDown">
-                  <div class="tag" v-for="(tagName,index) in this.editTags.tagNames"
-                       :key="index + '-only'">
-                    <span>{{ tagName }}</span>
-                    <a id="text-close" @click="deleteTagBtn(index)">
-                      <img src="@/assets/close.svg" alt="close-btn"/>
-                    </a>
-                  </div>
-                  <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
-                         ref="inputTags" @input="tagInputChange"
-                  />
-                </div>
-              </div>
+<!--              <div class="form-item">-->
+<!--                <label>标签</label>-->
+<!--                <div class="tag-input-box" @click="addTagsFocus" @keydown="handleTagInputKeyDown">-->
+<!--                  <div class="tag" v-for="(tagName,index) in this.editTags.tagNames"-->
+<!--                       :key="index + '-only'">-->
+<!--                    <span>{{ tagName }}</span>-->
+<!--                    <a id="text-close" @click="deleteTagBtn(index)">-->
+<!--                      <img src="@/assets/close.svg" alt="close-btn"/>-->
+<!--                    </a>-->
+<!--                  </div>-->
+<!--                  <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"-->
+<!--                         ref="inputTags" @input="tagInputChange"-->
+<!--                  />-->
+<!--                </div>-->
+<!--              </div>-->
+              <TagInput/>
             </div>
           </div>
         </div>
@@ -57,9 +58,11 @@
 
 <script>
 import {searchResult} from "@/mock/popup";
+import TagInput from "@/components/global/TagInput";
 
 export default {
   name: "EditBookMarkInfo",
+  components: {TagInput},
   props: {
     // 已收藏列表的单个项
     searchResultObj: {
@@ -179,7 +182,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.55);
 
   .edit-modal {
-    width: 70%;
+    width: 60%;
     height: 450px;
     box-sizing: border-box;
     overflow: hidden;
@@ -216,7 +219,7 @@ export default {
     }
 
     .content {
-      padding: 20px;
+      padding: 30px 40px;
 
       .bookmark-list-item {
         display: block;
@@ -270,41 +273,6 @@ export default {
             }
           }
 
-          .tag-input-box {
-            height: 150px;
-            width: 100%;
-            border: 1px solid rgba(218, 213, 226, 0.84);
-            background-color: #fdfdfd;
-            padding: 0 5px;
-            border-radius: 5px;
-            cursor: text;
-            overflow-y: scroll;
-            overflow-x: hidden;
-
-            input {
-              width: 6em;
-              height: 20px;
-              min-width: 1em;
-            }
-
-            #text-close {
-              display: flex;
-              align-items: center;
-              height: 15px;
-              margin-left: 5px;
-              border: none;
-              background-color: transparent;
-              overflow: hidden;
-              cursor: pointer;
-
-              img {
-                height: 70%;
-                filter: opacity(0.7);
-                transition: all .5s;
-              }
-            }
-          }
-
           #bookmark-tags {
             border: none;
             background-color: transparent;
@@ -317,16 +285,17 @@ export default {
   .operate-btn {
     position: absolute;
     width: 100%;
-    height: 20px;
+    height: 40px;
     left: 0;
     bottom: 30px;
 
-    .finish-btn {
-      right: 30px;
+    .finish-btn,
+    {
+      right: 40px;
       background-color: #1aa1f1;
       position: absolute;
       border: none;
-      font-size: 10px;
+      font-size: 14px;
       border-radius: 5px;
       padding: 7px 15px;
       color: white;
@@ -337,15 +306,21 @@ export default {
     .cancel-btn {
       position: absolute;
       border: none;
-      font-size: 10px;
+      font-size: 14px;
       border-radius: 5px;
       padding: 7px 15px;
       background-color: #f14c1a;
       color: white;
       cursor: pointer;
       transition: all .5s;
-      left: 30px;
+      left: 40px;
     }
   }
+}
+
+label {
+  display: inline;
+  width: 60px;
+  font-size: 13px;
 }
 </style>
