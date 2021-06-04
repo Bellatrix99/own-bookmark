@@ -71,7 +71,6 @@ export default {
     /**
      * @description 用于传递"编辑模态框"是否显示的状态布尔值
      * @param {Boolean} editable
-     * @return void
      */
     handleEditBookMark(editable) {
       this.showEditBookMarkInfo = editable;
@@ -79,7 +78,6 @@ export default {
     /**
      * @description 用于删除对应传入 index 的书签
      * @param {Number} searchResultIndex
-     * @return void
      */
     deleteBKIndex(searchResultIndex) {
       searchResult.splice(searchResultIndex, 1);
@@ -91,7 +89,6 @@ export default {
     /**
      * @description 用于取得可见的书签下标值数组
      * @param {Number} visibleBookMarkIndex
-     * @return void
      */
     getVisibleBookMarkIndex(visibleBookMarkIndex) {
       this.visibleBookMarkIndex = visibleBookMarkIndex;
@@ -107,14 +104,12 @@ export default {
     /**
      * @description 用于取得当前点击的书签下标值
      * @param {Number} searchResultIndex
-     * @return void
      */
     getClickBookMark(searchResultIndex) {
       this.BookMarkInfoIndex = searchResultIndex;
     },
     /**
      * @description 用于调用该组件的子组件的模糊搜索方法
-     * @return void
      */
     darkSearchBookMark() {
       this.$refs.BookMarkFilter.darkSearchBookMarkVal();
@@ -122,7 +117,6 @@ export default {
     /**
      * @description 用于获取搜索输入框输入的值
      * @param {String} searchInputVal
-     * @return void
      */
     getSearchInputVal(searchInputVal) {
       this.searchInputVal = searchInputVal;

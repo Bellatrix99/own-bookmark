@@ -75,7 +75,6 @@ export default {
     /**
      * @description 用于展开输入框
      * @param {Boolean} expanded
-     * @return void
      */
     handleSearchExpand({expanded}) {
       this.showBookMarkList = expanded;
@@ -84,7 +83,7 @@ export default {
     /**
      * @description 用于切换收藏页是否显示
      * @param {Boolean} showStarPage
-     * @return void
+     * @retur void
      */
     handleStarPage(showStarPage) {
       if (this.showStarPage === showStarPage) {
@@ -95,7 +94,6 @@ export default {
     },
     /**
      * @description 用于切换收藏页是否显示
-     * @return void
      */
     handleToggleExpand() {
       this.$refs.searchInput.handleToggleExpand()

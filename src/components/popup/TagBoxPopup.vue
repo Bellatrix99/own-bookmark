@@ -16,17 +16,17 @@ export default {
     // 深拷贝之后的"已收藏列表的单个项"
     searchResultNew: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     // 已收藏列表的单个项
     searchResultObj: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     // 当前 tag 显示数量
     tagNumbers: {
       type: String,
-      default: () => ""
+      default: ""
     }
   },
   data() {
@@ -39,7 +39,6 @@ export default {
     /**
      * @description 用于显示省略的 tags 数组
      * @param {Number} index
-     * @return void
      */
     showMoreTags(index) {
       this.moreTags = [];

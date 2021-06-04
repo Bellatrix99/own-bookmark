@@ -40,7 +40,6 @@ export default {
     },
     /**
      * @description 用于确定新增书签
-     * @return void
      */
     handleAddMark() {
 

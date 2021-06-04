@@ -19,7 +19,6 @@ export default {
   methods: {
     /**
      * @description 用于切换收藏页是否显示并传递显示状态布尔值
-     * @return void
      */
     handleToggleStarPage() {
       this.showStarPage = !this.showStarPage;

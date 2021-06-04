@@ -34,7 +34,6 @@ export default {
      * @description 用于监听当前元素的点击事件,
      * 并且传递搜索框是否展开的状态布尔值
      * @param {Object} event
-     * @return void
      */
     handleToggleExpand(event) {
       // 如果点击的元素是 Input 标签,则展开状态布尔值为"真"
@@ -48,7 +47,6 @@ export default {
     },
     /**
      * @description input 输入框失去焦点时清除输入框内容
-     * @return void
      */
     clearSearchInput() {
       this.searchTextInput = "";

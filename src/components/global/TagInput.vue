@@ -10,6 +10,7 @@
       </div>
       <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"
              ref="inputTags" @keyup="handleTagInputChange"
+             v-model="tagInputValue"
       />
     </div>
   </div>
@@ -20,22 +21,28 @@ export default {
   name: "tagInput",
   data() {
     return {
-      // 书签 tags 的样式
-      bookMarkTagsStyle: {
-        width: this.inputValueLength + 'em'
-      },
       // 单个书签,包括所有 tags 的数组
+      bookMarkTagsStyle: {
+        width: this.getInputValueLength
+      },
       tags: {
         tagNames: [],
       },
       // 输入内容的长度
       inputValueLength: "",
+      // tagInput 中输入的值
+      tagInputValue: "",
+    }
+  },
+  computed: {
+    // 书签 tags 的样式
+    getInputValueLength() {
+      return this.inputValueLength + 'em';
     }
   },
   methods: {
     /**
      * @description 用于给新增 tags 输入框聚焦
-     * @return void
      */
     addTagsFocus() {
       this.$refs.inputTags.focus();
@@ -43,10 +50,9 @@ export default {
     /**
      * @description 用于监听当前键盘按键, 用于删除标签
      * @param {Object} event
-     * @return void
      */
     handleTagInputKeyDown(event) {
-      if (event.key === 'Backspace' && event.target.value === '') {
+      if (event.key === 'Backspace' && this.tagInputValue === '') {
         if (this.$refs.inputTags.previousElementSibling) {
           this.tags.tagNames.pop();
         }
@@ -55,29 +61,27 @@ export default {
     /**
      * @description 用于监听点击删除时间, 用于删除书签
      * @param {Number} index
-     * @return void
      */
     deleteTagBtn(index) {
-      this.$nextTick(function () {
-        this.tags.tagNames.splice(index, 1);
-      })
+      this.tags.tagNames.splice(index, 1);
     },
     /**
      * @description 用于监听tag输入,
      * 输入好标签名称之后按下空格或是逗号即可将输入的值变成一个具有样式的 tag 标签
      * @param {Object} event
-     * @return void
      */
     handleTagInputChange(event) {
-      let value = event.target.value;
+      let value = this.tagInputValue;
+      let regex = /\s/g;
+      let spaceNum = value.match(regex);
       const match = value.match(/(.+)[,，]/);
       this.inputValueLength = value.length;
-      if (match !== null && match.length === 2 && event.key === "," || event.key === "，") {
+      if (match !== null && match.length === 2 && (event.key === "," || event.key === "，")) {
         this.tags.tagNames.push(match[1]);
-        event.target.value = "";
-      } else if (value.lastIndexOf(" ") !== value.length - 1 && event.key === "Enter") {
+        this.tagInputValue = "";
+      } else if (spaceNum && spaceNum.length !== value.length && event.key === "Enter") {
         this.tags.tagNames.push(value);
-        event.target.value = "";
+        this.tagInputValue = "";
       }
     },
   }
@@ -105,7 +109,7 @@ input, textarea {
 }
 
 #tag-input {
-  display: flex;
+  //display: flex;
   //justify-content:center;
   text-align: left;
   //height: calc(var(--star-tag-input-height) - 20px);

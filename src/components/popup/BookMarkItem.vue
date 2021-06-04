@@ -2,11 +2,13 @@
   <div class="search-page" ref="searchPage">
     <!-- 用于挂载搜索结果相关 DOM -->
     <div class="search-item">
-      <div class="search-item-icon-box" :title="this.searchResultObj.title">
+      <div class="search-item-icon-box" :title="searchResultObj.title">
         <img :src="searchResultObj.icon" alt="item-icon" :href="searchResultObj.href" @click="openTab">
       </div>
       <div class="search-info">
-        <h2 :href="searchResultObj.href" @click="openTab" :title="this.searchResultObj.title">
+        <h2 :href="searchResultObj.href" @click="openTab" :title="searchResultObj.title"
+            class="bookmark-title"
+        >
           {{ searchResultNew.title }}
         </h2>
         <div class="tag-box">
@@ -22,7 +24,6 @@
 </template>
 
 <script>
-import {calculateStringLength} from "@/utils/Globle";
 import TagBoxPopup from "@/components/popup/TagBoxPopup";
 
 export default {
@@ -32,13 +33,12 @@ export default {
     // 已收藏列表的单个项
     searchResultObj: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data() {
     return {
-      // 经过深拷贝的"已收藏列表的单个项"
+      // 经过拷贝的"已收藏列表的单个项"
       searchResultNew: {},
       // tag 总长度
       allTagLength: 0,
@@ -52,7 +52,6 @@ export default {
     /**
      * @description 用于监听点击事件来打开书签的网站
      * @param {Object} event
-     * @return void
      */
     openTab(event) {
       // 在新标签页打开链接
@@ -60,12 +59,13 @@ export default {
     },
     /**
      * @description 用于省略过长文字
-     * @return void
      */
     omitLongText() {
       let allTags = this.searchResultObj.tags;
       // 使用 JSON.parse(JSON.stringify(XXX)) 来完成简易的深拷贝
       this.searchResultNew = JSON.parse(JSON.stringify(this.searchResultObj));
+      // 拓展运算符完成浅拷贝
+      // this.searchResultNew = {...this.searchResultObj};
       for (let tagIndex in allTags) {
         // 避免原型链上有 tagIndex 属性
         if (Object.prototype.hasOwnProperty.call(allTags, tagIndex)) {
@@ -78,16 +78,6 @@ export default {
             this.searchResultNew.tags.splice(this.tagNumbers, 99, "...");
             this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers);
           }
-        }
-      }
-      // 用于判断标题中汉字和字符的比例, 如果汉字所占比例大于字符,则最大可显长度为16,反之为为22
-      if (calculateStringLength(this.searchResultObj.title).len > 26) {
-        if (calculateStringLength(this.searchResultObj.title).hans
-            >= calculateStringLength(this.searchResultObj.title).chars
-        ) {
-          this.searchResultNew.title = this.searchResultObj.title.slice(0, 16) + "...";
-        } else {
-          this.searchResultNew.title = this.searchResultObj.title.slice(0, 22) + "...";
         }
       }
     }
@@ -137,6 +127,13 @@ export default {
 
 .search-info {
   margin-left: 20px;
+
+  .bookmark-title {
+    width: 14em;
+    white-space: nowrap; // 连续的空白符会被合并，换行符会被当作空白符来处理。
+    text-overflow: ellipsis; // 如果空间太小到连省略号都容纳不下，那么这个省略号也会被截断。
+    overflow: hidden;
+  }
 }
 
 .tag-box {

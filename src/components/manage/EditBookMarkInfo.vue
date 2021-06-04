@@ -10,37 +10,22 @@
       <div class="content">
         <div class="bookmark-list-item">
           <div class="favicon">
-            <img :src="searchResult[this.BookMarkInfoIndex].icon" alt="item-icon">
+            <img :src="searchResult[BookMarkInfoIndex].icon" alt="item-icon">
           </div>
           <div class="form-item">
             <div class="form-content">
               <div class="form-item">
                 <label>标题</label>
                 <div class="input-item">
-                  <input type="text" :value="searchResult[this.BookMarkInfoIndex].title">
+                  <input type="text" :value="searchResult[BookMarkInfoIndex].title">
                 </div>
               </div>
               <div class="form-item">
                 <label>URL</label>
                 <div class="input-item">
-                  <input type="text" :value="searchResult[this.BookMarkInfoIndex].href">
+                  <input type="text" :value="searchResult[BookMarkInfoIndex].href">
                 </div>
               </div>
-<!--              <div class="form-item">-->
-<!--                <label>标签</label>-->
-<!--                <div class="tag-input-box" @click="addTagsFocus" @keydown="handleTagInputKeyDown">-->
-<!--                  <div class="tag" v-for="(tagName,index) in this.editTags.tagNames"-->
-<!--                       :key="index + '-only'">-->
-<!--                    <span>{{ tagName }}</span>-->
-<!--                    <a id="text-close" @click="deleteTagBtn(index)">-->
-<!--                      <img src="@/assets/close.svg" alt="close-btn"/>-->
-<!--                    </a>-->
-<!--                  </div>-->
-<!--                  <input id="bookmark-tags" type="text" :style="bookMarkTagsStyle"-->
-<!--                         ref="inputTags" @input="tagInputChange"-->
-<!--                  />-->
-<!--                </div>-->
-<!--              </div>-->
               <TagInput/>
             </div>
           </div>
@@ -67,11 +52,12 @@ export default {
     // 已收藏列表的单个项
     searchResultObj: {
       type: Object,
+      default: () => ({})
     },
     // 当前书签的下标值
     BookMarkInfoIndex: {
       type: Number,
-      default: () => 0
+      default: 0
     }
   },
   mounted() {
@@ -101,7 +87,6 @@ export default {
   methods: {
     /**
      * @description 用于编辑模态框完成编辑之后需要做的操作
-     * @return void
      */
     finishEditBookMarkInfo() {
       this.showEditBookMarkInfo = false;
@@ -110,59 +95,10 @@ export default {
     },
     /**
      * @description 用于编辑模态框关闭之后需要做的操作
-     * @return void
      */
     closeEditBookMarkInfo() {
       this.showEditBookMarkInfo = false;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
-    },
-    /**
-     * @description 用于监听tag输入,
-     * 输入好标签名称之后按下空格或是逗号即可将输入的值变成一个具有样式的 tag 标签
-     * @param {Object} event
-     * @return void
-     */
-    tagInputChange(event) {
-      let value = event.target.value;
-      // 使用正则表达式匹配输入的值(某个以逗号结尾的字符串)
-      const match = value.match(/(.+)[,，]/);
-      this.inputValueLength = value.length;
-      // 如果匹配后的内容不为空且匹配的组有两个
-      // 那么当组匹配的第一项中不是以空格结尾,则将输入的值传给 editTags 数组,
-      // 最后渲染成具有一定样式的 tag 标签
-      if (match !== null && match.length === 2 && match[1].lastIndexOf(" ") !== match[1].length - 1) {
-        this.editTags.tagNames.push(match[1]);
-        // 清空输入内容
-        event.target.value = "";
-      }
-    },
-    /**
-     * @description 用于监听点击删除时间, 用于删除书签
-     * @param {Number} index
-     * @return void
-     */
-    deleteTagBtn(index) {
-      this.tags.tagNames.splice(index, 1);
-      this.editTags.tagNames = this.tags.tagNames
-    },
-    /**
-     * @description 用于聚焦输入框
-     * @return void
-     */
-    addTagsFocus() {
-        this.$refs.inputTags.focus();
-    },
-    /**
-     * @description 用于监听当前键盘按键, 用于删除标签
-     * @param {Object} event
-     * @return void
-     */
-    handleTagInputKeyDown(event) {
-      if (event.key === 'Backspace' && event.target.value === '') {
-        if (this.$refs.inputTags.previousElementSibling) {
-          this.editTags.tagNames.pop();
-        }
-      }
     },
   },
 }
@@ -273,10 +209,6 @@ export default {
             }
           }
 
-          #bookmark-tags {
-            border: none;
-            background-color: transparent;
-          }
         }
       }
     }

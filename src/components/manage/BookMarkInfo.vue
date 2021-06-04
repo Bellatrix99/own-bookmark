@@ -24,7 +24,6 @@
 </template>
 
 <script>
-// import Bus from "@/assets/Bus";
 
 export default {
   name: "BookMarkInfo",
@@ -32,12 +31,12 @@ export default {
     // 已收藏列表的单个项
     searchResultObj: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     // 已收藏列表单个项对应的下标
     searchResultIndex: {
       type: Number,
-      default: () => 0
+      default: 0
     },
     // 隐藏的书签下标数组
     hiddenBookMarkIndex: {
@@ -47,7 +46,7 @@ export default {
     // 搜索框输入内容
     searchInputVal: {
       type: String,
-      default: () => ""
+      default: ""
     }
   },
   data() {
@@ -59,11 +58,9 @@ export default {
   methods: {
     /**
      * @description 用于切换模态框的显示并传递状态量
-     * @return void
      */
     handleToggleEdit() {
       this.editable = true;
-      // Bus.$emit('getClickBookMark', this.searchResultIndex);
       this.$emit('getClickBookMark', this.searchResultIndex);
       this.$emit('handleEditBookMark', this.editable);
     },
@@ -71,7 +68,6 @@ export default {
      * @description 用于删除书签项目;
      * 如果当前输入内容不为空则继续保持模糊搜索结果,然后在模糊搜索结果上进行删除;
      * 如果当前输入内容为空则在所有书签列表上进行删除
-     * @return void
      */
     deleteBookMarkItem() {
       if (this.searchInputVal !== "") {

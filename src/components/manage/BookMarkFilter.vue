@@ -5,7 +5,9 @@
       <div class="icon">
         <img src="@/assets/icon.png" alt="input-icon">
       </div>
-      <input type="text" placeholder="搜索书签或标签" @input="darkSearchBookMark">
+      <input type="text" placeholder="搜索书签或标签" @input="darkSearchBookMark"
+             v-model="searchInputVal"
+      >
     </div>
   </div>
 </template>
@@ -32,14 +34,11 @@ export default {
   methods: {
     /**
      * @description 用于实现模糊搜索(参数是当前元素版本)
-     * @param {Object} event
-     * @return void
      */
-    darkSearchBookMark(event) {
+    darkSearchBookMark() {
       // 初始化可见的下标数组和当前下标
       this.visibleBookMarkIndex = [];
       this.arrIndex = 0;
-      this.searchInputVal = event.target.value;
       // 书签的标题和标签拍平并合并成一维数组作为模糊搜索的"标志"
       this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
       // 循环判断,如果包含则为可见下标数组push该下标
@@ -57,7 +56,6 @@ export default {
     /**
      * @description 用于实现模糊搜索(参数是搜索框输入的值版本)
      * @param {String} searchInputVal
-     * @return void
      */
     darkSearchBookMarkVal(searchInputVal) {
       // 初始化可见的下标数组和当前下标
