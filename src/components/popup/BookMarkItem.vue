@@ -1,5 +1,5 @@
 <template>
-  <div class="search-page" ref="searchPage">
+  <div class="search-page" v-if="showBookMarkSearch">
     <!-- 用于挂载搜索结果相关 DOM -->
     <div class="search-item">
       <div class="search-item-icon-box" :title="searchResultObj.title">
@@ -34,6 +34,21 @@ export default {
     searchResultObj: {
       type: Object,
       default: () => ({})
+    },
+    // 需要隐藏的书签下标数组
+    hiddenBookMarkIndex: {
+      type: Array,
+      default: () => []
+    },
+    // 已收藏列表单个项对应的下标
+    searchResultIndex: {
+      type: Number,
+      default: 0
+    },
+    // tag 标签组最长字符数量
+    maxTagTextLength: {
+      type: Number,
+      default: 16
     }
   },
   data() {
@@ -73,7 +88,7 @@ export default {
           // 如果当前已显示 tag 的文字总长度超过16 或 tag 数量已经超过最大可显数量
           // 则tagNumbers取当前下标和最大可显数量的较小值
           // 其余 tag 都被替代成"..." 跟在后面
-          if (this.allTagLength > 16 || tagIndex > this.maxShowTagNumbers) {
+          if (this.allTagLength > this.maxTagTextLength || tagIndex > this.maxShowTagNumbers) {
             this.tagNumbers = tagIndex < this.maxShowTagNumbers ? tagIndex : this.maxShowTagNumbers;
             this.searchResultNew.tags.splice(this.tagNumbers, 99, "...");
             this.searchResultNew.tags = this.searchResultNew.tags.slice(0, this.tagNumbers);
@@ -85,6 +100,22 @@ export default {
   mounted() {
     // 调用省略过长文字的方法
     this.omitLongText();
+  },
+  computed: {
+    /**
+     * @description 用于处理需要显示的搜索结果
+     * (如果在隐藏书签列表中,则不显示; 反之显示)
+     * @return Boolean
+     */
+    showBookMarkSearch() {
+      for (let oneArr of this.hiddenBookMarkIndex) {
+        if (this.searchResultIndex === oneArr) {
+          return false;
+        }
+      }
+      return true;
+    },
+
   }
 }
 </script>

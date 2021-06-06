@@ -79,7 +79,7 @@ export default {
       if (match !== null && match.length === 2 && (event.key === "," || event.key === "，")) {
         this.tags.tagNames.push(match[1]);
         this.tagInputValue = "";
-      } else if (spaceNum && spaceNum.length !== value.length && event.key === "Enter") {
+      } else if (spaceNum?.length !== value.length && event.key === "Enter") {
         this.tags.tagNames.push(value);
         this.tagInputValue = "";
       }

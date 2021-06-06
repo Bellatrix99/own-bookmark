@@ -4,8 +4,12 @@
          :class="{'animate__searchUp': this.showBookMarkList, 'animate__topBoxToTop':this.showStarPage}">
       <div class="main-page-center" :class="{'animate__starButtonUp': this.showStarPage}">
         <!-- 输入框组件 -->
-        <search-input @toggleExpand="handleSearchExpand"
-                      ref="searchInput"
+        <SearchInput @toggleExpand="handleSearchExpand"
+                     ref="searchInput"
+                     @getSearchInputVal="getSearchInputVal"
+                     @getFuseResult="getFuseResult"
+                     @getVisibleBookMarkObj="getVisibleBookMarkObj"
+                     @fuseJsResultDisplay="fuseJsResultDisplay"
         />
         <transition
             name="bookmark-transition"
@@ -13,8 +17,11 @@
         >
           <div v-if="showBookMarkList" class="bookmark-outer-div">
             <!-- 书签目录组件 -->
-            <BookMarkItem :search-input-value="searchInputValue" ref="BookMarkItemChild"
-                          v-for="item in searchResult" :key="item.length" :searchResultObj='item'
+            <BookMarkItem :search-input-value="searchInputVal" ref="BookMarkItemChild"
+                          v-for="(item,index) in searchResult" :key="index + '-only'"
+                          :searchResultObj='item'
+                          :searchResultIndex="index"
+                          :hiddenBookMarkIndex="hiddenBookMarkIndex"
             />
           </div>
         </transition>
@@ -64,11 +71,19 @@ export default {
       // 搜索输入框是否上升(动画)状态布尔值
       searchInputUp: false,
       // 搜索输入框中输入的值
-      searchInputValue: "",
+      searchInputVal: "",
       // 全局的已收藏书签数组
-      searchResult: searchResult.item,
+      searchResult: searchResult,
       // 某个已收藏的书签
       item: {},
+      // fuseJs 模糊搜索的结果
+      fuseResult: [],
+      // (模糊搜索之后)可见的书签下标数组
+      visibleBookMarkSet: [],
+      // (模糊搜索之后)不可见的书签下标数组
+      hiddenBookMarkIndex: [],
+      // fuseJs 模糊搜索结果数组
+      fuseJsResultArr: []
     }
   },
   methods: {
@@ -97,6 +112,46 @@ export default {
      */
     handleToggleExpand() {
       this.$refs.searchInput.handleToggleExpand()
+    },
+    /**
+     * @description 用于获取搜索输入框输入的值
+     * @param {String} searchInputVal
+     */
+    getSearchInputVal(searchInputVal) {
+      this.searchInputVal = searchInputVal;
+    },
+    /**
+     * @description 用于获取模糊搜索结果
+     */
+    getFuseResult(fuseResult) {
+      this.fuseResult = fuseResult;
+    },
+    /**
+     * @description 用于取得可见的书签下标值数组
+     */
+    getVisibleBookMarkObj() {
+      if (this.searchInputVal === "") {
+        this.fuseResult = searchResult;
+        this.visibleBookMarkSet = this.fuseResult.map(result => result.href);
+      } else {
+        this.visibleBookMarkSet = this.fuseResult.map(result => result.item.href);
+      }
+      let resArr = this.searchResult.filter(result => !this.visibleBookMarkSet.includes(result.href))
+      this.hiddenBookMarkIndex = [];
+      for (const resArrElement of resArr) {
+        this.hiddenBookMarkIndex.push(this.searchResult.indexOf(resArrElement));
+      }
+    },
+    /**
+     * @description 用于将模糊搜索的结果合并到一个数组中
+     */
+    fuseJsResultDisplay() {
+      this.fuseJsResultArr = [];
+      for (const fuseResultItem of this.fuseResult) {
+        if (this.fuseJsResultArr.indexOf(fuseResultItem.item) === -1) {
+          this.fuseJsResultArr.push(fuseResultItem.item);
+        }
+      }
     },
   }
 }

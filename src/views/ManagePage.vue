@@ -63,8 +63,6 @@ export default {
       visibleBookMarkSet: [],
       // (模糊搜索之后)不可见的书签下标数组
       hiddenBookMarkIndex: [],
-      // (模糊搜索之后)不可见的书签对象数组
-      hiddenBookMarkObj: [],
       // (模糊搜索之前)原来的数组下标数组
       originBookMarkIndex: [],
       // 当前书签信息的下标
@@ -80,9 +78,16 @@ export default {
     };
   },
   methods: {
+    /**
+     * @description 用于拿到当前循环的 index 实例
+     * @param {Number} index
+     */
     getSearchResultIndex(index) {
       this.searchResultIndex = index;
     },
+    /**
+     * @description 用于将模糊搜索的结果合并到一个数组中
+     */
     fuseJsResultDisplay() {
       this.fuseJsResultArr = [];
       for (const fuseResultItem of this.fuseResult) {
@@ -103,7 +108,6 @@ export default {
      * @param {Number} searchResultIndex
      */
     deleteBKIndex(searchResultIndex) {
-      // console.log(searchResultIndex)
       this.searchResult.splice(searchResultIndex, 1);
       // 如果书签已全部删除,则设置"isEmptySearchResult(书签为空)"状态为真
       if (this.searchResult.length === 0) {

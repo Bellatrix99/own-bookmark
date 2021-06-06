@@ -22,12 +22,6 @@ export default {
     return {
       // 全局的已收藏书签数组
       searchResult: searchResult,
-      // 用于模糊搜索的"标志"(书签的标题和标签合并的一维数组)
-      darkSearchSymbol: [],
-      // 用于循环语句,从而得到当前数组循环的次数和数组下标
-      arrIndex: 0,
-      // 可见的书签下标数组
-      visibleBookMarkIndex: [],
       // 搜索框输入框的值
       searchInputVal: "",
       // fuseJs 模糊搜索
@@ -41,25 +35,33 @@ export default {
      * @description 用于实现模糊搜索(参数是当前元素版本)
      */
     darkSearchBookMark() {
-      console.log('123');
+      // 进行模糊搜索
       this.fuseResult = this.fuse.search(this.searchInputVal);
+      // 调用父组件的 get 函数,用于获取该子组件输入框输入的的值
       this.$emit('getSearchInputVal', this.searchInputVal);
+      // 如果模糊搜索结果大于 0, 调用父组件的 get 函数,用于获取该子组件模糊搜索的结果
       if (this.fuseResult.length > 0) {
         this.$emit('getFuseResult', this.fuseResult);
       }
+      // 调用父组件的 get 函数,用于计算模糊搜索之后那些书签可见那些书签不可见
       this.$emit('getVisibleBookMarkObj');
+      // 调用父组件函数, 将模糊搜索结果的 item 值合并成一个数组
       this.$emit('fuseJsResultDisplay');
     },
+    /**
+     * @description 用于 fuse.Js 初始化
+     */
     fuseSearch() {
       const options = {
         includeScore: true,
-        // Search in `title` and in `tags` array
+        // 用 `title` 和 `tags` 作为模糊搜索的索引
         keys: ['title', 'tags']
       }
       this.fuse = new Fuse(this.searchResult, options)
     }
   },
   mounted() {
+    // 加载时就先调用 fuseJs
     this.fuseSearch();
   }
 }

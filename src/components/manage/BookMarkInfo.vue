@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import {searchResult} from "@/mock/popup";
-
 export default {
   name: "BookMarkInfo",
   mounted() {
@@ -50,11 +48,6 @@ export default {
     searchInputVal: {
       type: String,
       default: ""
-    },
-    // fuseJs 模糊搜索结果数组
-    fuseResult: {
-      type: Array,
-      default: () => searchResult
     },
     // 已收藏列表的单个项
     searchResultItem: {

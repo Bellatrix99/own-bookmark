@@ -3,7 +3,7 @@
     <div class="search-box" @click="handleToggleExpand">
       <label>
         <input type="text" id="search" name="search" placeholder="搜索标签或书签" autocomplete="off"
-               v-model="searchTextInput" @blur="clearSearchInput">
+               v-model="searchInputVal" @blur="clearSearchInput" @input="darkSearchBookMark">
       </label>
       <transition
           name="cancel-button"
@@ -17,15 +17,23 @@
 </template>
 
 <script>
+import {searchResult} from "@/mock/popup";
+import Fuse from "fuse.js";
 
 export default {
   name: "SearchInput",
   data() {
     return {
+      // 全局的已收藏书签数组
+      searchResult: searchResult,
       // 搜索框是否展开的状态布尔值
       expanded: false,
-      // 输入框输入的值
-      searchTextInput: ""
+      // 搜索框输入框的值
+      searchInputVal: "",
+      // fuseJs 模糊搜索
+      fuse: "",
+      // fuseJs 模糊搜索结果
+      fuseResult: [],
     }
   },
 
@@ -49,8 +57,35 @@ export default {
      * @description input 输入框失去焦点时清除输入框内容
      */
     clearSearchInput() {
-      this.searchTextInput = "";
+      this.searchInputVal = "";
+    },
+    /**
+     * @description 用于进行模糊搜索
+     */
+    darkSearchBookMark() {
+      this.fuseResult = this.fuse.search(this.searchInputVal);
+      this.$emit('getSearchInputVal', this.searchInputVal);
+      if (this.fuseResult.length > 0) {
+        this.$emit('getFuseResult', this.fuseResult);
+      }
+      this.$emit('getVisibleBookMarkObj');
+      this.$emit('fuseJsResultDisplay');
+    },
+    /**
+     * @description 用于 fuse.Js 初始化
+     */
+    fuseSearch() {
+      const options = {
+        includeScore: true,
+        // Search in `title` and in `tags` array
+        keys: ['title', 'tags']
+      }
+      this.fuse = new Fuse(this.searchResult, options)
     }
+  },
+  mounted() {
+    // 加载时就先初始化 fuseJs
+    this.fuseSearch();
   },
 }
 </script>
