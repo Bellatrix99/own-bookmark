@@ -26,7 +26,7 @@
                   <input type="text" :value="searchResult[BookMarkInfoIndex].href">
                 </div>
               </div>
-              <TagInput/>
+              <TagInput :BookMarkInfoIndex = "BookMarkInfoIndex"/>
             </div>
           </div>
         </div>
@@ -61,8 +61,7 @@ export default {
     }
   },
   mounted() {
-    // 简单的深拷贝数组
-    this.editTags.tagNames = this.tags.tagNames.slice(0);
+
   },
   data() {
     return {
@@ -89,6 +88,8 @@ export default {
      * @description 用于编辑模态框完成编辑之后需要做的操作
      */
     finishEditBookMarkInfo() {
+      // 简单的深拷贝数组
+      this.editTags.tagNames = this.tags.tagNames.slice(0);
       this.showEditBookMarkInfo = false;
       searchResult[this.BookMarkInfoIndex].tags = this.editTags.tagNames;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);

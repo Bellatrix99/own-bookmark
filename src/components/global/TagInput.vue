@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import {searchResult} from "@/mock/popup";
+
 export default {
   name: "tagInput",
   data() {
@@ -32,6 +34,18 @@ export default {
       inputValueLength: "",
       // tagInput 中输入的值
       tagInputValue: "",
+    }
+  },
+  props: {
+    BookMarkInfoIndex: {
+      type: Number,
+      default: 99999999
+    }
+  },
+  mounted() {
+    // 如果 BookMarkInfoIndex 不是默认值，则表示已经发生改变
+    if (this.BookMarkInfoIndex !== 99999999) {
+      this.tags.tagNames = searchResult[this.BookMarkInfoIndex].tags;
     }
   },
   computed: {
@@ -79,7 +93,8 @@ export default {
       if (match !== null && match.length === 2 && (event.key === "," || event.key === "，")) {
         this.tags.tagNames.push(match[1]);
         this.tagInputValue = "";
-      } else if (spaceNum?.length !== value.length && event.key === "Enter") {
+      } else if (this.tagInputValue !== "" &&
+          spaceNum?.length !== value.length && event.key === "Enter") {
         this.tags.tagNames.push(value);
         this.tagInputValue = "";
       }

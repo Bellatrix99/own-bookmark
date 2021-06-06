@@ -146,6 +146,7 @@ export default {
 
   .search-item-icon-box {
     margin-left: calc(50% - 144px);
+    width: 30px;
     height: 50%;
     cursor: pointer;
 

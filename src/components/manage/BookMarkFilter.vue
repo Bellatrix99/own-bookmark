@@ -35,6 +35,7 @@ export default {
      * @description 用于实现模糊搜索(参数是当前元素版本)
      */
     darkSearchBookMark() {
+      this.fuseSearch();
       // 进行模糊搜索
       this.fuseResult = this.fuse.search(this.searchInputVal);
       // 调用父组件的 get 函数,用于获取该子组件输入框输入的的值

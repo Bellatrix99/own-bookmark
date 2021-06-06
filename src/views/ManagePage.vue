@@ -2,7 +2,8 @@
   <div class="container">
     <div class="bookmark-filter">
       <!-- 管理页顶部以搜索框为主体的组件 -->
-      <BookMarkFilter @getVisibleBookMarkObj="getVisibleBookMarkObj"
+      <BookMarkFilter ref="bookMarkFilter"
+                      @getVisibleBookMarkObj="getVisibleBookMarkObj"
                       @getFuseResult="getFuseResult"
                       @getSearchInputVal="getSearchInputVal"
                       @fuseJsResultDisplay="fuseJsResultDisplay"
@@ -20,6 +21,7 @@
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
                         :fuseResult="fuseResult"
                         :searchInputVal="searchInputVal"
+                        @darkSearch="darkSearch"
                         @getClickBookMark="getClickBookMark"
                         @handleEditBookMark="handleEditBookMark"
                         @deleteBKIndex="deleteBKIndex"
@@ -78,6 +80,9 @@ export default {
     };
   },
   methods: {
+    darkSearch() {
+      this.$refs.bookMarkFilter.darkSearchBookMark();
+    },
     /**
      * @description 用于拿到当前循环的 index 实例
      * @param {Number} index
@@ -108,9 +113,9 @@ export default {
      * @param {Number} searchResultIndex
      */
     deleteBKIndex(searchResultIndex) {
-      this.searchResult.splice(searchResultIndex, 1);
+      searchResult.splice(searchResultIndex, 1);
       // 如果书签已全部删除,则设置"isEmptySearchResult(书签为空)"状态为真
-      if (this.searchResult.length === 0) {
+      if (searchResult.length === 0) {
         this.isEmptySearchResult = true;
       }
     },
@@ -118,6 +123,9 @@ export default {
      * @description 用于取得可见的书签下标值数组
      */
     getVisibleBookMarkObj() {
+      if (this.isEmptySearchResult) {
+        return;
+      }
       if (this.searchInputVal === "") {
         this.fuseResult = searchResult;
         this.visibleBookMarkSet = this.fuseResult.map(result => result.href);

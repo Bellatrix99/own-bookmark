@@ -78,10 +78,10 @@ export default {
      * 如果当前输入内容为空则在所有书签列表上进行删除
      */
     deleteBookMarkItem() {
-      if (this.searchInputVal !== "") {
-        this.$emit('darkSearchBookMark', this.searchInputVal);
-      }
       this.$emit("deleteBKIndex", this.searchResultIndex);
+      if (this.searchInputVal !== "") {
+        this.$emit('darkSearch');
+      }
     },
   },
   computed: {
