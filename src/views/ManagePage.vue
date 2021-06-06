@@ -2,23 +2,27 @@
   <div class="container">
     <div class="bookmark-filter">
       <!-- 管理页顶部以搜索框为主体的组件 -->
-      <BookMarkFilter @getVisibleBookMarkIndex="getVisibleBookMarkIndex"
+      <BookMarkFilter @getVisibleBookMarkObj="getVisibleBookMarkObj"
+                      @getFuseResult="getFuseResult"
                       @getSearchInputVal="getSearchInputVal"
-                      ref="BookMarkFilter"
+                      @fuseJsResultDisplay="fuseJsResultDisplay"
       />
     </div>
     <div class="default-container">
       <a-row :gutter="24">
         <a-col :span="18" class="bookmark-info-outer">
-          <!-- 书签香惜信息页组件 -->
-          <BookMarkInfo v-for="(item,index) in searchResult" :key="index + '-only'"
-                        :searchResultObj="item" :searchResultIndex="index"
+          <!-- 书签信息页组件 -->
+          <BookMarkInfo v-for="(item,index) in this.searchResult" :key="index + '-only'"
+                        @load="getSearchResultIndex(index)"
+                        :ref="`bookMarkInfo${index}`"
+                        :searchResultObj="item"
+                        :searchResultIndex="index"
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
+                        :fuseResult="fuseResult"
                         :searchInputVal="searchInputVal"
                         @getClickBookMark="getClickBookMark"
                         @handleEditBookMark="handleEditBookMark"
                         @deleteBKIndex="deleteBKIndex"
-                        @darkSearchBookMark="darkSearchBookMark"
           />
           <div v-if="this.isEmptySearchResult">
             没有数据
@@ -56,18 +60,37 @@ export default {
       // 搜索结果是否为空的状态布尔值
       isEmptySearchResult: false,
       // (模糊搜索之后)可见的书签下标数组
-      visibleBookMarkIndex: [],
+      visibleBookMarkSet: [],
       // (模糊搜索之后)不可见的书签下标数组
       hiddenBookMarkIndex: [],
+      // (模糊搜索之后)不可见的书签对象数组
+      hiddenBookMarkObj: [],
       // (模糊搜索之前)原来的数组下标数组
       originBookMarkIndex: [],
       // 当前书签信息的下标
       BookMarkInfoIndex: 0,
       // manage 页顶部搜索框输入的值
-      searchInputVal: ""
+      searchInputVal: "",
+      // fuseJs 模糊搜索的结果
+      fuseResult: [],
+      // v-for 循环的 index
+      searchResultIndex: 0,
+      // fuseJs 模糊搜索结果数组
+      fuseJsResultArr: []
     };
   },
   methods: {
+    getSearchResultIndex(index) {
+      this.searchResultIndex = index;
+    },
+    fuseJsResultDisplay() {
+      this.fuseJsResultArr = [];
+      for (const fuseResultItem of this.fuseResult) {
+        if (this.fuseJsResultArr.indexOf(fuseResultItem.item) === -1) {
+          this.fuseJsResultArr.push(fuseResultItem.item);
+        }
+      }
+    },
     /**
      * @description 用于传递"编辑模态框"是否显示的状态布尔值
      * @param {Boolean} editable
@@ -80,26 +103,28 @@ export default {
      * @param {Number} searchResultIndex
      */
     deleteBKIndex(searchResultIndex) {
-      searchResult.splice(searchResultIndex, 1);
+      // console.log(searchResultIndex)
+      this.searchResult.splice(searchResultIndex, 1);
       // 如果书签已全部删除,则设置"isEmptySearchResult(书签为空)"状态为真
-      if (searchResult.length === 0) {
+      if (this.searchResult.length === 0) {
         this.isEmptySearchResult = true;
       }
     },
     /**
      * @description 用于取得可见的书签下标值数组
-     * @param {Number} visibleBookMarkIndex
      */
-    getVisibleBookMarkIndex(visibleBookMarkIndex) {
-      this.visibleBookMarkIndex = visibleBookMarkIndex;
-      // 通过对原始书签下标数组与可见数组下标数组求其补集,得到应该隐藏的书签下标数组
-      this.hiddenBookMarkIndex = this.originBookMarkIndex.filter(
-          (val) => {
-            if (Object.prototype.hasOwnProperty.call(this.originBookMarkIndex, val)) {
-              return this.visibleBookMarkIndex.indexOf(val) === -1
-            }
-          }
-      );
+    getVisibleBookMarkObj() {
+      if (this.searchInputVal === "") {
+        this.fuseResult = searchResult;
+        this.visibleBookMarkSet = this.fuseResult.map(result => result.href);
+      } else {
+        this.visibleBookMarkSet = this.fuseResult.map(result => result.item.href);
+      }
+      let resArr = this.searchResult.filter(result => !this.visibleBookMarkSet.includes(result.href))
+      this.hiddenBookMarkIndex = [];
+      for (const resArrElement of resArr) {
+        this.hiddenBookMarkIndex.push(this.searchResult.indexOf(resArrElement));
+      }
     },
     /**
      * @description 用于取得当前点击的书签下标值
@@ -109,10 +134,10 @@ export default {
       this.BookMarkInfoIndex = searchResultIndex;
     },
     /**
-     * @description 用于调用该组件的子组件的模糊搜索方法
+     * @description 用于获取模糊搜索结果
      */
-    darkSearchBookMark() {
-      this.$refs.BookMarkFilter.darkSearchBookMarkVal();
+    getFuseResult(fuseResult) {
+      this.fuseResult = fuseResult;
     },
     /**
      * @description 用于获取搜索输入框输入的值
@@ -120,7 +145,7 @@ export default {
      */
     getSearchInputVal(searchInputVal) {
       this.searchInputVal = searchInputVal;
-    }
+    },
   },
   mounted() {
     // 拿到原始的书签下标数组,长度为已收藏书签的长度

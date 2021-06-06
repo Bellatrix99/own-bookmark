@@ -11,6 +11,7 @@
     "@types/chrome": "0.0.141",
     "ant-design-vue": "^1.7.5",
     "core-js": "^3.6.5",
+    "fuse.js": "^6.4.6",
     "modern-normalize": "^1.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

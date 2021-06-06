@@ -14,6 +14,7 @@
 
 <script>
 import {searchResult} from "@/mock/popup";
+import Fuse from 'fuse.js';
 
 export default {
   name: "BookMarkFilter",
@@ -28,7 +29,11 @@ export default {
       // 可见的书签下标数组
       visibleBookMarkIndex: [],
       // 搜索框输入框的值
-      searchInputVal: ""
+      searchInputVal: "",
+      // fuseJs 模糊搜索
+      fuse: "",
+      // fuseJs 模糊搜索结果
+      fuseResult: [],
     }
   },
   methods: {
@@ -36,45 +41,26 @@ export default {
      * @description 用于实现模糊搜索(参数是当前元素版本)
      */
     darkSearchBookMark() {
-      // 初始化可见的下标数组和当前下标
-      this.visibleBookMarkIndex = [];
-      this.arrIndex = 0;
-      // 书签的标题和标签拍平并合并成一维数组作为模糊搜索的"标志"
-      this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
-      // 循环判断,如果包含则为可见下标数组push该下标
-      for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
-        this.arrIndex++;
-        if (eachDarkSearchSymbol.toString().split(",").join("")
-            .indexOf(this.searchInputVal) !== -1) {
-          this.visibleBookMarkIndex.push(this.arrIndex - 1);
-        }
-      }
-      // 调用父组件的方法, 并传值
-      this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
+      console.log('123');
+      this.fuseResult = this.fuse.search(this.searchInputVal);
       this.$emit('getSearchInputVal', this.searchInputVal);
+      if (this.fuseResult.length > 0) {
+        this.$emit('getFuseResult', this.fuseResult);
+      }
+      this.$emit('getVisibleBookMarkObj');
+      this.$emit('fuseJsResultDisplay');
     },
-    /**
-     * @description 用于实现模糊搜索(参数是搜索框输入的值版本)
-     * @param {String} searchInputVal
-     */
-    darkSearchBookMarkVal(searchInputVal) {
-      // 初始化可见的下标数组和当前下标
-      this.visibleBookMarkIndex = [];
-      this.arrIndex = 0;
-      // 书签的标题和标签拍平并合并成一维数组作为模糊搜索的"标志"
-      this.darkSearchSymbol = searchResult.map(item => [].concat(item.title, ...item.tags));
-      // 循环判断,如果包含则为可见下标数组push该下标
-      for (const eachDarkSearchSymbol of this.darkSearchSymbol) {
-        this.arrIndex++;
-        if (eachDarkSearchSymbol.toString().split(",").join("")
-            .indexOf(searchInputVal) !== -1) {
-          this.visibleBookMarkIndex.push(this.arrIndex - 1);
-        }
+    fuseSearch() {
+      const options = {
+        includeScore: true,
+        // Search in `title` and in `tags` array
+        keys: ['title', 'tags']
       }
-      // 调用父组件的方法, 并传值
-      this.$emit('getVisibleBookMarkIndex', this.visibleBookMarkIndex);
-      this.$emit('getSearchInputVal', this.searchInputVal);
+      this.fuse = new Fuse(this.searchResult, options)
     }
+  },
+  mounted() {
+    this.fuseSearch();
   }
 }
 </script>

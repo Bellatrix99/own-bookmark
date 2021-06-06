@@ -24,11 +24,14 @@
 </template>
 
 <script>
+import {searchResult} from "@/mock/popup";
 
 export default {
   name: "BookMarkInfo",
+  mounted() {
+  },
   props: {
-    // 已收藏列表的单个项
+    // 模糊搜索列表的单个项
     searchResultObj: {
       type: Object,
       default: () => ({})
@@ -47,12 +50,24 @@ export default {
     searchInputVal: {
       type: String,
       default: ""
+    },
+    // fuseJs 模糊搜索结果数组
+    fuseResult: {
+      type: Array,
+      default: () => searchResult
+    },
+    // 已收藏列表的单个项
+    searchResultItem: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
     return {
       // 编辑模态框是否弹出
       editable: false,
+      // fuseJs 模糊搜索结果数组
+      fuseJsResultArr: []
     }
   },
   methods: {
@@ -75,7 +90,6 @@ export default {
       }
       this.$emit("deleteBKIndex", this.searchResultIndex);
     },
-
   },
   computed: {
     /**
@@ -91,6 +105,7 @@ export default {
       }
       return true;
     },
+
   }
 }
 </script>

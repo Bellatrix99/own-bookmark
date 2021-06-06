@@ -66,7 +66,7 @@ export default {
       // 搜索输入框中输入的值
       searchInputValue: "",
       // 全局的已收藏书签数组
-      searchResult: searchResult,
+      searchResult: searchResult.item,
       // 某个已收藏的书签
       item: {},
     }
