@@ -3,9 +3,16 @@
     <div class="search-tag-input-outer">
       <input type="text" id="searchTagInput" @input="searchTag" v-model="searchInputValue">
     </div>
-    <div class="tag draggableTag" v-for="(tagItem,index) in searchTagArr" :key="index+'-only'">
-      {{ tagItem }}
-    </div>
+    <transition-group
+        name="tag-transition"
+        enter-active-class="animate__animated animate__fadeIn"
+        leave-active-class="animate__animated animate__fadeOut"
+        mode="in-out"
+    >
+      <div class="tag draggableTag" v-for="(tagItem,index) in searchTagArr" :key="index+'-only'">
+        {{ tagItem }}
+      </div>
+    </transition-group>
   </div>
 </template>
 
@@ -47,12 +54,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.animate__fadeIn {
+  animation-duration: 0.6s;
+}
+
+.animate__fadeOut {
+  animation-duration: 0.3s;
+}
+
 .tag-box {
   padding: 10px;
-  text-align: center;
+  //text-align: center;
   background-color: white;
   box-shadow: 0 3px 5px rgba(226, 226, 226, 82%);
   border-radius: 14px;
+  transition: all 1s;
 
   .search-tag-input-outer {
     border: 1px solid #b4b1b1;
@@ -60,6 +76,7 @@ export default {
     height: 30px;
 
     input {
+      margin-left: 10px;
       font-size: 14px;
       min-width: 100px;
       width: 90%;

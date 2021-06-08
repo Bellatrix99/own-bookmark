@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmark-info" v-if="showBookMarkSearch">
+  <div class="bookmark-info">
     <div class="favicon">
       <img :src="searchResultObj.icon" alt="item-icon">
     </div>
@@ -84,26 +84,17 @@ export default {
       }
     },
   },
-  computed: {
-    /**
-     * @description 用于处理需要显示的搜索结果
-     * (如果在隐藏书签列表中,则不显示; 反之显示)
-     * @return Boolean
-     */
-    showBookMarkSearch() {
-      for (let oneArr of this.hiddenBookMarkIndex) {
-        if (this.searchResultIndex === oneArr) {
-          return false;
-        }
-      }
-      return true;
-    },
-
-  }
+  computed: {}
 }
 </script>
 
 <style scoped lang="scss">
+@media (max-width: 500px) {
+  .favicon {
+    display: none !important;
+  }
+}
+
 .bookmark-info {
   display: flex;
   position: relative;
@@ -118,7 +109,7 @@ export default {
 
   .content {
     width: 80%;
-    margin: 0 70px 0 20px;
+    margin: 0 10px;
 
     h1 {
       font-size: 25px;
@@ -127,6 +118,10 @@ export default {
       a {
         word-wrap: anywhere;
       }
+    }
+
+    p {
+      font-size: 16px;
     }
 
     .tag-box-inner {

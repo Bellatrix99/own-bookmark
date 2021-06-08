@@ -10,20 +10,20 @@
       <div class="content">
         <div class="bookmark-list-item">
           <div class="favicon">
-            <img :src="searchResult[BookMarkInfoIndex].icon" alt="item-icon">
+            <img :src="getIcon" alt="item-icon">
           </div>
           <div class="form-item">
             <div class="form-content">
               <div class="form-item">
                 <label>标题</label>
                 <div class="input-item">
-                  <input type="text" :value="searchResult[BookMarkInfoIndex].title">
+                  <input type="text" :value="getTitle">
                 </div>
               </div>
               <div class="form-item">
                 <label>URL</label>
                 <div class="input-item">
-                  <input type="text" :value="searchResult[BookMarkInfoIndex].href">
+                  <input type="text" :value="getHref">
                 </div>
               </div>
               <TagInput :BookMarkInfoIndex = "BookMarkInfoIndex"/>
@@ -102,6 +102,20 @@ export default {
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
     },
   },
+  computed: {
+    getIcon() {
+      if (!searchResult[this.BookMarkInfoIndex].icon) throw new Error("No icon!");
+      return searchResult[this.BookMarkInfoIndex].icon;
+    },
+    getTitle() {
+      if (!searchResult[this.BookMarkInfoIndex].title) throw new Error("No title!");
+      return searchResult[this.BookMarkInfoIndex].title;
+    },
+    getHref() {
+      if (!searchResult[this.BookMarkInfoIndex].href) throw new Error("No href!");
+      return searchResult[this.BookMarkInfoIndex].href;
+    }
+  }
 }
 </script>
 

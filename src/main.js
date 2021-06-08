@@ -7,7 +7,10 @@ import 'ant-design-vue/dist/antd.css';
 import '@/style/global.scss'
 import "./utils/Globle.js";
 import '../node_modules/modern-normalize/modern-normalize.css';
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
+Vue.use(VueVirtualScroller)
 Vue.use(Antd);
 Vue.use(animate)
 

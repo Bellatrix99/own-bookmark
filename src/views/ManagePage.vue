@@ -13,7 +13,7 @@
       <a-row :gutter="24">
         <a-col :span="18" class="bookmark-info-outer">
           <!-- 书签信息页组件 -->
-          <BookMarkInfo v-for="(item,index) in this.searchResult" :key="index + '-only'"
+          <BookMarkInfo v-for="(item,index) in showSearchResult" :key="index + '-only'"
                         @load="getSearchResultIndex(index)"
                         :ref="`bookMarkInfo${index}`"
                         :searchResultObj="item"
@@ -37,9 +37,16 @@
       </a-row>
     </div>
     <!-- 编辑书签信息的模态框组件 -->
-    <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"
-                      :BookMarkInfoIndex="this.BookMarkInfoIndex"
-    />
+    <transition
+        name="star-page-transition"
+        enter-active-class="animate__animated animate__fadeIn"
+        leave-active-class="animate__animated animate__fadeOut"
+        mode="out-in"
+    >
+      <EditBookMarkInfo v-if="showEditBookMarkInfo" @handleEditBookMark="handleEditBookMark"
+                        :BookMarkInfoIndex="this.BookMarkInfoIndex"
+      />
+    </transition>
   </div>
 </template>
 
@@ -61,8 +68,10 @@ export default {
       showEditBookMarkInfo: false,
       // 搜索结果是否为空的状态布尔值
       isEmptySearchResult: false,
-      // (模糊搜索之后)可见的书签下标数组
+      // (模糊搜索之后)可见的书签链接数组
       visibleBookMarkSet: [],
+      // (模糊搜索之后)可见的书签数组
+      visibleBookMarkArr: [],
       // (模糊搜索之后)不可见的书签下标数组
       hiddenBookMarkIndex: [],
       // (模糊搜索之前)原来的数组下标数组
@@ -81,6 +90,7 @@ export default {
   },
   methods: {
     darkSearch() {
+      this.$refs.bookMarkFilter.fuseSearch();
       this.$refs.bookMarkFilter.darkSearchBookMark();
     },
     /**
@@ -130,7 +140,7 @@ export default {
         this.fuseResult = searchResult;
         this.visibleBookMarkSet = this.fuseResult.map(result => result.href);
       } else {
-        this.visibleBookMarkSet = this.fuseResult.map(result => result.item.href);
+        this.visibleBookMarkSet = this.fuseResult.map(result => result?.item?.href);
       }
       let resArr = this.searchResult.filter(result => !this.visibleBookMarkSet.includes(result.href))
       this.hiddenBookMarkIndex = [];
@@ -157,16 +167,42 @@ export default {
      */
     getSearchInputVal(searchInputVal) {
       this.searchInputVal = searchInputVal;
-    },
+    }
   },
   mounted() {
     // 拿到原始的书签下标数组,长度为已收藏书签的长度
     this.originBookMarkIndex = [...new Array(this.searchResult.length).keys()];
   }
+  ,
+  computed: {
+    /**
+     * @description 用于处理需要显示的搜索结果
+     * (如果在隐藏书签列表中,则不显示; 反之显示)
+     * @return {Array}
+     */
+    showSearchResult() {
+      if (this.visibleBookMarkSet.length === 0) return this.searchResult;
+      return this.searchResult.filter(
+          bookmark => this.visibleBookMarkSet.some(href => bookmark.href === href)
+      );
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
+.animate__fadeIn {
+  animation-duration: 0.5s;
+}
+
+.animate__fadeOut {
+  animation-duration: 0.3s;
+}
+
+.container {
+  //transition: all 1s;
+}
+
 .bookmark-filter {
   width: 100%;
   height: 400px;
@@ -178,11 +214,30 @@ export default {
   border-radius: 3px;
   width: 80%;
   margin: -100px auto 30px;
+  //transition: 1s;
 }
 
 .tag-box-outer {
   position: sticky;
   top: 5%;
+}
+
+@media (max-width: 650px) {
+  .bookmark-info-outer {
+    width: 100%;
+    box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
+    background-color: white;
+    padding: 12px;
+    border-radius: 14px;
+  }
+  .tag-box-outer {
+    display: none !important;
+  }
+  .default-container {
+    border-radius: 3px;
+    width: 80%;
+    margin: -120px auto 30px;
+  }
 }
 
 .bookmark-info-outer {

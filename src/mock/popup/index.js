@@ -1,5 +1,6 @@
 export let searchResult = [
     {
+        id: 1,
         title: '百度一下，你就知道',
         href: 'https://www.baidu.com',
         icon: 'https://www.baidu.com/favicon.ico',
@@ -8,6 +9,7 @@ export let searchResult = [
         ]
     },
     {
+        id: 2,
         title: 'Google',
         href: 'https://www.google.com',
         icon: 'https://www.google.com/favicon.ico',
@@ -16,6 +18,7 @@ export let searchResult = [
         ]
     },
     {
+        id: 3,
         title: 'Github,Github,Github,Github,Github',
         href: 'https://github.com',
         icon: 'https://github.com/favicon.ico',
@@ -24,6 +27,7 @@ export let searchResult = [
         ]
     },
     {
+        id: 4,
         title: '存储 API - Google Chrome 应用开发文档',
         href: 'https://crxdoc-zh.appspot.com/apps/app_storage',
         icon: 'https://crxdoc-zh.appspot.com/favicon.ico',
@@ -32,6 +36,7 @@ export let searchResult = [
         ]
     },
     {
+        id: 5,
         title: '掘金 - 代码不止，掘金不停',
         href: 'https://juejin.cn',
         icon: 'https://juejin.cn/favicon.ico',
@@ -40,6 +45,7 @@ export let searchResult = [
         ]
     },
     {
+        id: 6,
         title: 'OSCHINA - 中文开源技术交流社区',
         href: 'https://www.oschina.net',
         icon: 'https://www.oschina.net/favicon.ico',
