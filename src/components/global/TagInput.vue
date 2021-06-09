@@ -2,7 +2,7 @@
   <div class="form-item" id="form-item-tag">
     <label for="bookmark-tags">标签</label>
     <div class="input tags-box" id="tag-input" @click="addTagsFocus" @keydown="handleTagInputKeyDown">
-      <div class="tag" v-for="(tagName,index) in this.tags.tagNames" :key="index + '-only'">
+      <div class="tag" v-for="(tagName,index) in this.editTags.tagNames" :key="index + '-only'">
         <span>{{ tagName }}</span>
         <a id="text-close" @click="deleteTagBtn(index)">
           <img src="@/assets/close.svg" alt="close-btn"/>
@@ -27,9 +27,15 @@ export default {
       bookMarkTagsStyle: {
         width: this.getInputValueLength
       },
+      // 显示的所有 tag 组成的数组
       tags: {
         id: this.BookMarkInfoIndex,
         tagNames: [],
+      },
+      // 编辑模态框中正在编辑的所有 tags
+      editTags: {
+        id: 0,
+        tagNames: []
       },
       // 输入内容的长度
       inputValueLength: "",
@@ -38,14 +44,25 @@ export default {
     }
   },
   props: {
+    // 当前书签下标
     BookMarkInfoIndex: {
       type: Number,
       default: 0
+    },
+    // 是否展示收藏页
+    showStarPage: {
+      type: Boolean,
+      default: false
     }
   },
   mounted() {
-    // 如果 BookMarkInfoIndex 不是默认值，则表示已经发生改变
-      this.tags.tagNames = searchResult[this.tags.id].tags;
+    // 如果不是 starPage 收藏页下的该组件,则 tagBox 显示其对应的所有 tag,
+    // 否则为空(因为收藏页是要新增收藏)
+    if (this.showStarPage === true) {
+      this.editTags.tagNames = [];
+    } else {
+      this.editTags.tagNames = searchResult[this.tags.id].tags.slice(0);
+    }
   },
   computed: {
     // 书签 tags 的样式
@@ -67,7 +84,7 @@ export default {
     handleTagInputKeyDown(event) {
       if (event.key === 'Backspace' && this.tagInputValue === '') {
         if (this.$refs.inputTags.previousElementSibling) {
-          this.tags.tagNames.pop();
+          this.editTags.tagNames.pop();
         }
       }
     },
@@ -76,7 +93,7 @@ export default {
      * @param {Number} index
      */
     deleteTagBtn(index) {
-      this.tags.tagNames.splice(index, 1);
+      this.editTags.tagNames.splice(index, 1);
     },
     /**
      * @description 用于监听tag输入,
@@ -84,19 +101,33 @@ export default {
      * @param {Object} event
      */
     handleTagInputChange(event) {
+      // 拿到 tagInput 的输入值
       let value = this.tagInputValue;
+      // 正则匹配空格
       let regex = /\s/g;
+      // 匹配空格的总数
       let spaceNum = value.match(regex);
+      // 正则匹配以中英文逗号结尾的输入值
       const match = value.match(/(.+)[,，]/);
+      // 拿到输入值的长度
       this.inputValueLength = value.length;
+      // 如果匹配不为空(匹配成功) 并且匹配组有两个
+      // 并且当前按下的按键是"中英文逗号之一"
       if (match !== null && match.length === 2 && (event.key === "," || event.key === "，")) {
-        this.tags.tagNames.push(match[1]);
+        // 则将匹配组第二个(也就是逗号前面的部分)推入 editTags(正在编辑的tag)
+        this.editTags.tagNames.push(match[1]);
+        // 并且清空输入框的值
         this.tagInputValue = "";
+        // 或者当输入框的值不为空并且空格的长度不等于输入的总长(即不能全为空格)并且按下 Enter 回车键
       } else if (this.tagInputValue !== "" &&
           spaceNum?.length !== value.length && event.key === "Enter") {
-        this.tags.tagNames.push(value);
+        // 则推入当前的输入值
+        this.editTags.tagNames.push(value);
+        // 并且清空输入框的值
         this.tagInputValue = "";
       }
+      // 告知父组件获取正在编辑的标签们--editTags
+      this.$emit('getEditTags', this.editTags);
     },
   }
 }

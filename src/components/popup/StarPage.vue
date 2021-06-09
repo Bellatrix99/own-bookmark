@@ -13,7 +13,7 @@
           <input type="text" name="title" id="bookmark-folder"/>
         </div>
       </div>
-      <TagInput/>
+      <TagInput :showStarPage="showStarPage"/>
     </form>
     <div class="operate-group">
       <button id="deleteBtn" class="button" @click="starPageBackToMain">取消</button>
@@ -31,6 +31,12 @@ export default {
   data() {
     return {}
   },
+  props: {
+    showStarPage: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     /**
      * @description 用于返回到主页 (显示收藏页状态布尔值设为 false)
@@ -44,7 +50,7 @@ export default {
     handleAddMark() {
 
     }
-  }
+  },
 }
 
 </script>

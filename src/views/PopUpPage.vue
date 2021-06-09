@@ -46,7 +46,10 @@
           mode="out-in"
       >
         <!-- 新增收藏组件 -->
-        <StarPage v-if="showStarPage" key="StarPage" @showStarPage="handleStarPage"/>
+        <StarPage v-if="showStarPage" key="StarPage"
+                  @showStarPage="handleStarPage"
+                  :showStarPage="showStarPage"
+        />
       </transition>
     </div>
   </div>
@@ -98,7 +101,7 @@ export default {
     /**
      * @description 用于切换收藏页是否显示
      * @param {Boolean} showStarPage
-     * @retur void
+     * @return void
      */
     handleStarPage(showStarPage) {
       if (this.showStarPage === showStarPage) {

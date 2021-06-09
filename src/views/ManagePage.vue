@@ -16,7 +16,7 @@
           <BookMarkInfo v-for="(item,index) in showSearchResult" :key="index + '-only'"
                         @load="getSearchResultIndex(index)"
                         :ref="`bookMarkInfo${index}`"
-                        :searchcResultObj="item"
+                        :searchResultObj="item"
                         :searchResultIndex="item.id - 1"
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
                         :fuseResult="fuseResult"
@@ -56,7 +56,6 @@ import BookMarkFilter from "@/components/manage/BookMarkFilter";
 import TagBox from "@/components/manage/TagBox";
 import BookMarkInfo from "@/components/manage/BookMarkInfo";
 import EditBookMarkInfo from "@/components/manage/EditBookMarkInfo";
-
 export default {
   name: "ManagePage",
   components: {EditBookMarkInfo, BookMarkInfo, TagBox, BookMarkFilter},
@@ -181,47 +180,40 @@ export default {
      * @return {Array}
      */
     showSearchResult() {
-      if (this.visibleBookMarkSet.length === 0) return searchResult;
-      return searchResult.filter(
+      if (this.visibleBookMarkSet.length === 0) return this.searchResult;
+      return this.searchResult.filter(
           bookmark => this.visibleBookMarkSet.some(href => bookmark.href === href)
       );
     }
   }
 }
 </script>
-
 <style scoped lang="scss">
 .animate__fadeIn {
   animation-duration: 0.5s;
 }
-
 .animate__fadeOut {
   animation-duration: 0.3s;
 }
-
 .container {
   //transition: all 1s;
 }
-
 .bookmark-filter {
   width: 100%;
   height: 400px;
   background-color: #ffb030;
   overflow: hidden;
 }
-
 .default-container {
   border-radius: 3px;
   width: 80%;
   margin: -100px auto 30px;
   //transition: 1s;
 }
-
 .tag-box-outer {
   position: sticky;
   top: 5%;
 }
-
 @media (max-width: 650px) {
   .bookmark-info-outer {
     width: 100%;
@@ -239,12 +231,10 @@ export default {
     margin: -120px auto 30px;
   }
 }
-
 .bookmark-info-outer {
   box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
   background-color: white;
   padding: 12px;
   border-radius: 14px;
 }
-
 </style>

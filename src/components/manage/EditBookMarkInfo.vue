@@ -26,7 +26,9 @@
                   <input type="text" :value="getHref">
                 </div>
               </div>
-              <TagInput :BookMarkInfoIndex="BookMarkInfoIndex"/>
+              <TagInput :BookMarkInfoIndex="BookMarkInfoIndex"
+                        @getEditTags="getEditTags"
+              />
             </div>
           </div>
         </div>
@@ -61,6 +63,7 @@ export default {
     },
   },
   mounted() {
+
   },
   data() {
     return {
@@ -80,7 +83,7 @@ export default {
       // 编辑模态框中正在编辑的所有 tags
       editTags: {
         id: 0,
-        tagNames: ""
+        tagNames: []
       }
     }
   },
@@ -90,7 +93,7 @@ export default {
      */
     finishEditBookMarkInfo() {
       // 简单的深拷贝数组
-      this.editTags.tagNames = this.tags.tagNames.slice(0);
+      // this.editTags.tagNames = this.tags.tagNames.slice(0);
       this.showEditBookMarkInfo = false;
       searchResult[this.tags.id].tags = this.editTags.tagNames;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
@@ -102,17 +105,39 @@ export default {
       this.showEditBookMarkInfo = false;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
     },
+    /**
+     * @description 用于获取正在编辑的所有 tag
+     * @param {Object} editTags
+     */
+    getEditTags(editTags) {
+      this.editTags = editTags;
+    },
   },
   computed: {
+    /**
+     * @description 用于获取对应的图标 icon
+     * @return {String}
+     */
     getIcon() {
+      // 如该值不存在则抛出错误
       if (!searchResult[this.tags.id].icon) throw new Error("No icon!");
       return searchResult[this.tags.id].icon;
     },
+    /**
+     * @description 用于获取对应的标题 title
+     * @return {String}
+     */
     getTitle() {
+      // 如该值不存在则抛出错误
       if (!searchResult[this.tags.id].title) throw new Error("No title!");
       return searchResult[this.tags.id].title;
     },
+    /**
+     * @description 用于获取对应的链接 href
+     * @return {String}
+     */
     getHref() {
+      // 如该值不存在则抛出错误
       if (!searchResult[this.tags.id].href) throw new Error("No href!");
       return searchResult[this.tags.id].href;
     }
