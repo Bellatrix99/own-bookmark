@@ -84,7 +84,22 @@ export default {
       }
     },
   },
-  computed: {}
+  computed: {
+    /**
+     * @description 用于处理需要显示的搜索结果
+     * (如果在隐藏书签列表中,则不显示; 反之显示)
+     * @return Boolean
+     */
+    showBookMarkSearch() {
+      for (let hiddenOne of this.hiddenBookMarkIndex) {
+        if (this.searchResultIndex === hiddenOne) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+  }
 }
 </script>
 

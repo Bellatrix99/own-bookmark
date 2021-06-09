@@ -26,7 +26,7 @@
                   <input type="text" :value="getHref">
                 </div>
               </div>
-              <TagInput :BookMarkInfoIndex = "BookMarkInfoIndex"/>
+              <TagInput :BookMarkInfoIndex="BookMarkInfoIndex"/>
             </div>
           </div>
         </div>
@@ -58,10 +58,9 @@ export default {
     BookMarkInfoIndex: {
       type: Number,
       default: 0
-    }
+    },
   },
   mounted() {
-
   },
   data() {
     return {
@@ -75,10 +74,12 @@ export default {
       },
       // 当前书签下标在全局的已收藏书签数组中的所有 tags
       tags: {
+        id: this.BookMarkInfoIndex,
         tagNames: searchResult[this.BookMarkInfoIndex].tags,
       },
       // 编辑模态框中正在编辑的所有 tags
       editTags: {
+        id: 0,
         tagNames: ""
       }
     }
@@ -91,7 +92,7 @@ export default {
       // 简单的深拷贝数组
       this.editTags.tagNames = this.tags.tagNames.slice(0);
       this.showEditBookMarkInfo = false;
-      searchResult[this.BookMarkInfoIndex].tags = this.editTags.tagNames;
+      searchResult[this.tags.id].tags = this.editTags.tagNames;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
     },
     /**
@@ -104,16 +105,16 @@ export default {
   },
   computed: {
     getIcon() {
-      if (!searchResult[this.BookMarkInfoIndex].icon) throw new Error("No icon!");
-      return searchResult[this.BookMarkInfoIndex].icon;
+      if (!searchResult[this.tags.id].icon) throw new Error("No icon!");
+      return searchResult[this.tags.id].icon;
     },
     getTitle() {
-      if (!searchResult[this.BookMarkInfoIndex].title) throw new Error("No title!");
-      return searchResult[this.BookMarkInfoIndex].title;
+      if (!searchResult[this.tags.id].title) throw new Error("No title!");
+      return searchResult[this.tags.id].title;
     },
     getHref() {
-      if (!searchResult[this.BookMarkInfoIndex].href) throw new Error("No href!");
-      return searchResult[this.BookMarkInfoIndex].href;
+      if (!searchResult[this.tags.id].href) throw new Error("No href!");
+      return searchResult[this.tags.id].href;
     }
   }
 }

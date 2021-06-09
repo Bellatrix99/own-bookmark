@@ -16,8 +16,8 @@
           <BookMarkInfo v-for="(item,index) in showSearchResult" :key="index + '-only'"
                         @load="getSearchResultIndex(index)"
                         :ref="`bookMarkInfo${index}`"
-                        :searchResultObj="item"
-                        :searchResultIndex="index"
+                        :searchcResultObj="item"
+                        :searchResultIndex="item.id - 1"
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
                         :fuseResult="fuseResult"
                         :searchInputVal="searchInputVal"
@@ -181,8 +181,8 @@ export default {
      * @return {Array}
      */
     showSearchResult() {
-      if (this.visibleBookMarkSet.length === 0) return this.searchResult;
-      return this.searchResult.filter(
+      if (this.visibleBookMarkSet.length === 0) return searchResult;
+      return searchResult.filter(
           bookmark => this.visibleBookMarkSet.some(href => bookmark.href === href)
       );
     }

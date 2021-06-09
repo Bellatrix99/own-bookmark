@@ -28,6 +28,7 @@ export default {
         width: this.getInputValueLength
       },
       tags: {
+        id: this.BookMarkInfoIndex,
         tagNames: [],
       },
       // 输入内容的长度
@@ -39,14 +40,12 @@ export default {
   props: {
     BookMarkInfoIndex: {
       type: Number,
-      default: 99999999
+      default: 0
     }
   },
   mounted() {
     // 如果 BookMarkInfoIndex 不是默认值，则表示已经发生改变
-    if (this.BookMarkInfoIndex !== 99999999) {
-      this.tags.tagNames = searchResult[this.BookMarkInfoIndex].tags;
-    }
+      this.tags.tagNames = searchResult[this.tags.id].tags;
   },
   computed: {
     // 书签 tags 的样式

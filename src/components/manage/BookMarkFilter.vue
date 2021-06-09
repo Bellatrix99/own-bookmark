@@ -15,6 +15,7 @@
 <script>
 import {searchResult} from "@/mock/popup";
 import Fuse from 'fuse.js';
+import {darkSearchBookMark} from "@/utils/Globle";
 
 export default {
   name: "BookMarkFilter",
@@ -35,18 +36,7 @@ export default {
      * @description 用于实现模糊搜索(参数是当前元素版本)
      */
     darkSearchBookMark() {
-      // 进行模糊搜索
-      this.fuseResult = this.fuse.search(this.searchInputVal);
-      // 调用父组件的 get 函数,用于获取该子组件输入框输入的的值
-      this.$emit('getSearchInputVal', this.searchInputVal);
-      // 如果模糊搜索结果大于 0, 调用父组件的 get 函数,用于获取该子组件模糊搜索的结果
-      if (this.fuseResult.length > 0) {
-        this.$emit('getFuseResult', this.fuseResult);
-      }
-      // 调用父组件的 get 函数,用于计算模糊搜索之后那些书签可见那些书签不可见
-      this.$emit('getVisibleBookMarkObj');
-      // 调用父组件函数, 将模糊搜索结果的 item 值合并成一个数组
-      this.$emit('fuseJsResultDisplay');
+      darkSearchBookMark(this);
     },
     /**
      * @description 用于 fuse.Js 初始化
@@ -57,7 +47,7 @@ export default {
         // 用 `title` 和 `tags` 作为模糊搜索的索引
         keys: ['title', 'tags']
       }
-      this.fuse = new Fuse(this.searchResult, options)
+      this.fuse = new Fuse(searchResult, options)
     }
   },
   mounted() {

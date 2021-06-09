@@ -19,6 +19,7 @@
 <script>
 import {searchResult} from "@/mock/popup";
 import Fuse from "fuse.js";
+import {darkSearchBookMark} from "@/utils/Globle";
 
 export default {
   name: "SearchInput",
@@ -63,13 +64,7 @@ export default {
      * @description 用于进行模糊搜索
      */
     darkSearchBookMark() {
-      this.fuseResult = this.fuse.search(this.searchInputVal);
-      this.$emit('getSearchInputVal', this.searchInputVal);
-      if (this.fuseResult.length > 0) {
-        this.$emit('getFuseResult', this.fuseResult);
-      }
-      this.$emit('getVisibleBookMarkObj');
-      this.$emit('fuseJsResultDisplay');
+      darkSearchBookMark(this)
     },
     /**
      * @description 用于 fuse.Js 初始化
