@@ -14,10 +14,10 @@
         <a-col :span="18" class="bookmark-info-outer">
           <!-- 书签信息页组件 -->
           <BookMarkInfo v-for="(item,index) in showSearchResult" :key="index + '-only'"
-                        @load="getSearchResultIndex(index)"
+                        @load="getSearchResultIndex(item)"
                         :ref="`bookMarkInfo${index}`"
                         :searchResultObj="item"
-                        :searchResultIndex="item.id - 1"
+                        :searchResultIndex="index"
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
                         :fuseResult="fuseResult"
                         :searchInputVal="searchInputVal"
@@ -26,8 +26,10 @@
                         @handleEditBookMark="handleEditBookMark"
                         @deleteBKIndex="deleteBKIndex"
           />
-          <div v-if="this.isEmptySearchResult">
-            没有数据
+          <div v-if="this.isEmptySearchResult"
+               class="noSearchResult"
+          >
+            <p>无书签，请先新增书签</p>
           </div>
         </a-col>
         <a-col :span="6" class="tag-box-outer">
@@ -56,6 +58,7 @@ import BookMarkFilter from "@/components/manage/BookMarkFilter";
 import TagBox from "@/components/manage/TagBox";
 import BookMarkInfo from "@/components/manage/BookMarkInfo";
 import EditBookMarkInfo from "@/components/manage/EditBookMarkInfo";
+
 export default {
   name: "ManagePage",
   components: {EditBookMarkInfo, BookMarkInfo, TagBox, BookMarkFilter},
@@ -84,7 +87,7 @@ export default {
       // v-for 循环的 index
       searchResultIndex: 0,
       // fuseJs 模糊搜索结果数组
-      fuseJsResultArr: []
+      fuseJsResultArr: [],
     };
   },
   methods: {
@@ -94,10 +97,10 @@ export default {
     },
     /**
      * @description 用于拿到当前循环的 index 实例
-     * @param {Number} index
+     * @param {Object} item
      */
-    getSearchResultIndex(index) {
-      this.searchResultIndex = index;
+    getSearchResultIndex(item) {
+      this.searchResultIndex = item.id;
     },
     /**
      * @description 用于将模糊搜索的结果合并到一个数组中
@@ -192,28 +195,34 @@ export default {
 .animate__fadeIn {
   animation-duration: 0.5s;
 }
+
 .animate__fadeOut {
   animation-duration: 0.3s;
 }
+
 .container {
   //transition: all 1s;
 }
+
 .bookmark-filter {
   width: 100%;
   height: 400px;
   background-color: #ffb030;
   overflow: hidden;
 }
+
 .default-container {
   border-radius: 3px;
   width: 80%;
   margin: -100px auto 30px;
   //transition: 1s;
 }
+
 .tag-box-outer {
   position: sticky;
   top: 5%;
 }
+
 @media (max-width: 650px) {
   .bookmark-info-outer {
     width: 100%;
@@ -231,10 +240,22 @@ export default {
     margin: -120px auto 30px;
   }
 }
+
 .bookmark-info-outer {
+  height: 100%;
   box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
   background-color: white;
   padding: 12px;
   border-radius: 14px;
+}
+
+.noSearchResult {
+  height: 40vh;
+  text-align: center;
+  p {
+    height: 20vh;
+    line-height: 20vh;
+    font-size: 20px;
+  }
 }
 </style>

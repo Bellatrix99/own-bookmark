@@ -104,16 +104,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .favicon {
     display: none !important;
+  }
+  .content {
+    width: 80%;
+    padding-right: 10px;
   }
 }
 
 .bookmark-info {
   display: flex;
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 15px 25px;
   border-radius: 10px;
   transition: all .3s;
@@ -123,8 +127,8 @@ export default {
   }
 
   .content {
-    width: 80%;
-    margin: 0 10px;
+    width: 75%;
+    margin-left: 10px;
 
     h1 {
       font-size: 25px;
@@ -132,6 +136,11 @@ export default {
 
       a {
         word-wrap: anywhere;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
     }
 

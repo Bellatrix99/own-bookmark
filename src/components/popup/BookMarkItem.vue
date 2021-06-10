@@ -151,7 +151,8 @@ export default {
     cursor: pointer;
 
     img {
-      height: 100%;
+      width: 30px;
+      height: 30px;
     }
   }
 

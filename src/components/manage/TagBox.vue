@@ -13,6 +13,14 @@
         {{ tagItem }}
       </div>
     </transition-group>
+    <transition
+        name="p-transition"
+        enter-active-class="animate__animated animate__fadeInDown"
+        leave-active-class="animate__animated animate__fadeOutDown"
+        mode="in-out"
+    >
+      <p v-if="searchResultIsEmpty" key="noResult">没有找到相关的标签</p>
+    </transition>
   </div>
 </template>
 
@@ -25,6 +33,11 @@ export default {
     // 默认搜索结果为全局的的已定义标签数组 tagsArr
     this.searchTagArr = tagsArr;
   },
+  computed: {
+    searchResultIsEmpty() {
+      return this.isEmpty
+    }
+  },
   data() {
     return {
       // 全局的已定义标签数组 tagsArr
@@ -32,7 +45,9 @@ export default {
       // 搜索标签结果数组
       searchTagArr: [],
       // 搜索框输入的值
-      searchInputValue: ""
+      searchInputValue: "",
+      // 搜索结果是否为空
+      isEmpty: false
     }
   },
   methods: {
@@ -46,6 +61,10 @@ export default {
         // 如果已定义的标签数组中某一项包含当前输入的值,则将该项推到模糊搜索结果数组中(忽略大小写)
         if (tag.toLowerCase().indexOf(this.searchInputValue.toLowerCase()) !== -1) {
           this.searchTagArr.push(tag);
+          this.isEmpty = false;
+        }
+        if (this.searchTagArr.length === 0) {
+          this.isEmpty = true;
         }
       }
     }
@@ -54,6 +73,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.animate__fadeInDown {
+  animation-delay: 0.35s;
+  animation-duration: 0.3s;
+}
+
+.animate__fadeOutDown {
+  animation-duration: 0.3s;
+}
+
 .animate__fadeIn {
   animation-duration: 0.6s;
 }
@@ -69,6 +97,13 @@ export default {
   box-shadow: 0 3px 5px rgba(226, 226, 226, 82%);
   border-radius: 14px;
   transition: all 1s;
+
+  p {
+    text-align: center;
+    line-height: 20px;
+    font-size: 16px;
+    margin: 5px 0;
+  }
 
   .search-tag-input-outer {
     border: 1px solid #b4b1b1;
