@@ -18,6 +18,7 @@
                         :ref="`bookMarkInfo${index}`"
                         :searchResultObj="item"
                         :searchResultIndex="index"
+                        :currId="item.id - 1"
                         :hiddenBookMarkIndex="hiddenBookMarkIndex"
                         :fuseResult="fuseResult"
                         :searchInputVal="searchInputVal"
@@ -58,6 +59,7 @@ import BookMarkFilter from "@/components/manage/BookMarkFilter";
 import TagBox from "@/components/manage/TagBox";
 import BookMarkInfo from "@/components/manage/BookMarkInfo";
 import EditBookMarkInfo from "@/components/manage/EditBookMarkInfo";
+import {getSearchInputVal, getFuseResult, fuseJsResultDisplay, getVisibleBookMarkObj} from "@/utils/Globle";
 
 export default {
   name: "ManagePage",
@@ -88,6 +90,8 @@ export default {
       searchResultIndex: 0,
       // fuseJs 模糊搜索结果数组
       fuseJsResultArr: [],
+      // 当前的 id
+      currId: 0
     };
   },
   methods: {
@@ -103,15 +107,29 @@ export default {
       this.searchResultIndex = item.id;
     },
     /**
+     * @description 用于获取搜索输入框输入的值
+     * @param {String} searchInputVal
+     */
+    getSearchInputVal(searchInputVal) {
+      getSearchInputVal(this, searchInputVal);
+    },
+    /**
+     * @description 用于获取模糊搜索结果
+     */
+    getFuseResult(fuseResult) {
+      getFuseResult(this, fuseResult)
+    },
+    /**
      * @description 用于将模糊搜索的结果合并到一个数组中
      */
     fuseJsResultDisplay() {
-      this.fuseJsResultArr = [];
-      for (const fuseResultItem of this.fuseResult) {
-        if (this.fuseJsResultArr.indexOf(fuseResultItem.item) === -1) {
-          this.fuseJsResultArr.push(fuseResultItem.item);
-        }
-      }
+      fuseJsResultDisplay(this)
+    },
+    /**
+     * @description 用于取得可见的书签下标值数组
+     */
+    getVisibleBookMarkObj() {
+      getVisibleBookMarkObj(this);
     },
     /**
      * @description 用于传递"编辑模态框"是否显示的状态布尔值
@@ -122,58 +140,31 @@ export default {
     },
     /**
      * @description 用于删除对应传入 index 的书签
-     * @param {Number} searchResultIndex
+     // * @param {Number} currId
      */
-    deleteBKIndex(searchResultIndex) {
-      searchResult.splice(searchResultIndex, 1);
+    deleteBKIndex(currId) {
+      console.log(searchResult.filter(
+          bookmark => bookmark.id - 1 !== currId
+      ));
+      this.searchResult = this.searchResult.filter(bookmark => bookmark.id - 1 !== currId);
+      // searchResult.splice(searchResult.filter(bookmark => bookmark.id - 1 === currId), 1);
       // 如果书签已全部删除,则设置"isEmptySearchResult(书签为空)"状态为真
       if (searchResult.length === 0) {
         this.isEmptySearchResult = true;
       }
     },
     /**
-     * @description 用于取得可见的书签下标值数组
-     */
-    getVisibleBookMarkObj() {
-      if (this.isEmptySearchResult) {
-        return;
-      }
-      if (this.searchInputVal === "") {
-        this.fuseResult = searchResult;
-        this.visibleBookMarkSet = this.fuseResult.map(result => result.href);
-      } else {
-        this.visibleBookMarkSet = this.fuseResult.map(result => result?.item?.href);
-      }
-      let resArr = this.searchResult.filter(result => !this.visibleBookMarkSet.includes(result.href))
-      this.hiddenBookMarkIndex = [];
-      for (const resArrElement of resArr) {
-        this.hiddenBookMarkIndex.push(this.searchResult.indexOf(resArrElement));
-      }
-    },
-    /**
      * @description 用于取得当前点击的书签下标值
-     * @param {Number} searchResultIndex
+     * @param {Number} currId
      */
-    getClickBookMark(searchResultIndex) {
-      this.BookMarkInfoIndex = searchResultIndex;
+    getClickBookMark(currId) {
+      this.BookMarkInfoIndex = currId;
     },
-    /**
-     * @description 用于获取模糊搜索结果
-     */
-    getFuseResult(fuseResult) {
-      this.fuseResult = fuseResult;
-    },
-    /**
-     * @description 用于获取搜索输入框输入的值
-     * @param {String} searchInputVal
-     */
-    getSearchInputVal(searchInputVal) {
-      this.searchInputVal = searchInputVal;
-    }
   },
   mounted() {
     // 拿到原始的书签下标数组,长度为已收藏书签的长度
     this.originBookMarkIndex = [...new Array(this.searchResult.length).keys()];
+    this.getVisibleBookMarkObj();
   }
   ,
   computed: {
@@ -192,6 +183,24 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+@media (max-width: 650px) {
+  .bookmark-info-outer {
+    width: 100%;
+    box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
+    background-color: white;
+    padding: 12px;
+    border-radius: 14px;
+  }
+  .tag-box-outer {
+    display: none !important;
+  }
+  .default-container {
+    border-radius: 3px;
+    width: 80%;
+    margin: -120px auto 30px;
+  }
+}
+
 .animate__fadeIn {
   animation-duration: 0.5s;
 }
@@ -223,24 +232,6 @@ export default {
   top: 5%;
 }
 
-@media (max-width: 650px) {
-  .bookmark-info-outer {
-    width: 100%;
-    box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
-    background-color: white;
-    padding: 12px;
-    border-radius: 14px;
-  }
-  .tag-box-outer {
-    display: none !important;
-  }
-  .default-container {
-    border-radius: 3px;
-    width: 80%;
-    margin: -120px auto 30px;
-  }
-}
-
 .bookmark-info-outer {
   height: 100%;
   box-shadow: rgba(167,167,167,48%) -1px -1px 10px;
@@ -252,6 +243,7 @@ export default {
 .noSearchResult {
   height: 40vh;
   text-align: center;
+
   p {
     height: 20vh;
     line-height: 20vh;

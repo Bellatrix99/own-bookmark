@@ -1,7 +1,9 @@
 <template>
   <div class="bookmark-info">
     <div class="favicon">
-      <img :src="searchResultObj.icon" alt="item-icon">
+      <img :src="searchResultObj.icon" alt="item-icon"
+           :onerror="errorImg"
+      >
     </div>
     <div class="content">
       <h1>
@@ -39,6 +41,11 @@ export default {
       type: Number,
       default: 0
     },
+    // 当前书签的 id
+    currId: {
+      type: Number,
+      default: 0
+    },
     // 隐藏的书签下标数组
     hiddenBookMarkIndex: {
       type: Array,
@@ -60,7 +67,9 @@ export default {
       // 编辑模态框是否弹出
       editable: false,
       // fuseJs 模糊搜索结果数组
-      fuseJsResultArr: []
+      fuseJsResultArr: [],
+      // 图片加载有误显示的图片
+      errorImg: 'this.src="' + require('@/assets/error-3.svg') + '"',
     }
   },
   methods: {
@@ -69,7 +78,7 @@ export default {
      */
     handleToggleEdit() {
       this.editable = true;
-      this.$emit('getClickBookMark', this.searchResultIndex);
+      this.$emit('getClickBookMark', this.currId);
       this.$emit('handleEditBookMark', this.editable);
     },
     /**
@@ -78,28 +87,14 @@ export default {
      * 如果当前输入内容为空则在所有书签列表上进行删除
      */
     deleteBookMarkItem() {
-      this.$emit("deleteBKIndex", this.searchResultIndex);
+      console.log(this.currId)
+      this.$emit("deleteBKIndex", this.currId);
       if (this.searchInputVal !== "") {
         this.$emit('darkSearch');
       }
     },
   },
-  computed: {
-    /**
-     * @description 用于处理需要显示的搜索结果
-     * (如果在隐藏书签列表中,则不显示; 反之显示)
-     * @return Boolean
-     */
-    showBookMarkSearch() {
-      for (let hiddenOne of this.hiddenBookMarkIndex) {
-        if (this.searchResultIndex === hiddenOne) {
-          return false;
-        }
-      }
-      return true;
-    },
-
-  }
+  computed: {}
 }
 </script>
 
@@ -111,6 +106,26 @@ export default {
   .content {
     width: 80%;
     padding-right: 10px;
+  }
+  button {
+    &:before {
+      content: "";
+      position: absolute;
+    }
+  }
+  #edit-btn {
+    &:before {
+      top: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+  }
+  #remove-btn {
+    &:before {
+      top: -10px;
+      bottom: -10px;
+      right: -10px;
+    }
   }
 }
 

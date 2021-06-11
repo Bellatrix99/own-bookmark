@@ -1,15 +1,18 @@
 <template>
-  <div class="search-page" v-if="showBookMarkSearch">
+  <div class="search-page">
     <!-- 用于挂载搜索结果相关 DOM -->
     <div class="search-item">
       <div class="search-item-icon-box" :title="searchResultObj.title">
-        <img :src="searchResultObj.icon" alt="item-icon" :href="searchResultObj.href" @click="openTab">
+        <img :src="searchResultObj.icon" alt="item-icon"
+             :href="searchResultObj.href" @click="openTab"
+             :onerror="errorImg"
+        >
       </div>
       <div class="search-info">
         <h2 :href="searchResultObj.href" @click="openTab" :title="searchResultObj.title"
             class="bookmark-title"
         >
-          {{ searchResultNew.title }}
+          {{ searchResultObj.title }}
         </h2>
         <div class="tag-box">
           <!-- popup 页的 tag 输入盒子组件 -->
@@ -61,6 +64,8 @@ export default {
       tagNumbers: "",
       // 理论最大可显 tag 数量
       maxShowTagNumbers: 6,
+      // 图片加载有误显示的图片
+      errorImg: 'this.src="' + require('@/assets/error-1.svg') + '"',
     }
   },
   methods: {
@@ -101,22 +106,7 @@ export default {
     // 调用省略过长文字的方法
     this.omitLongText();
   },
-  computed: {
-    /**
-     * @description 用于处理需要显示的搜索结果
-     * (如果在隐藏书签列表中,则不显示; 反之显示)
-     * @return Boolean
-     */
-    showBookMarkSearch() {
-      for (let oneArr of this.hiddenBookMarkIndex) {
-        if (this.searchResultIndex === oneArr) {
-          return false;
-        }
-      }
-      return true;
-    },
-
-  }
+  computed: {}
 }
 </script>
 
@@ -153,6 +143,7 @@ export default {
     img {
       width: 30px;
       height: 30px;
+
     }
   }
 

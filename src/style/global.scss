@@ -50,6 +50,7 @@ div {
   background-color: rgba(217, 240, 255, 0.62);
   color: #485665;
   transition: all 0.3s;
+  cursor: default;
 
   &:hover {
     background-color: rgb(194, 227, 250);
@@ -58,4 +59,12 @@ div {
 
 img {
   object-fit: cover;
+}
+
+button {
+  user-select: none
+}
+
+a {
+  user-select: none
 }

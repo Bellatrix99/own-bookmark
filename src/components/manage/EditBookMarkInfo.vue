@@ -10,7 +10,10 @@
       <div class="content">
         <div class="bookmark-list-item">
           <div class="favicon">
-            <img :src="getIcon" alt="item-icon">
+            <img :src="getIcon"
+                 :onerror="errorImg"
+                 alt="item-icon"
+            >
           </div>
           <div class="form-item">
             <div class="form-content">
@@ -84,7 +87,9 @@ export default {
       editTags: {
         id: 0,
         tagNames: []
-      }
+      },
+      // 图片加载有误显示的图片
+      errorImg: 'this.src="' + require('@/assets/error-2.svg') + '"',
     }
   },
   methods: {

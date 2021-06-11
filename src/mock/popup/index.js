@@ -3,7 +3,7 @@ export let searchResult = [
         id: 1,
         title: '百度一下，你就知道',
         href: 'https://www.baidu.com',
-        icon: 'https://www.baidu.com/favicon.ico',
+        icon: 'https://www.baidu.com/favicon.testerror',
         tags: [
             'chrome', 'dev', 'html', 'css', 'js', 'baidu'
         ]

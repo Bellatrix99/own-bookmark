@@ -45,7 +45,7 @@ export default {
       if (index === this.tagNumbers - 1) {
         // 省略的数组就是完整 tags 数组截去前面可显的数组
         this.moreTags = this.searchResultObj.tags.slice(this.tagNumbers - 1);
-        this.$refs.eachTag[index].style.cursor = 'pointer';
+        this.$refs.eachTag[index].style.cursor = 'zoom-in';
       }
     }
   }
@@ -54,16 +54,12 @@ export default {
 
 <style scoped lang="scss">
 .tag {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 20px;
-  font-size: 12px;
+  height: 24px;
   color: #485665;
-  background-color: rgba(217, 240, 255, 0.62);
   border-radius: 2px;
   padding: 3px 8px;
   margin: 3px 5px;
+  cursor: default;
 
   &:first-child {
     margin-left: 0;

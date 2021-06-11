@@ -45,6 +45,7 @@ export default {
      * @param {Object} event
      */
     handleToggleExpand(event) {
+      this.darkSearchBookMark();
       // 如果点击的元素是 Input 标签,则展开状态布尔值为"真"
       this.expanded = event.target.tagName === 'INPUT';
       // 子组件可以使用 $emit 触发父组件的自定义事件
@@ -75,7 +76,7 @@ export default {
         // Search in `title` and in `tags` array
         keys: ['title', 'tags']
       }
-      this.fuse = new Fuse(this.searchResult, options)
+      this.fuse = new Fuse(searchResult, options)
     }
   },
   mounted() {
