@@ -1,6 +1,7 @@
 <template>
-  <div class="container" ref="container">
-    <div class="top-box" ref="topBox"
+  <div class="popup-page">
+    <div
+        class="top-box"
          :class="{'animate__searchUp': showBookMarkList, 'animate__topBoxToTop':showStarPage}">
       <div class="main-page-center" :class="{'animate__starButtonUp': showStarPage}">
         <!-- 输入框组件 -->
@@ -32,10 +33,22 @@
             mode="out-in"
         >
           <p id="or" v-show="!this.showBookMarkList" key="orP">or</p>
-          <div class="star-btn-outer" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
+          <div class="star-btn-wrapper" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
                key="starButtonOuter" v-show="!this.showBookMarkList">
             <!-- 点击收藏按钮组件 -->
-            <StarButton @ToggleStarPage="handleStarPage" key="starButton"/>
+            <v-btn
+                class="mx-4"
+                id="star-btn"
+                fab
+                depressed
+                dark
+                color="#f4b828"
+                @click="toggleStarPageShowStatus"
+            >
+              <v-icon dark large>
+                mdi-star-outline
+              </v-icon>
+            </v-btn>
           </div>
         </transition-group>
       </div>
@@ -46,9 +59,11 @@
           mode="out-in"
       >
         <!-- 新增收藏组件 -->
-        <StarPage v-if="showStarPage" key="StarPage"
-                  @showStarPage="handleStarPage"
-                  :showStarPage="showStarPage"
+        <StarPage
+            v-if="showStarPage"
+            key="StarPage"
+            :show="showStarPage"
+            @close="toggleStarPageShowStatus"
         />
       </transition>
     </div>
@@ -56,16 +71,15 @@
 </template>
 
 <script>
-import {searchResult} from '@/mock/popup';
+import { searchResult } from '@/mock/popup';
 import SearchInput from "@/components/popup/SearchInput";
 import BookMarkItem from "@/components/popup/BookMarkItem";
-import StarButton from "@/components/popup/StarButton";
 import StarPage from "@/components/popup/StarPage";
-import {fuseJsResultDisplay, getFuseResult, getSearchInputVal, getVisibleBookMarkObj} from "@/utils/Globle";
+import { fuseJsResultDisplay, getFuseResult, getSearchInputVal, getVisibleBookMarkObj } from "@/utils/Globle";
 
 export default {
   name: "PopUpPage",
-  components: {StarButton, BookMarkItem, SearchInput, StarPage},
+  components: { BookMarkItem, SearchInput, StarPage },
   data() {
     return {
       // 是否显示书签目录状态布尔值
@@ -108,21 +122,15 @@ export default {
      * @description 用于展开输入框
      * @param {Boolean} expanded
      */
-    handleSearchExpand({expanded}) {
+    handleSearchExpand({ expanded }) {
       this.showBookMarkList = expanded;
       this.searchInputUp = true;
     },
     /**
      * @description 用于切换收藏页是否显示
-     * @param {Boolean} showStarPage
-     * @return void
      */
-    handleStarPage(showStarPage) {
-      if (this.showStarPage === showStarPage) {
-        this.showStarPage = !showStarPage;
-      } else {
-        this.showStarPage = showStarPage;
-      }
+    toggleStarPageShowStatus() {
+      this.showStarPage = !this.showStarPage;
     },
     /**
      * @description 用于切换收藏页是否显示
@@ -160,106 +168,109 @@ export default {
 </script>
 
 <style scoped lang="scss">
-* {
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-}
 
-.star-btn-outer {
-  margin-left: calc(50% - 20px);
-  width: 40px;
-  transition: 1s;
-}
+.popup-page {
+  width: 450px;
+  height: 400px;
 
-.animate__starButtonOuterUp {
-  width: 100%;
-  border-radius: 20px;
-  margin-left: 0;
-  background-color: #f4b828;
-}
+  .top-box {
+    padding-top: 25%;
+    transition: 0.4s;
+  }
 
-.container {
-  width: 400px;
-  height: 500px;
-}
-
-.animate__fadeIn {
-  animation-duration: 1s;
-}
-
-.animate__fadeInDown {
-  animation-duration: .4s;
-}
-
-.animate__fadeOut {
-  animation-duration: 0s;
-}
-
-.top-box {
-  padding-top: 25%;
-  transition: 0.4s;
-}
-
-.animate__topBoxToTop {
-  padding-top: 0;
-}
-
-.animate__searchUp {
-  padding-top: 10%;
-}
-
-.main-page-center {
-  transition: 0.4s;
-}
-
-.animate__starButtonUp {
-  margin-top: -90px;
-  background-color: #f4b828;
-}
-
-#or {
-  text-align: center;
-  font-size: 20px;
-  letter-spacing: .3em;
-  font-weight: lighter;
-  margin: 15px auto;
-  color: #191d22;
-}
-
-.bookmark-outer-div {
-  width: 90%;
-  height: 300px;
-  overflow-y: scroll;
-  margin-top: 10px;
-  padding: 10px 10px 0 10px;
-
-  &:hover {
-    &::-webkit-scrollbar-thumb {
-      width: 20px;
-      background-color: rgba(0, 0, 0, .2);
-      border-radius: 10px;
-      -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
+  #star-btn {
+    i {
+      font-size: 28px !important;
     }
   }
 
-  &::-webkit-scrollbar { /*滚动条整体样式*/
-    width: 1vw; /*高宽分别对应横竖滚动条的尺寸*/
-    max-width: 10px;
+  .star-btn-wrapper {
+    text-align: center;
+    transition: 1s;
   }
 
-  &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+  .animate__starButtonOuterUp {
+    width: 100%;
+    border-radius: 20px;
+    margin-left: 0;
+    background-color: #f4b828;
+  }
+
+  .animate__fadeIn {
+    animation-duration: 1s;
+  }
+
+  .animate__fadeInDown {
+    animation-duration: .4s;
+  }
+
+  .animate__fadeOut {
+    animation-duration: 0s;
+  }
+
+
+
+  .animate__topBoxToTop {
+    padding-top: 0;
+  }
+
+  .animate__searchUp {
+    padding-top: 10%;
+  }
+
+  .main-page-center {
+    transition: 0.4s;
+  }
+
+  .animate__starButtonUp {
+    margin-top: -100px;
+    background-color: #f4b828;
+  }
+
+  #or {
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: .3em;
+    font-weight: lighter;
+    margin: 15px auto;
+    color: #191d22;
+  }
+
+  .bookmark-outer-div {
+    width: 90%;
+    height: 300px;
+    overflow-y: scroll;
+    margin-top: 10px;
+    padding: 10px 10px 0 10px;
+
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        width: 20px;
+        background-color: rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
+      }
+    }
+
+    &::-webkit-scrollbar { /*滚动条整体样式*/
+      width: 1vw; /*高宽分别对应横竖滚动条的尺寸*/
+      max-width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+      border-radius: 5px;
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .bookmark-outer-div::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.35);
     border-radius: 5px;
-    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
   }
 }
 
-.bookmark-outer-div::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.35);
-  border-radius: 5px;
-  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
 
-}
 
 </style>

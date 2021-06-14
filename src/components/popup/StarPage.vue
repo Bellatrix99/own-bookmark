@@ -1,131 +1,147 @@
 <template>
   <div class="star-page">
-    <form>
-      <div class="form-item">
-        <label for="bookmark-title">标题</label>
-        <div class="input">
-          <input type="text" name="title" id="bookmark-title"/>
-        </div>
-      </div>
-      <div class="form-item">
-        <label for="bookmark-folder">描述</label>
-        <div class="input">
-          <input type="text" name="title" id="bookmark-folder"/>
-        </div>
-      </div>
-      <TagInput :showStarPage="showStarPage"/>
-    </form>
+    <v-form v-model="valid">
+      <v-container>
+        <v-row>
+          <v-col
+              cols="12"
+              md="4"
+          >
+            <v-text-field
+                v-model="form.title"
+                :rules="validations.title"
+                label="标题"
+                hide-details="auto"
+                prepend-inner-icon="mdi-format-title"
+                clearable
+                required
+            >
+            </v-text-field>
+          </v-col>
+
+          <v-col
+              cols="12"
+              md="4"
+          >
+            <!--TODO: 描述抓 Meta 中的 SEO 关键词-->
+            <v-text-field
+                v-model="form.description"
+                label="描述"
+                hide-details="auto"
+                prepend-inner-icon="mdi-pen"
+                clearable
+                required
+            >
+            </v-text-field>
+          </v-col>
+
+          <v-col
+              cols="12"
+              md="4"
+          >
+            <TagSelector
+                @createTag="handleCreateTag"
+                @editTag="handleEditTag"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-form>
     <div class="operate-group">
-      <button id="deleteBtn" class="button" @click="starPageBackToMain">取消</button>
-      <button id="addBtn" class="button" @click="handleAddMark">添加</button>
+      <v-btn
+          depressed
+          color="primary"
+          @click="handleStoreBookmark"
+      >
+        添加
+      </v-btn>
+      <v-btn
+          depressed
+          @click="handleClose"
+      >
+        取消
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import TagInput from "@/components/global/TagInput";
+
+import TagSelector from "@/components/popup/TagSelector";
 
 export default {
   name: "StarPage",
-  components: {TagInput},
+  components: { TagSelector },
   data() {
-    return {}
+    return {
+      valid: false,
+      form: {
+        title: '',
+        description: '',
+        tags: []
+      },
+      validations: {
+        title: [
+          (val) => {
+            return val ? true : '标题不能为空';
+          }
+        ],
+      },
+    }
   },
   props: {
-    showStarPage: {
+    show: {
       type: Boolean,
       default: false
     }
   },
   methods: {
     /**
-     * @description 用于返回到主页 (显示收藏页状态布尔值设为 false)
+     * 关闭 StarPage 并返回
      */
-    starPageBackToMain() {
-      this.$emit("showStarPage", false)
+    handleClose() {
+      this.$emit("close")
+    },
+    handleStoreBookmark() {
+      this.$emit("store", { form: this.form});
     },
     /**
-     * @description 用于确定新增书签
+     * 监听 TagSelector 的 CreateTag 事件回调函数，弹出修改 Dialog
+     * @param title { string } 要创建的 Tag 标题
      */
-    handleAddMark() {
-
+    handleCreateTag({ label: title }) {
+      console.log(title);
+    },
+    handleEditTag({ tag }) {
+      console.log(tag)
     }
+
   },
 }
 
 </script>
 
 <style scoped lang="scss">
-form {
-  display: block;
-  margin-top: 20px;
 
-  .form-item {
-    width: 80%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    height: var(--form-item-height);
+.star-page {
+  padding: 0 20px;
 
-    label {
-      width: 50px;
-      font-size: 12px;
-      line-height: var(--form-item-height);
-      max-width: 80px;
-      text-align: left;
-      cursor: default;
+  ::v-deep {
+
+    .v-input__icon--prepend-inner {
+      margin-right: 8px;
     }
   }
 
-  .input {
-    flex-grow: 1;
-    height: 25px;
-    border: 1px solid var(--light-border-color);
-    border-radius: 3px;
-    overflow: hidden;
+  .operate-group {
+    padding: 0 10px;
 
-    input {
-      width: 100%;
-      height: 100%;
-      border: none;
-      padding: 0 10px;
-      outline: none;
+    button {
+      &:first-child {
+        float: right;
+      }
     }
   }
-}
-
-.operate-group {
-  width: 80%;
-  margin: auto;
-}
-
-#addBtn {
-  float: right;
-  background-color: var(--star-btn-color);
-  color: white;
-  border: none;
-}
-
-#deleteBtn {
-  float: left;
-}
-
-button {
-  height: 30px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  transition: all .5s;
-}
-
-.button {
-  font-size: 13px;
-  padding: 5px 20px;
-  color: #2d3139;
-  border: 1px solid var(--light-border-color);
-  border-radius: 5px;
-  box-shadow: 0 0 3px #efefef;
-  transition: all .5s;
 }
 
 </style>
