@@ -43,7 +43,7 @@
               label="标签"
               :rules="validateRules.text"
               required
-              counter="10"
+              counter="30"
           ></v-text-field>
           <v-text-field
               v-model="form.description"

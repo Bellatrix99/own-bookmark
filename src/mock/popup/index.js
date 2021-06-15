@@ -61,3 +61,46 @@ export let tagsArr = [
     'TypeScript', 'Webpack', 'React', 'Vue', 'jest',
     '测试', '知乎', '掘金'
 ]
+
+const tags = [
+    {
+        text: 'Foo',
+        description: 'aaa',
+        color: 'blue',
+    },
+    {
+        text: 'Bar',
+        color: 'red',
+    },
+    {
+        text: 'a',
+        color: 'red',
+    }, {
+        text: 'b',
+        color: 'red',
+    }, {
+        text: 'c',
+        color: 'red',
+    }, {
+        text: 'd',
+        color: 'red',
+    }, {
+        text: 'e',
+        color: 'red',
+    },
+]
+
+export async function fetchAllTags() {
+    return new Promise(res => {
+        res(tags);
+    })
+}
+
+export async function storeTag(tag) {
+    return new Promise((res) => {
+        setTimeout(() => {
+            tags.push(tag);
+            res();
+        }, 100)
+    })
+}

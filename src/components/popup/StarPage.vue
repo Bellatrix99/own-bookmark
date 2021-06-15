@@ -68,6 +68,7 @@
 
 import TagSelector from "@/components/popup/TagSelector";
 import TagEditDialog from "@/components/popup/TagEditDialog";
+import { storeTag } from "@/mock/popup";
 
 export default {
   name: "StarPage",
@@ -97,10 +98,12 @@ export default {
   },
   methods: {
     // eslint-disable-next-line no-unused-vars
-    handleSaveTag({ form, mode }) {
+    async handleSaveTag({ form, mode }) {
       // TODO: Save Tags
+      await storeTag(form);
       const tagSelector = this.$refs.tagSelector;
-      tagSelector.appendSelectedTag(form)
+      await tagSelector.fetchAllTags();
+      tagSelector.appendSelectedTag(form);
     },
     /**
      * 关闭 StarPage 并返回

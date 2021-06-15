@@ -52,17 +52,19 @@
     </template>
     <template v-slot:item="{ index, item }">
       <v-chip
+          class="mr-2 flex-shrink-0"
           :color="item.color"
           text-color="white"
           label
           small
       >
-        <span>
         {{ item.text }}
-        </span>
       </v-chip>
+      <span class="text-truncate" v-if="item.description">
+        {{ item.description }}
+      </span>
       <v-spacer></v-spacer>
-      <v-list-item-action @click.stop>
+      <v-list-item-action @click.stop class="flex-shrink-0">
         <v-btn
             icon
             @click.stop.prevent="handleEditTag(item)"
@@ -78,36 +80,12 @@
 
 <script>
 // FIXME: v-list 下拉项较长时遮挡其他元素
+import { fetchAllTags } from "@/mock/popup";
+
 export default {
   name: "TagSelector",
   data: () => ({
-    tagItems: [
-      {
-        text: 'Foo',
-        description: 'aaa',
-        color: 'blue',
-      },
-      {
-        text: 'Bar',
-        color: 'red',
-      },
-      {
-        text: 'a',
-        color: 'red',
-      }, {
-        text: 'b',
-        color: 'red',
-      }, {
-        text: 'c',
-        color: 'red',
-      }, {
-        text: 'd',
-        color: 'red',
-      }, {
-        text: 'e',
-        color: 'red',
-      },
-    ],
+    tagItems: [],
     selectedTags: [],
     search: null,
   }),
@@ -138,12 +116,21 @@ export default {
       }).filter(tag => (tag instanceof Object));
     },
   },
+  created() {
+    this.fetchAllTags();
+  },
   methods: {
+    async fetchAllTags() {
+      this.tagItems = await fetchAllTags();
+    },
     handleEditTag(tag) {
       this.$emit('editTag', { tag });
     },
     handleCreateTag(search) {
       this.$emit('createTag', { text: typeof search === 'string' ? search : this.search });
+    },
+    reloadTagOptions() {
+      this.fetchAllTags();
     },
     /**
      * 对外使用的接口，向 v-model 绑定的数组中添加 Tag
