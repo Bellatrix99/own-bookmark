@@ -171,7 +171,7 @@ export default {
 
 .popup-page {
   width: 450px;
-  height: 400px;
+  height: 550px;
 
   .top-box {
     padding-top: 25%;
@@ -237,8 +237,7 @@ export default {
   }
 
   .bookmark-outer-div {
-    width: 90%;
-    height: 300px;
+    height: 450px;
     overflow-y: scroll;
     margin-top: 10px;
     padding: 10px 10px 0 10px;
