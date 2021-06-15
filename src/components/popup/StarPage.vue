@@ -96,8 +96,9 @@ export default {
     }
   },
   methods: {
+    // eslint-disable-next-line no-unused-vars
     handleSaveTag({ form, mode }) {
-      console.log(form, mode);
+      // TODO: Save Tags
       const tagSelector = this.$refs.tagSelector;
       tagSelector.appendSelectedTag(form)
     },
