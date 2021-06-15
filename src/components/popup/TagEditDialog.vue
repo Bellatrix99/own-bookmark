@@ -12,7 +12,7 @@
         <v-btn
             icon
             dark
-            @click="handleCloseDialog"
+            @click="handleCancelSaving"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -107,6 +107,10 @@ export default {
     handleSelectColor(color) {
       this.form.color = color;
     },
+    handleCancelSaving() {
+      this.$emit('cancel');
+      this.handleCloseDialog();
+    },
     /**
      * 关闭 Dialog 相关逻辑，分别发送 close 事件，设置 display 状态并清空 dialog 表单
      */
@@ -119,7 +123,7 @@ export default {
      * 点击 Dialog Toolbar 中保存按钮回调，向外发送 save 事件并关闭 Dialog
      */
     handleSaveTag() {
-      this.$emit('save', { form: this.form, mode: this.mode })
+      this.$emit('save', { form: { ...this.form }, mode: this.mode })
       this.handleCloseDialog();
     },
     /**

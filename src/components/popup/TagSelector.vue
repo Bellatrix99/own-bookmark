@@ -77,11 +77,11 @@
 </template>
 
 <script>
+// FIXME: v-list 下拉项较长时遮挡其他元素
 export default {
   name: "TagSelector",
   data: () => ({
     tagItems: [
-      { header: '选择或创建标签' },
       {
         text: 'Foo',
         description: 'aaa',
@@ -91,31 +91,68 @@ export default {
         text: 'Bar',
         color: 'red',
       },
+      {
+        text: 'a',
+        color: 'red',
+      }, {
+        text: 'b',
+        color: 'red',
+      }, {
+        text: 'c',
+        color: 'red',
+      }, {
+        text: 'd',
+        color: 'red',
+      }, {
+        text: 'e',
+        color: 'red',
+      },
     ],
     selectedTags: [],
     search: null,
   }),
   watch: {
-    async model (val, prev) {
-      if (val.length === prev.length) return
-      this.model = val.map(v => {
-        if (typeof v === 'string') {
-          v = {
-            text: v,
+    /**
+     * 按下 Enter 键后，Combobox 会将 search push 至 v-model 绑定的数组中
+     * @param val
+     * @param prev
+     * @return {Promise<void>}
+     */
+    async selectedTags(val, prev) {
+      // 如果空值情况下按下的 enter ，则无需操作
+      if (val.length === prev.length) return;
+      // 遍历 v-model 绑定数组
+      this.selectedTags = val.map(selectedTag => {
+        // 如果遇到由 Combobox 默认行为产生的 String 项，尝试将其转换为 Tag 对象再加入到 v-model 数组中
+        if (typeof selectedTag === 'string') {
+          // 在已经创建的 Tags 中查找，如果找到则添加至 v-model 数组中
+          const tag = this.tagItems.find(t => t.text === selectedTag);
+          if (tag) {
+            return tag;
           }
-          this.items.push(v)
-          this.once++
+          console.log('create', JSON.stringify(tag), JSON.stringify(this.selectedTags));
+          // 否则创建标签
+          this.handleCreateTag(selectedTag);
         }
-        return v
-      })
+        return selectedTag;
+      }).filter(tag => (tag instanceof Object));
     },
   },
   methods: {
     handleEditTag(tag) {
       this.$emit('editTag', { tag });
     },
-    handleCreateTag() {
-      this.$emit('createTag', { text: this.search });
+    handleCreateTag(search) {
+      this.$emit('createTag', { text: typeof search === 'string' ? search : this.search });
+    },
+    /**
+     * 对外使用的接口，向 v-model 绑定的数组中添加 Tag
+     * @param tag { Object } Tag
+     */
+    appendSelectedTag(tag) {
+      if (tag instanceof Object) {
+        this.selectedTags.push(tag);
+      }
     },
     filterTags(item, queryText, itemText) {
       if (item.header) return false

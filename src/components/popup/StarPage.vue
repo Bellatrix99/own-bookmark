@@ -37,6 +37,7 @@
               cols="12"
           >
             <TagSelector
+                ref="tagSelector"
                 @createTag="handleCreateTag"
                 @editTag="handleEditTag"
             />
@@ -59,7 +60,7 @@
         取消
       </v-btn>
     </div>
-    <TagEditDialog ref="editDialog"/>
+    <TagEditDialog ref="editDialog" @save="handleSaveTag"/>
   </div>
 </template>
 
@@ -95,6 +96,11 @@ export default {
     }
   },
   methods: {
+    handleSaveTag({ form, mode }) {
+      console.log(form, mode);
+      const tagSelector = this.$refs.tagSelector;
+      tagSelector.appendSelectedTag(form)
+    },
     /**
      * 关闭 StarPage 并返回
      */
@@ -102,7 +108,7 @@ export default {
       this.$emit("close");
     },
     handleStoreBookmark() {
-      this.$emit("store", { form: this.form});
+      this.$emit("store", { form: this.form });
     },
     /**
      * 监听 TagSelector 的 CreateTag 事件回调函数，弹出修改 Dialog

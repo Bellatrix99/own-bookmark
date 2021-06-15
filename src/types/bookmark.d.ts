@@ -8,7 +8,10 @@ interface BookmarkItem {
     title: string;
     url: string;
     description?: string;
+    faviconSrc: string;
     tags: Array<TagId>;
+    createdAt: string;
+    updatedAt: string;
 }
 
 interface Tag {
