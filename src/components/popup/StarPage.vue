@@ -5,7 +5,6 @@
         <v-row>
           <v-col
               cols="12"
-              md="4"
           >
             <v-text-field
                 v-model="form.title"
@@ -21,7 +20,6 @@
 
           <v-col
               cols="12"
-              md="4"
           >
             <!--TODO: 描述抓 Meta 中的 SEO 关键词-->
             <v-text-field
@@ -37,7 +35,6 @@
 
           <v-col
               cols="12"
-              md="4"
           >
             <TagSelector
                 @createTag="handleCreateTag"
@@ -62,16 +59,18 @@
         取消
       </v-btn>
     </div>
+    <TagEditDialog ref="editDialog"/>
   </div>
 </template>
 
 <script>
 
 import TagSelector from "@/components/popup/TagSelector";
+import TagEditDialog from "@/components/popup/TagEditDialog";
 
 export default {
   name: "StarPage",
-  components: { TagSelector },
+  components: { TagEditDialog, TagSelector },
   data() {
     return {
       valid: false,
@@ -100,22 +99,22 @@ export default {
      * 关闭 StarPage 并返回
      */
     handleClose() {
-      this.$emit("close")
+      this.$emit("close");
     },
     handleStoreBookmark() {
       this.$emit("store", { form: this.form});
     },
     /**
      * 监听 TagSelector 的 CreateTag 事件回调函数，弹出修改 Dialog
-     * @param title { string } 要创建的 Tag 标题
+     * @param text { string } 要创建的 Tag 标题
      */
-    handleCreateTag({ label: title }) {
-      console.log(title);
+    handleCreateTag({ text }) {
+      this.$refs.editDialog.createTag(text);
     },
     handleEditTag({ tag }) {
-      console.log(tag)
+      console.log(tag);
+      this.$refs.editDialog.editTag(tag);
     }
-
   },
 }
 

@@ -13,26 +13,9 @@
   --light-border-color: #dedede;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-  outline: none;
-  color: #252629;
-}
-
-html {
-  overflow-y: scroll;
-}
 
 body {
   width: 100vw;
-}
-
-:root {
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 div {
