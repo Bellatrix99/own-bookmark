@@ -103,7 +103,7 @@ export default {
   width: 70%;
   margin: auto;
   height: var(--search-height);
-  border-radius: 20px;
+  border-radius: calc(var(--search-height) / 2);
   padding: 0 var(--search-input-left-padding);
   background-color: #e9e9e9;
 
@@ -118,6 +118,7 @@ export default {
     line-height: var(--search-height);
     border: none;
     outline: none;
+    font-size: 15px;
     background-color: transparent;
     transition: all .3s;
 
