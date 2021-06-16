@@ -9,6 +9,7 @@
       hide-selected
       label="标签"
       multiple
+      clearable
       prepend-inner-icon="mdi-tag"
   >
     <template v-slot:no-data>
@@ -119,6 +120,11 @@ export default {
   created() {
     this.fetchAllTags();
   },
+  mounted() {
+    // TODO: Focus after animations
+    setTimeout(() => {
+    }, 1000);
+  },
   methods: {
     async fetchAllTags() {
       this.tagItems = await fetchAllTags();
@@ -157,5 +163,10 @@ export default {
 
 
 <style lang="scss" scoped>
-
+::v-deep  {
+  .v-list-item {
+    min-height: unset;
+    height: 36px;
+  }
+}
 </style>
