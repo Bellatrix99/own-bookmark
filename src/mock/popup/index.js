@@ -1,59 +1,168 @@
-export let searchResult = [
+const date = new Date();
+
+const dateStr = date.toDateString();
+
+export let mockBookmarkData = [
     {
         id: 1,
         title: '百度一下，你就知道',
-        href: 'https://www.baidu.com',
-        icon: 'https://www.baidu.com/favicon.testerror',
+        url: 'https://www.baidu.com',
+        favicon: 'https://www.baidu.com/favicon.testerror',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'js', 'baidu'
-        ]
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
     },
     {
         id: 2,
         title: 'Google',
-        href: 'https://www.google.com',
-        icon: 'https://www.google.com/favicon.ico',
+        url: 'https://www.google.com',
+        favicon: 'https://www.google.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'google', 'js'
-        ]
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
     },
     {
         id: 3,
         title: 'Github,Github,Github,Github,Github',
-        href: 'https://github.com',
-        icon: 'https://github.com/favicon.ico',
+        url: 'https://github.com',
+        favicon: 'https://github.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'github', 'js'
-        ]
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
     },
     {
         id: 4,
         title: '存储 API - Google Chrome 应用开发文档',
-        href: 'https://crxdoc-zh.appspot.com/apps/app_storage',
-        icon: 'https://crxdoc-zh.appspot.com/favicon.ico',
+        url: 'https://crxdoc-zh.appspot.com/apps/app_storage',
+        favicon: 'https://crxdoc-zh.appspot.com/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'api', 'js'
-        ]
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
     },
     {
         id: 5,
         title: '掘金 - 代码不止，掘金不停',
-        href: 'https://juejin.cn',
-        icon: 'https://juejin.cn/favicon.ico',
+        url: 'https://juejin.cn',
+        favicon: 'https://juejin.cn/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'juejin', 'js'
-        ]
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
     },
     {
         id: 6,
         title: 'OSCHINA - 中文开源技术交流社区',
-        href: 'https://www.oschina.net',
-        icon: 'https://www.oschina.net/favicon.ico',
+        url: 'https://www.oschina.net',
+        favicon: 'https://www.oschina.net/favicon.ico',
         tags: [
-            'chrome', 'dev', 'html', 'css', 'oschina', 'js'
-        ]
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
+    },
+    {
+        id: 6,
+        title: 'OSCHINA - 中文开源技术交流社区',
+        url: 'https://www.oschina.net',
+        favicon: 'https://www.oschina.net/favicon.ico',
+        tags: [
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
+    },    {
+        id: 6,
+        title: 'OSCHINA - 中文开源技术交流社区',
+        url: 'https://www.oschina.net',
+        favicon: 'https://www.oschina.net/favicon.ico',
+        tags: [
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
+    },    {
+        id: 6,
+        title: 'OSCHINA - 中文开源技术交流社区',
+        url: 'https://www.oschina.net',
+        favicon: 'https://www.oschina.net/favicon.ico',
+        tags: [
+            {
+                id: 1,
+                text: 'Chrome',
+                color: 'blue',
+                createdAt: dateStr,
+                updateAt: dateStr,
+            }
+        ],
+        createdAt: dateStr,
+        updateAt: dateStr,
     },
 ];
+
+export async function getBookmarkData() {
+    return new Promise((res) => {
+        setTimeout(() => {
+            res(mockBookmarkData);
+        })
+    })
+}
 
 export let tagsArr = [
     'Docker', 'C++', 'Java', 'JavaScript',

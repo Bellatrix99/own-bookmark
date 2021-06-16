@@ -2,39 +2,54 @@
   <div class="popup-page">
     <div
         class="top-box"
-         :class="{'animate__searchUp': showBookMarkList, 'animate__topBoxToTop':showStarPage}">
+        :class="{'animate__searchUp': showBookMarkList, 'animate__topBoxToTop':showStarPage}">
       <div class="main-page-center" :class="{'animate__starButtonUp': showStarPage}">
-        <!-- 输入框组件 -->
-        <SearchInput @toggleExpand="handleSearchExpand"
-                     ref="searchInput"
-                     @getSearchInputVal="getSearchInputVal"
-                     @getFuseResult="getFuseResult"
-                     @getVisibleBookMarkObj="getVisibleBookMarkObj"
-                     @fuseJsResultDisplay="fuseJsResultDisplay"
-        />
+        <div class="search-header flex align-center flex-nowrap">
+          <!-- 输入框组件 -->
+          <v-text-field
+              placeholder="搜索书签..."
+              filled
+              rounded
+              clearable
+              hide-details
+              v-model="searchInputVal"
+              @focus="() => toggleSearchExpandStatus(true)"
+          ></v-text-field>
+          <v-btn text :class="{hidden: !showBookMarkList}" @click="() => toggleSearchExpandStatus(false)">取消</v-btn>
+        </div>
         <transition
             name="bookmark-transition"
             enter-active-class="animate__animated animate__fadeInDown"
         >
-          <div v-if="showBookMarkList" class="bookmark-outer-div">
+          <div class="bookmark-outer-div" v-if="showBookMarkList">
             <!-- 书签目录组件 -->
-            <BookMarkItem v-for="(item,index) in showSearchResult" :key="index + '-only'"
-                          :searchResultObj="item"
-                          :searchResultIndex="index"
-                          :search-input-value="searchInputVal"
-                          :hiddenBookMarkIndex="hiddenBookMarkIndex"
-            />
+            <v-virtual-scroll
+                height="480"
+                item-height="80"
+                :items="filteredBookmarkData"
+            >
+              <template v-slot:default="{ item: bookmark }">
+                <BookMarkItem
+                    :id="bookmark.id"
+                    :title="bookmark.title"
+                    :url="bookmark.url"
+                    :favicon="bookmark.favicon"
+                    :tags="bookmark.tags"
+                />
+              </template>
+
+            </v-virtual-scroll>
           </div>
         </transition>
+        <v-divider class="divider" inset/>
         <transition-group
             name="others-transition"
             enter-active-class="animate__animated animate__fadeIn"
             leave-active-class="animate__animated animate__fadeOut"
             mode="out-in"
         >
-          <p id="or" v-show="!this.showBookMarkList" key="orP">or</p>
           <div class="star-btn-wrapper" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
-               key="starButtonOuter" v-show="!this.showBookMarkList">
+               key="starButtonOuter" v-if="!this.showBookMarkList">
             <!-- 点击收藏按钮组件 -->
             <v-btn
                 class="mx-4"
@@ -71,15 +86,14 @@
 </template>
 
 <script>
-import { searchResult } from '@/mock/popup';
-import SearchInput from "@/components/popup/SearchInput";
+import { getBookmarkData } from '@/mock/popup';
 import BookMarkItem from "@/components/popup/BookMarkItem";
 import StarPage from "@/components/popup/StarPage";
 import { fuseJsResultDisplay, getFuseResult, getSearchInputVal, getVisibleBookMarkObj } from "@/utils/Globle";
 
 export default {
   name: "PopUpPage",
-  components: { BookMarkItem, SearchInput, StarPage },
+  components: { BookMarkItem, StarPage },
   data() {
     return {
       // 是否显示书签目录状态布尔值
@@ -91,18 +105,11 @@ export default {
       // 搜索输入框中输入的值
       searchInputVal: "",
       // 全局的已收藏书签数组
-      searchResult: searchResult,
-      // 某个已收藏的书签
-      item: {},
-      // fuseJs 模糊搜索的结果
-      fuseResult: [],
-      // (模糊搜索之后)可见的书签下标数组
-      visibleBookMarkSet: [],
-      // (模糊搜索之后)不可见的书签下标数组
-      hiddenBookMarkIndex: [],
-      // fuseJs 模糊搜索结果数组
-      fuseJsResultArr: []
+      bookmarkItems: [],
     }
+  },
+  created() {
+    this.loadBookmarkData();
   },
   computed: {
     /**
@@ -110,33 +117,33 @@ export default {
      * (如果在隐藏书签列表中,则不显示; 反之显示)
      * @return {Array}
      */
-    showSearchResult() {
-      if (this.visibleBookMarkSet.length === 0) return this.searchResult;
-      return this.searchResult.filter(
-          bookmark => this.visibleBookMarkSet.some(href => bookmark.href === href)
-      );
+    filteredBookmarkData() {
+      // TODO: 模糊搜索
+      const keyword = this.searchInputVal;
+      return this.bookmarkItems?.filter((bookmarkItem) => {
+        return bookmarkItem.title.includes(keyword) || bookmarkItem.tags?.some?.((tag) => {
+          tag?.text?.includes(keyword);
+        })
+      });
     }
   },
   methods: {
+    async loadBookmarkData() {
+      this.bookmarkItems = await getBookmarkData();
+    },
     /**
      * @description 用于展开输入框
-     * @param {Boolean} expanded
+     * @param {Boolean} status
      */
-    handleSearchExpand({ expanded }) {
-      this.showBookMarkList = expanded;
-      this.searchInputUp = true;
+    toggleSearchExpandStatus(status) {
+      this.showBookMarkList = status ?? !this.showBookMarkList;
+      this.searchInputUp = status ?? !this.searchInputUp;
     },
     /**
      * @description 用于切换收藏页是否显示
      */
     toggleStarPageShowStatus() {
       this.showStarPage = !this.showStarPage;
-    },
-    /**
-     * @description 用于切换收藏页是否显示
-     */
-    handleToggleExpand() {
-      this.$refs.searchInput.handleToggleExpand()
     },
     /**
      * @description 用于获取搜索输入框输入的值
@@ -172,10 +179,34 @@ export default {
 .popup-page {
   width: 450px;
   height: 550px;
+  overflow: hidden;
 
   .top-box {
-    padding-top: 25%;
+    padding-top: 180px;
     transition: 0.4s;
+  }
+
+  .search-header {
+    display: flex;
+    width: 80%;
+    margin: auto;
+
+    button {
+      flex-shrink: 0;
+      transition: all 0.5s, opacity .3s;
+
+      &.hidden {
+        width: 0 !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+      }
+    }
+  }
+
+  .divider {
+    width: 50px;
+    margin: 30px auto;
   }
 
   #star-btn {
@@ -209,13 +240,12 @@ export default {
   }
 
 
-
   .animate__topBoxToTop {
     padding-top: 0;
   }
 
   .animate__searchUp {
-    padding-top: 10%;
+    padding-top: 20px;
   }
 
   .main-page-center {
@@ -223,53 +253,44 @@ export default {
   }
 
   .animate__starButtonUp {
-    margin-top: -100px;
+    margin-top: -115px;
     background-color: #f4b828;
   }
 
-  #or {
-    text-align: center;
-    font-size: 20px;
-    letter-spacing: .3em;
-    font-weight: lighter;
-    margin: 15px auto;
-    color: #191d22;
-  }
-
   .bookmark-outer-div {
-    height: 450px;
-    overflow-y: scroll;
-    margin-top: 10px;
-    padding: 10px 10px 0 10px;
-
-    &:hover {
-      &::-webkit-scrollbar-thumb {
-        width: 20px;
-        background-color: rgba(0, 0, 0, .2);
-        border-radius: 10px;
-        -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
+    ::v-deep {
+      .bookmark-item {
+        margin: 15px;
       }
     }
+  }
 
-    &::-webkit-scrollbar { /*滚动条整体样式*/
-      width: 1vw; /*高宽分别对应横竖滚动条的尺寸*/
-      max-width: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-      border-radius: 5px;
-      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-      background-color: rgba(0, 0, 0, 0.15);
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      width: 20px;
+      background-color: rgba(0, 0, 0, .2);
+      border-radius: 10px;
+      -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
     }
   }
 
-  .bookmark-outer-div::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.35);
+  &::-webkit-scrollbar { /*滚动条整体样式*/
+    width: 1vw; /*高宽分别对应横竖滚动条的尺寸*/
+    max-width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
     border-radius: 5px;
-    -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.15);
   }
 }
 
+.bookmark-outer-div::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 5px;
+  -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
+}
 
 
 </style>
