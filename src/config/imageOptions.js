@@ -1,8 +1,7 @@
-
 const BACKUP_IMAGE_URL_MAPPER = {
     production: '',
-    development: '//localhost:8080/icon.png',
-    others: '//'
+    development: require('@/assets/icon.png'),
+    others: require('@/assets/icon.png'),
 }
 
 export const imageOptions = {

@@ -9,7 +9,7 @@
           aspect-ratio="1"
           height="50"
           width="50"
-          :src="favicon"
+          :src="faviconURL"
           @error="handleLoadFaviconFailed"
       >
         <template v-slot:placeholder>
