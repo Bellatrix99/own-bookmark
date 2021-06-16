@@ -1,5 +1,14 @@
 module.exports = {
-  transpileDependencies: [
-    'vuetify'
-  ]
+    transpileDependencies: [
+        'vuetify'
+    ],
+
+    configureWebpack: {
+        devtool: 'source-map',
+    },
+    // Disable sourcemap in production mode
+    productionSourceMap: false,
+    devServer: {
+        writeToDisk: true
+    }
 }

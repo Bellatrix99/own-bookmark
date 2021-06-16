@@ -174,6 +174,13 @@ export default {
 }
 </script>
 
+<style>
+body {
+  width: 450px;
+  height: 550px;
+}
+</style>
+
 <style scoped lang="scss">
 
 .popup-page {
