@@ -1,41 +1,69 @@
 <template>
-  <div class="container" ref="container">
-    <div class="top-box" ref="topBox"
-         :class="{'animate__searchUp': showBookMarkList, 'animate__topBoxToTop':showStarPage}">
+  <div class="popup-page">
+    <div
+        class="top-box"
+        :class="{'animate__searchUp': showBookMarkList, 'animate__topBoxToTop':showStarPage}">
       <div class="main-page-center" :class="{'animate__starButtonUp': showStarPage}">
-        <!-- 输入框组件 -->
-        <SearchInput @toggleExpand="handleSearchExpand"
-                     ref="searchInput"
-                     @getSearchInputVal="getSearchInputVal"
-                     @getFuseResult="getFuseResult"
-                     @getVisibleBookMarkObj="getVisibleBookMarkObj"
-                     @fuseJsResultDisplay="fuseJsResultDisplay"
-        />
+        <div class="search-header flex align-center flex-nowrap">
+          <!-- 输入框组件 -->
+          <v-text-field
+              placeholder="搜索书签..."
+              filled
+              rounded
+              clearable
+              hide-details
+              v-model="searchInputVal"
+              @focus="() => toggleSearchExpandStatus(true)"
+          ></v-text-field>
+          <v-btn text :class="{hidden: !showBookMarkList}" @click="() => toggleSearchExpandStatus(false)">取消</v-btn>
+        </div>
         <transition
             name="bookmark-transition"
             enter-active-class="animate__animated animate__fadeInDown"
         >
-          <div v-if="showBookMarkList" class="bookmark-outer-div">
+          <div class="bookmark-outer-div" v-if="showBookMarkList">
             <!-- 书签目录组件 -->
-            <BookMarkItem v-for="(item,index) in showSearchResult" :key="index + '-only'"
-                          :searchResultObj="item"
-                          :searchResultIndex="index"
-                          :search-input-value="searchInputVal"
-                          :hiddenBookMarkIndex="hiddenBookMarkIndex"
-            />
+            <v-virtual-scroll
+                height="480"
+                item-height="80"
+                :items="filteredBookmarkData"
+            >
+              <template v-slot:default="{ item: bookmark }">
+                <BookMarkItem
+                    :id="bookmark.id"
+                    :title="bookmark.title"
+                    :url="bookmark.url"
+                    :favicon="bookmark.favicon"
+                    :tags="bookmark.tags"
+                />
+              </template>
+
+            </v-virtual-scroll>
           </div>
         </transition>
+        <v-divider class="divider" inset/>
         <transition-group
             name="others-transition"
             enter-active-class="animate__animated animate__fadeIn"
             leave-active-class="animate__animated animate__fadeOut"
             mode="out-in"
         >
-          <p id="or" v-show="!this.showBookMarkList" key="orP">or</p>
-          <div class="star-btn-outer" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
-               key="starButtonOuter" v-show="!this.showBookMarkList">
+          <div class="star-btn-wrapper" :class="{'animate__starButtonOuterUp' : this.showStarPage}"
+               key="starButtonOuter" v-if="!this.showBookMarkList">
             <!-- 点击收藏按钮组件 -->
-            <StarButton @ToggleStarPage="handleStarPage" key="starButton"/>
+            <v-btn
+                class="mx-4"
+                id="star-btn"
+                fab
+                depressed
+                dark
+                color="#f4b828"
+                @click="toggleStarPageShowStatus"
+            >
+              <v-icon dark large>
+                mdi-star-outline
+              </v-icon>
+            </v-btn>
           </div>
         </transition-group>
       </div>
@@ -46,9 +74,11 @@
           mode="out-in"
       >
         <!-- 新增收藏组件 -->
-        <StarPage v-if="showStarPage" key="StarPage"
-                  @showStarPage="handleStarPage"
-                  :showStarPage="showStarPage"
+        <StarPage
+            v-if="showStarPage"
+            key="StarPage"
+            :show="showStarPage"
+            @close="toggleStarPageShowStatus"
         />
       </transition>
     </div>
@@ -56,16 +86,14 @@
 </template>
 
 <script>
-import {searchResult} from '@/mock/popup';
-import SearchInput from "@/components/popup/SearchInput";
+import { getBookmarkData } from '@/mock/popup';
 import BookMarkItem from "@/components/popup/BookMarkItem";
-import StarButton from "@/components/popup/StarButton";
 import StarPage from "@/components/popup/StarPage";
-import {fuseJsResultDisplay, getFuseResult, getSearchInputVal, getVisibleBookMarkObj} from "@/utils/Globle";
+import { fuseJsResultDisplay, getFuseResult, getSearchInputVal, getVisibleBookMarkObj } from "@/utils/Globle";
 
 export default {
   name: "PopUpPage",
-  components: {StarButton, BookMarkItem, SearchInput, StarPage},
+  components: { BookMarkItem, StarPage },
   data() {
     return {
       // 是否显示书签目录状态布尔值
@@ -77,18 +105,11 @@ export default {
       // 搜索输入框中输入的值
       searchInputVal: "",
       // 全局的已收藏书签数组
-      searchResult: searchResult,
-      // 某个已收藏的书签
-      item: {},
-      // fuseJs 模糊搜索的结果
-      fuseResult: [],
-      // (模糊搜索之后)可见的书签下标数组
-      visibleBookMarkSet: [],
-      // (模糊搜索之后)不可见的书签下标数组
-      hiddenBookMarkIndex: [],
-      // fuseJs 模糊搜索结果数组
-      fuseJsResultArr: []
+      bookmarkItems: [],
     }
+  },
+  created() {
+    this.loadBookmarkData();
   },
   computed: {
     /**
@@ -96,39 +117,33 @@ export default {
      * (如果在隐藏书签列表中,则不显示; 反之显示)
      * @return {Array}
      */
-    showSearchResult() {
-      if (this.visibleBookMarkSet.length === 0) return this.searchResult;
-      return this.searchResult.filter(
-          bookmark => this.visibleBookMarkSet.some(href => bookmark.href === href)
-      );
+    filteredBookmarkData() {
+      // TODO: 模糊搜索
+      const keyword = this.searchInputVal;
+      return this.bookmarkItems?.filter((bookmarkItem) => {
+        return bookmarkItem.title.includes(keyword) || bookmarkItem.tags?.some?.((tag) => {
+          tag?.text?.includes(keyword);
+        })
+      });
     }
   },
   methods: {
+    async loadBookmarkData() {
+      this.bookmarkItems = await getBookmarkData();
+    },
     /**
      * @description 用于展开输入框
-     * @param {Boolean} expanded
+     * @param {Boolean} status
      */
-    handleSearchExpand({expanded}) {
-      this.showBookMarkList = expanded;
-      this.searchInputUp = true;
-    },
-    /**
-     * @description 用于切换收藏页是否显示
-     * @param {Boolean} showStarPage
-     * @return void
-     */
-    handleStarPage(showStarPage) {
-      if (this.showStarPage === showStarPage) {
-        this.showStarPage = !showStarPage;
-      } else {
-        this.showStarPage = showStarPage;
-      }
+    toggleSearchExpandStatus(status) {
+      this.showBookMarkList = status ?? !this.showBookMarkList;
+      this.searchInputUp = status ?? !this.searchInputUp;
     },
     /**
      * @description 用于切换收藏页是否显示
      */
-    handleToggleExpand() {
-      this.$refs.searchInput.handleToggleExpand()
+    toggleStarPageShowStatus() {
+      this.showStarPage = !this.showStarPage;
     },
     /**
      * @description 用于获取搜索输入框输入的值
@@ -159,80 +174,103 @@ export default {
 }
 </script>
 
+<style>
+body {
+  width: 450px;
+  height: 550px;
+}
+</style>
+
 <style scoped lang="scss">
-* {
+
+.popup-page {
+  width: 450px;
+  height: 550px;
   overflow: hidden;
-  padding: 0;
-  margin: 0;
-}
 
-.star-btn-outer {
-  margin-left: calc(50% - 20px);
-  width: 40px;
-  transition: 1s;
-}
+  .top-box {
+    padding-top: 180px;
+    transition: 0.4s;
+  }
 
-.animate__starButtonOuterUp {
-  width: 100%;
-  border-radius: 20px;
-  margin-left: 0;
-  background-color: #f4b828;
-}
+  .search-header {
+    display: flex;
+    width: 80%;
+    margin: auto;
 
-.container {
-  width: 400px;
-  height: 500px;
-}
+    button {
+      flex-shrink: 0;
+      transition: all 0.5s, opacity .3s;
 
-.animate__fadeIn {
-  animation-duration: 1s;
-}
+      &.hidden {
+        width: 0 !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+      }
+    }
+  }
 
-.animate__fadeInDown {
-  animation-duration: .4s;
-}
+  .divider {
+    width: 50px;
+    margin: 30px auto;
+  }
 
-.animate__fadeOut {
-  animation-duration: 0s;
-}
+  #star-btn {
+    i {
+      font-size: 28px !important;
+    }
+  }
 
-.top-box {
-  padding-top: 25%;
-  transition: 0.4s;
-}
+  .star-btn-wrapper {
+    text-align: center;
+    transition: 1s;
+  }
 
-.animate__topBoxToTop {
-  padding-top: 0;
-}
+  .animate__starButtonOuterUp {
+    width: 100%;
+    border-radius: 20px;
+    margin-left: 0;
+    background-color: #f4b828;
+  }
 
-.animate__searchUp {
-  padding-top: 10%;
-}
+  .animate__fadeIn {
+    animation-duration: 1s;
+  }
 
-.main-page-center {
-  transition: 0.4s;
-}
+  .animate__fadeInDown {
+    animation-duration: .4s;
+  }
 
-.animate__starButtonUp {
-  margin-top: -90px;
-  background-color: #f4b828;
-}
+  .animate__fadeOut {
+    animation-duration: 0s;
+  }
 
-#or {
-  text-align: center;
-  font-size: 20px;
-  letter-spacing: .3em;
-  font-weight: lighter;
-  margin: 15px auto;
-  color: #191d22;
-}
 
-.bookmark-outer-div {
-  width: 90%;
-  height: 300px;
-  overflow-y: scroll;
-  margin-top: 10px;
-  padding: 10px 10px 0 10px;
+  .animate__topBoxToTop {
+    padding-top: 0;
+  }
+
+  .animate__searchUp {
+    padding-top: 20px;
+  }
+
+  .main-page-center {
+    transition: 0.4s;
+  }
+
+  .animate__starButtonUp {
+    margin-top: -115px;
+    background-color: #f4b828;
+  }
+
+  .bookmark-outer-div {
+    ::v-deep {
+      .bookmark-item {
+        margin: 15px;
+      }
+    }
+  }
 
   &:hover {
     &::-webkit-scrollbar-thumb {
@@ -259,7 +297,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.35);
   border-radius: 5px;
   -webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1);
-
 }
+
 
 </style>

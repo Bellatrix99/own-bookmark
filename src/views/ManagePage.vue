@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import {searchResult} from '@/mock/popup';
+import {mockBookmarkData} from '@/mock/popup';
 import BookMarkFilter from "@/components/manage/BookMarkFilter";
 import TagBox from "@/components/manage/TagBox";
 import BookMarkInfo from "@/components/manage/BookMarkInfo";
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       // 全局的已收藏书签数组
-      searchResult: searchResult,
+      searchResult: mockBookmarkData,
       // 是否显示书签信息编辑模态框的状态布尔值
       showEditBookMarkInfo: false,
       // 搜索结果是否为空的状态布尔值
@@ -143,13 +143,13 @@ export default {
      // * @param {Number} currId
      */
     deleteBKIndex(currId) {
-      console.log(searchResult.filter(
+      console.log(mockBookmarkData.filter(
           bookmark => bookmark.id - 1 !== currId
       ));
       this.searchResult = this.searchResult.filter(bookmark => bookmark.id - 1 !== currId);
       // searchResult.splice(searchResult.filter(bookmark => bookmark.id - 1 === currId), 1);
       // 如果书签已全部删除,则设置"isEmptySearchResult(书签为空)"状态为真
-      if (searchResult.length === 0) {
+      if (mockBookmarkData.length === 0) {
         this.isEmptySearchResult = true;
       }
     },

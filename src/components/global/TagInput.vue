@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {searchResult} from "@/mock/popup";
+import {mockBookmarkData} from "@/mock/popup";
 
 export default {
   name: "tagInput",
@@ -61,7 +61,7 @@ export default {
     if (this.showStarPage === true) {
       this.editTags.tagNames = [];
     } else {
-      this.editTags.tagNames = searchResult[this.tags.id].tags.slice(0);
+      this.editTags.tagNames = mockBookmarkData[this.tags.id].tags.slice(0);
     }
   },
   computed: {

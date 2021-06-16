@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {searchResult} from "@/mock/popup";
+import {mockBookmarkData} from "@/mock/popup";
 import Fuse from 'fuse.js';
 import {darkSearchBookMark} from "@/utils/Globle";
 
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       // 全局的已收藏书签数组
-      searchResult: searchResult,
+      searchResult: mockBookmarkData,
       // 搜索框输入框的值
       searchInputVal: "",
       // fuseJs 模糊搜索
@@ -47,7 +47,7 @@ export default {
         // 用 `title` 和 `tags` 作为模糊搜索的索引
         keys: ['title', 'tags']
       }
-      this.fuse = new Fuse(searchResult, options)
+      this.fuse = new Fuse(mockBookmarkData, options)
     }
   },
   mounted() {

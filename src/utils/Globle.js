@@ -1,4 +1,4 @@
-import {searchResult} from "@/mock/popup";
+import {mockBookmarkData} from "@/mock/popup";
 
 export function flatten(arr) {
     return [].concat(...arr.map(item => [].concat(item, ...flatten(item.tags))))
@@ -52,7 +52,7 @@ export function getVisibleBookMarkObj(self) {
     if (self.isEmptySearchResult) return;
 
     if (self.searchInputVal.length === 0) {
-        self.fuseResult = searchResult;
+        self.fuseResult = mockBookmarkData;
         self.visibleBookMarkSet = self.fuseResult.map(result => result.href);
     } else {
         self.visibleBookMarkSet = self.fuseResult.map(result => result?.item?.href);

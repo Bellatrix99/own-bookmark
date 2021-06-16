@@ -1,8 +1,8 @@
 :root {
-  --search-height: 40px;
+  --search-height: 50px;
   --search-input-left-padding: 15px;
   --top-box-height: 138px;
-  --search-item-height: 60px;
+  --search-item-height: 80px;
   --star-btn-color: #f4b828;
   --search-input-cancel-width: 17px;
   --star-tag-input-height: 110px;
@@ -13,26 +13,9 @@
   --light-border-color: #dedede;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-  outline: none;
-  color: #252629;
-}
-
-html {
-  overflow-y: scroll;
-}
 
 body {
   width: 100vw;
-}
-
-:root {
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 div {

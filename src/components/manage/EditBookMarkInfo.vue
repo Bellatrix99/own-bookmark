@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import {searchResult} from "@/mock/popup";
+import {mockBookmarkData} from "@/mock/popup";
 import TagInput from "@/components/global/TagInput";
 
 export default {
@@ -73,7 +73,7 @@ export default {
       // 是否显示编辑模态框的状态布尔值
       showEditBookMarkInfo: false,
       // 全局的已收藏书签数组
-      searchResult: searchResult,
+      searchResult: mockBookmarkData,
       // 书签标签的样式设置(设置为输入字符长度对应的"em"长度)
       bookMarkTagsStyle: {
         width: this.inputValueLength + 'em'
@@ -81,7 +81,7 @@ export default {
       // 当前书签下标在全局的已收藏书签数组中的所有 tags
       tags: {
         id: this.BookMarkInfoIndex,
-        tagNames: searchResult[this.BookMarkInfoIndex].tags,
+        tagNames: mockBookmarkData[this.BookMarkInfoIndex].tags,
       },
       // 编辑模态框中正在编辑的所有 tags
       editTags: {
@@ -100,7 +100,7 @@ export default {
       // 简单的深拷贝数组
       // this.editTags.tagNames = this.tags.tagNames.slice(0);
       this.showEditBookMarkInfo = false;
-      searchResult[this.tags.id].tags = this.editTags.tagNames;
+      mockBookmarkData[this.tags.id].tags = this.editTags.tagNames;
       this.$emit('handleEditBookMark', this.showEditBookMarkInfo);
     },
     /**
@@ -125,8 +125,8 @@ export default {
      */
     getIcon() {
       // 如该值不存在则抛出错误
-      if (!searchResult[this.tags.id].icon) throw new Error("No icon!");
-      return searchResult[this.tags.id].icon;
+      if (!mockBookmarkData[this.tags.id].icon) throw new Error("No icon!");
+      return mockBookmarkData[this.tags.id].icon;
     },
     /**
      * @description 用于获取对应的标题 title
@@ -134,8 +134,8 @@ export default {
      */
     getTitle() {
       // 如该值不存在则抛出错误
-      if (!searchResult[this.tags.id].title) throw new Error("No title!");
-      return searchResult[this.tags.id].title;
+      if (!mockBookmarkData[this.tags.id].title) throw new Error("No title!");
+      return mockBookmarkData[this.tags.id].title;
     },
     /**
      * @description 用于获取对应的链接 href
@@ -143,8 +143,8 @@ export default {
      */
     getHref() {
       // 如该值不存在则抛出错误
-      if (!searchResult[this.tags.id].href) throw new Error("No href!");
-      return searchResult[this.tags.id].href;
+      if (!mockBookmarkData[this.tags.id].href) throw new Error("No href!");
+      return mockBookmarkData[this.tags.id].href;
     }
   }
 }
